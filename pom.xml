@@ -24,7 +24,7 @@ limitations under the License.
   <artifactId>Macchiato</artifactId>
 
   <properties>
-    <appengine.version>1.9.46</appengine.version>
+    <appengine.sdk.version>1.9.46</appengine.sdk.version>
     <appengine.maven.plugin.version>1.9.46</appengine.maven.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -36,6 +36,7 @@ limitations under the License.
     <guava.version>18.0</guava.version>
     <endpoints.framework.version>2.0.0-beta.7</endpoints.framework.version>
     <endpoints.management.version>1.0.0-beta.7</endpoints.management.version>
+    <spring.version>4.2.2.RELEASE</spring.version>
   </properties>
 
   <prerequisites>
@@ -47,7 +48,7 @@ limitations under the License.
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-api-1.0-sdk</artifactId>
-      <version>${appengine.version}</version>
+      <version>${appengine.sdk.version}</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -60,28 +61,67 @@ limitations under the License.
       <artifactId>jstl</artifactId>
       <version>1.2</version>
     </dependency>
-  
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
 
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
 
- 
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>bootstrap</artifactId>
+      <version>3.3.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.objectify</groupId>
+      <artifactId>objectify</artifactId>
+      <version>${objectify.version}</version>
+    </dependency>
+
     <!-- Test Dependencies -->
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-testing</artifactId>
-      <version>${appengine.version}</version>
+      <version>${appengine.sdk.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-api-stubs</artifactId>
-      <version>${appengine.version}</version>
+      <version>${appengine.sdk.version}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-tools-sdk</artifactId>
-      <version>${appengine.version}</version>
+      <version>${appengine.sdk.version}</version>
       <scope>test</scope>
     </dependency>
 
