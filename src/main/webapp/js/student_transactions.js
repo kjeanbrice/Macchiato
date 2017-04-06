@@ -14,4 +14,4 @@ $(document).ready(function () {
         user_email.text(user_status.trim());
         user_email.attr("email_val", user_status.trim());
     }
-})
+});

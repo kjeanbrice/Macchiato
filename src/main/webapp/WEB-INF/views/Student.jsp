@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -6,8 +7,8 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Macchiato</title>
-    <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="icons/foundation-icons/foundation-icons/foundation-icons.css"/>
+    <link rel="stylesheet" href="../../css/app.css">
+    <link rel="stylesheet" href="../../icons/foundation-icons/foundation-icons/foundation-icons.css"/>
     <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
@@ -27,7 +28,7 @@
             <ul class="menu">
                 <li><a href="/Student.htm" class="link">Home</a></li>
                 <li><a href="/CourseInfo.htm" class="link">Course Info</a></li>
-                <li><a href="#" class="link">Forum</a></li>
+                <li><a href="/Discussionboard.htm" class="link">Forum</a></li>
                 <li><a href="/logout.htm" class="link">Logout</a></li>
             </ul>
         </div>
@@ -86,9 +87,6 @@
 
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="bower_components/what-input/dist/what-input.js"></script>
-<script src="bower_components/foundation-sites/dist/js/foundation.js"></script>
 <script src="js/app.js"></script>
 
 </body>
