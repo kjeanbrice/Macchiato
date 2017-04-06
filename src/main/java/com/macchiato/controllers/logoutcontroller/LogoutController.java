@@ -1,4 +1,4 @@
-package com.macchiato.controllers;
+package com.macchiato.controllers.logoutcontroller;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;

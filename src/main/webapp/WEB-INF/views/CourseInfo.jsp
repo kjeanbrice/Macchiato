@@ -26,7 +26,7 @@
         </div>
         <div class="top-bar-right">
             <ul class="menu">
-                <li><a href="/Student.html" class="link">Home</a></li>
+                <li><a href="/Student.htm" class="link">Home</a></li>
                 <li><a href="/CourseInfo.html" class="link">Course Info</a></li>
                 <li><a href="#" class="link">Forum</a></li>
                 <li><a href="/logout.htm" class="link">Logout</a></li>

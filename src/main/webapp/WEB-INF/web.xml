@@ -6,7 +6,7 @@
 
   <display-name>Macchiato</display-name>
   <welcome-file-list>
-    <welcome-file>Home.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
 
   <servlet>

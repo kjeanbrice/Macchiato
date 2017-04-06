@@ -1,4 +1,4 @@
-package com.macchiato.controllers;
+package com.macchiato.controllers.logincontroller;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -24,7 +24,7 @@ public class LoginController {
             return "redirect:" + userService.createLogoutURL("/");
         }
         else{
-            return "redirect:" + userService.createLoginURL("../Student.html");
+            return "redirect:" + userService.createLoginURL("/Student.htm");
         }
     }
 }

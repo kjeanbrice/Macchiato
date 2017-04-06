@@ -1,40 +1,30 @@
-<!DOCTYPE html>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.macchiato.HelloInfo" %>
-<!-- [START_EXCLUDE] -->
-<%--
-  ~ Copyright (c) 2016 Google Inc. All Rights Reserved.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License"); you
-  ~ may not use this file except in compliance with the License. You may
-  ~ obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-  ~ implied. See the License for the specific language governing
-  ~ permissions and limitations under the License.
-  --%>
-<!-- [END_EXCLUDE] -->
-<html>
-<head>
-    <link href='//fonts.googleapis.com/css?family=Marmelad' rel='stylesheet' type='text/css'>
-    <title>Hello App Engine Standard</title>
-</head>
-<body>
-<h1>Hello App Engine -- Standard!</h1>
+<!doctype html>
+<html class="no-js" lang="en">
 
-<p>This is <%= HelloInfo.getInfo() %>.</p>
-<table>
-    <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>
-    </tr>
-    <tr>
-        <td><a href='/hello'>The servlet</a></td>
-    </tr>
-</table>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macchiato</title>
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="icons/foundation-icons/foundation-icons/foundation-icons.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+
+<body>
+<form id="home-form" action=" " method="get" style="display: none;">
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+<script src="js/index_redirect.js"></script>
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/what-input/dist/what-input.js"></script>
+<script src="bower_components/foundation-sites/dist/js/foundation.js"></script>
+<script src="js/app.js"></script>
 
 </body>
+
+
 </html>
