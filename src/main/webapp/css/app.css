@@ -44,8 +44,12 @@
     transition: color 200ms ease-in-out
 }
 
+.menu.forum-links li a {
+    font-size: 25px;
+    color: #0a0a0a
+}
+
 .link-highlight {
-    border-bottom: 1px solid #1779ba;
     color: #1779ba
 }
 
@@ -136,6 +140,10 @@
     font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
     letter-spacing: 2px;
     text-transform: uppercase
+}
+
+#navbar-static {
+    margin: 0px 0px 1rem 0px !important
 }
 
 .notification-style-modal {
@@ -275,6 +283,7 @@
 }
 
 .sticky {
+    position: absolute;
     width: 100%
 }
 
@@ -498,9 +507,13 @@
 
 .wrapper {
     padding-top: 6%;
-    background-color: #fff;
     position: relative;
     width: 100%
+}
+
+.submenu-test {
+    position: relative;
+    z-index: 999
 }
 
 .middle_box {
@@ -645,13 +658,17 @@
 
 .comment_div {
     width: 95%;
-    margin: 10px 0px;
+    margin: 25px 0px;
     text-align: center;
     vertical-align: text-top
 }
 
+.comment_content {
+    padding-left: 5%
+}
+
 .comment_background {
-    background: linear-gradient(rgba(245, 245, 245, 0.9), rgba(245, 245, 245, 0.9));
+    background: linear-gradient(rgba(245, 245, 245, 0.8), rgba(245, 245, 245, 0.8));
     padding: 18px;
     border-radius: 40px
 }
@@ -4300,7 +4317,7 @@ select[multiple] {
     display: none;
     min-width: 200px;
     border: 1px solid #cacaca;
-    background: #fefefe
+    background: #cacaca
 }
 
 .is-dropdown-submenu .is-dropdown-submenu-parent > a::after {
@@ -5714,6 +5731,10 @@ a.thumbnail image {
 
 .top-bar, .top-bar ul {
     background-color: #0a0a0a
+}
+
+.top-bar ul ul {
+    background-color: #fafafa
 }
 
 .top-bar input {
