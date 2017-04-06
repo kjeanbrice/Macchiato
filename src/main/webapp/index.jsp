@@ -20,21 +20,21 @@
 <!-- [END_EXCLUDE] -->
 <html>
 <head>
-  <link href='//fonts.googleapis.com/css?family=Marmelad' rel='stylesheet' type='text/css'>
-  <title>Hello App Engine Standard</title>
+    <link href='//fonts.googleapis.com/css?family=Marmelad' rel='stylesheet' type='text/css'>
+    <title>Hello App Engine Standard</title>
 </head>
 <body>
-    <h1>Hello App Engine -- Standard!</h1>
+<h1>Hello App Engine -- Standard!</h1>
 
-  <p>This is <%= HelloInfo.getInfo() %>.</p>
-  <table>
+<p>This is <%= HelloInfo.getInfo() %>.</p>
+<table>
     <tr>
-      <td colspan="2" style="font-weight:bold;">Available Servlets:</td>
+        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>
     </tr>
     <tr>
-      <td><a href='/hello'>The servlet</a></td>
+        <td><a href='/hello'>The servlet</a></td>
     </tr>
-  </table>
+</table>
 
 </body>
 </html>
