@@ -37,10 +37,10 @@
             </div>
             <div class="top-bar-right">
                 <ul class="menu">
-                    <li><a href="#" class="link">Home</a></li>
-                    <li><a href="#" class="link">Forum</a></li>
-                    <li><a href="#" class="link">Assignments</a></li>
-                    <li><a href="#" class="link">Logout</a></li>
+                    <li><a href="/Home.htm" class="link">Home</a></li>
+                    <li><a href="/Discussionboard.htm" class="link">Forum</a></li>
+                    <li><a href="/Student.htm" class="link">Assignments</a></li>
+                    <li><a href="/logout.htm" class="link">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -75,7 +75,7 @@
     <div class="ques_num">Question 1</div>
     <div class="the_ques">Initialize the variable i as an integer with a value of 1.</div>
     <button class="sol_box">VIEW SOLUTION</button>
-    <input type="text" id="myText" value="Some text...">
+    <textarea name="Text1" id="myText" cols="40" rows="5"></textarea>
     <button class="sub_box">SUBMIT</button>
     <div class = "prev_next_box">
     <span class = "prev_space"><button class="prev_box">PREV</button>
@@ -105,10 +105,8 @@
 
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="bower_components/what-input/dist/what-input.js"></script>
-<script src="bower_components/foundation-sites/dist/js/foundation.js"></script>
 <script src="js/app.js"></script>
+<script src="js/question_transactions.js"></script>
 </body>
 
 

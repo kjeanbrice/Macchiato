@@ -49,4 +49,12 @@ public class URLMapping {
         ModelAndView model = new ModelAndView("Discussionboard");
         return model;
     }
+
+    @RequestMapping(value = "Question.htm", method = RequestMethod.GET)
+    public ModelAndView loadQuestionPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
+
+        ModelAndView model = new ModelAndView("Question");
+        return model;
+    }
 }

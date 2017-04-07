@@ -56,7 +56,7 @@
         <hr  style="margin: 0px 10px;">
         <div class="row" style="padding: 0px 25px " >
             <div class="small-4 medium-6 large-6 columns">
-                <p style="text-align:center"><a href="#" class="link" >Assignment 1</a></p>
+                <p style="text-align:center"><a href="/Question.htm" class="link" >Assignment 1</a></p>
 
             </div>
             <div class="small-4 medium-3 large-3 columns">
