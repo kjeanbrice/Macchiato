@@ -37,7 +37,7 @@
             </div>
             <div class="top-bar-right">
                 <ul class="menu">
-                    <li><a href="/Home.htm" class="link">Home</a></li>
+                    <li><a href="/Student.htm" class="link">Home</a></li>
                     <li><a href="/Discussionboard.htm" class="link">Forum</a></li>
                     <li><a href="/Student.htm" class="link">Assignments</a></li>
                     <li><a href="/logout.htm" class="link">Logout</a></li>

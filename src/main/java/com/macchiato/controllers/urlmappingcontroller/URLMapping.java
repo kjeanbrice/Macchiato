@@ -1,7 +1,8 @@
 package com.macchiato.controllers.urlmappingcontroller;
 
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.users.User;
+import com.google.appengine.api.datastore.*;
+import com.macchiato.beans.QuestionBean;
+import com.macchiato.beans.QuestionListBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,8 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+
 /**
  * Created by Karl on 4/5/2017.
+ * Edited by Raymond Xue
  */
 @Controller
 public class URLMapping {
@@ -56,5 +59,26 @@ public class URLMapping {
 
         ModelAndView model = new ModelAndView("Question");
         return model;
+    }
+
+    @RequestMapping(value ="PopulateQues.htm",method = RequestMethod.GET)
+    public void populateQuesRequest(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        response.setContentType("application/json");
+
+        PrintWriter out = response.getWriter();
+
+        /* FOR TESTING PURPOSE SINCE WE HAVE NO DATABASE YET */
+        QuestionListBean newList = new QuestionListBean();
+        QuestionBean q1 = new QuestionBean("Initialize an integer i with the value 1","int i = 1;","1");
+        QuestionBean q2 = new QuestionBean("Initialize an integer i with the value 2","int i = 2;","2");
+        QuestionBean q3 = new QuestionBean("Initialize an integer i with the value 3","int i = 3;","3");
+        newList.getProblems().add(q1);
+        newList.getProblems().add(q2);
+        newList.getProblems().add(q3);
+
+        System.out.println(newList.generateJSON());
+        out.println(newList.generateJSON());
+
+
     }
 }
