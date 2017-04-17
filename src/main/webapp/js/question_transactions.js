@@ -67,4 +67,23 @@ $(document).ready(function () {
 
 
     });
+
+    $('body').on('click','.sol_box', function(e){
+        var $url = "/PopulateQues.htm";
+
+        $.ajax({
+            method: 'get',
+            url: $url,
+            dataType: 'json',
+            success: function (question_table) {
+                console.log("Get List Items:Success");
+                var JSON_list_items = question_table;
+                $('#solution').text(JSON_list_items.Questions[i].solution);
+                $('#dialog').dialog();
+            },
+            error: function () {
+                console.log("Add Item Failure: Aw, It didn't connect to the servlet :(");
+            }
+        })
+    });
 });

@@ -75,6 +75,9 @@
     <div class="ques_num">Question 1</div>
     <div class="the_ques">Initialize the variable i as an integer with a value of 1.</div>
     <button class="sol_box">VIEW SOLUTION</button>
+    <div id="dialog" style="display: none"; title="Solution">
+        <p id = "solution" >This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+    </div>
     <textarea name="Text1" id="myText" cols="40" rows="5"></textarea>
     <button class="sub_box">SUBMIT</button>
     <div class = "prev_next_box">
@@ -105,6 +108,8 @@
 
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="js/app.js"></script>
 <script src="js/question_transactions.js"></script>
 </body>
