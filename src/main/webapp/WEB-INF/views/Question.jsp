@@ -78,7 +78,11 @@
     <div id="dialog" style="display: none"; title="Solution">
         <p id = "solution" >This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
     </div>
+    <div id="dialog1" style="display: none"; title="Submit Code">
+        <p id = "code" >This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+    </div>
     <textarea name="Text1" id="myText" cols="40" rows="5"></textarea>
+    <button class="compile_box">COMPILE</button>
     <button class="sub_box">SUBMIT</button>
     <div class = "prev_next_box">
     <span class = "prev_space"><button class="prev_box">PREV</button>

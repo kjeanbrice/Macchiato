@@ -7,6 +7,7 @@ public class QuestionBean {
     private String problem;
     private String solution;
     private String id;
+    private String answer;
 
     public QuestionBean(String problem, String solution, String id){
         this.problem = problem;
@@ -46,5 +47,13 @@ public class QuestionBean {
         outputString += "}";
 
         return outputString;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 }

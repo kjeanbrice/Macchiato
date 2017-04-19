@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import com.hackerrank.api.client.*;
+import com.hackerrank.api.hackerrank.api.*;
+import com.hackerrank.api.hackerrank.model.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,5 +83,29 @@ public class URLMapping {
         out.println(newList.generateJSON());
 
 
+    }
+
+    @RequestMapping(value="Compile.htm", method = RequestMethod.GET)
+    public void compileCode(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        String apiKey = "hackerrank|2458825-1355|a7001ed51bce45bd9f6cc1e4bf499ef05d8d4495";
+        String source = "puts 'Testing'";
+        Integer lang = new Integer(5);
+        String testcases = "[\"Test 1\", \"Test 2\"]";
+        String format = "JSON";
+        String callbackUrl = "https://testing.com/response/handler";
+        String wait = "true";
+
+        try {
+            CheckerApi checkerApi = new CheckerApi();
+            Submission response1 = checkerApi.submission(apiKey, source, lang, testcases, format, callbackUrl, wait);
+            System.out.println(response1);
+        } catch (ApiException e) {
+            System.out.printf("ApiException caught: %s\n", e.getMessage());
+        }
+    }
+
+    @RequestMapping(value="SubmitSol.htm",method = RequestMethod.GET)
+    public void submitSolution(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        response.setContentType("text/html;charset=UTF-8");
     }
 }
