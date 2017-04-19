@@ -20,7 +20,7 @@ public class LoginController {
             User user = userService.getCurrentUser();
             System.out.println(user.getEmail());
             System.out.println(user.getUserId());
-            System.out.println("Already logged in: User Logged out");
+            System.out.println("Already logged in: UserBean Logged out");
             return "redirect:" + userService.createLogoutURL("/");
         }
         else{

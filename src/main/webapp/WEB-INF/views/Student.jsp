@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="top-bar" style="background-color:#515151;">
-        <h6 style="color:#EAEAEA; text-align:center; "><b>Student</b></h6>
+        <h6 id="stud_name" style="color:#EAEAEA; text-align:center; "><b>Student</b></h6>
     </div>
 </div>
 
@@ -87,7 +87,7 @@
 
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
-<script src="js/app.js"></script>
+<script src="js/student_transactions.js"></script>
 
 </body>
 
