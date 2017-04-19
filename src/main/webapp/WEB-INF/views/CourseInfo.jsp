@@ -75,7 +75,7 @@
 
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
-<script src="js/student_transactions.js"></script>
+<script src="js/stud_course_info.js"></script>
 
 </body>
 

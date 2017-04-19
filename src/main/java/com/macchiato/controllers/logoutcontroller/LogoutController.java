@@ -15,11 +15,11 @@ public class LogoutController {
     public String LoginService (){
         UserService userService = UserServiceFactory.getUserService();
         if(userService.isUserLoggedIn()){
-            System.out.println("User Logged out");
+            System.out.println("UserBean Logged out");
             return "redirect:" + userService.createLogoutURL("/");
         }
         else{
-            System.out.println("User already logged out");
+            System.out.println("UserBean already logged out");
         }
         return "/";
     }

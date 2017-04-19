@@ -3,15 +3,22 @@ package com.macchiato.controllers.urlmappingcontroller;
 import com.google.appengine.api.datastore.*;
 import com.macchiato.beans.QuestionBean;
 import com.macchiato.beans.QuestionListBean;
+import com.macchiato.beans.UserBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+
 
 
 /**
@@ -36,6 +43,8 @@ public class URLMapping {
         ModelAndView model = new ModelAndView("Student");
         return model;
     }
+
+
 
     @RequestMapping(value = "CourseInfo.htm", method = RequestMethod.GET)
     public ModelAndView loadCourseInfoPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
