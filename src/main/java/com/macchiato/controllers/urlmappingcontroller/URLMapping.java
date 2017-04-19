@@ -3,7 +3,7 @@ package com.macchiato.controllers.urlmappingcontroller;
 import com.google.appengine.api.datastore.*;
 import com.macchiato.beans.QuestionBean;
 import com.macchiato.beans.QuestionListBean;
-import com.macchiato.beans.UserBean;
+//import com.macchiato.beans.UserBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -96,10 +96,15 @@ public class URLMapping {
 
     @RequestMapping(value="Compile.htm", method = RequestMethod.GET)
     public void compileCode(HttpServletRequest request, HttpServletResponse response) throws IOException{
+
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        String text = request.getParameter("text");
+        System.out.println(text);
         String apiKey = "hackerrank|2458825-1355|a7001ed51bce45bd9f6cc1e4bf499ef05d8d4495";
-        String source = "puts 'Testing'";
-        Integer lang = new Integer(5);
-        String testcases = "[\"Test 1\", \"Test 2\"]";
+        String source = text;
+        Integer lang = new Integer(3);
+        String testcases = "[\"int i = 1;\", \"Test 2\"]";
         String format = "JSON";
         String callbackUrl = "https://testing.com/response/handler";
         String wait = "true";
@@ -107,7 +112,12 @@ public class URLMapping {
         try {
             CheckerApi checkerApi = new CheckerApi();
             Submission response1 = checkerApi.submission(apiKey, source, lang, testcases, format, callbackUrl, wait);
-            System.out.println(response1);
+            Result answer = response1.getResult();
+            System.out.println(answer.getCompilemessage());
+            String finmessage = "{\"output\":\"" + answer.getCompilemessage() + "\"";
+            finmessage += "}";
+
+            out.println(finmessage);
         } catch (ApiException e) {
             System.out.printf("ApiException caught: %s\n", e.getMessage());
         }

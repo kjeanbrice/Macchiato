@@ -50,11 +50,22 @@ $(document).ready(function () {
     });
 
     $('body').on('click','.compile_box', function(e){
-        var $url = "/Compile.htm";
 
-        $.ajax({url: $url, success: function(result){
-           alert("WORKING");
-        }});
+        var text = $('#myText').val();
+        var $url = "/Compile.htm?" + "&text=" + text;
+
+        $.ajax({
+            method: 'get',
+            url: $url,
+            dataType: 'text',
+            success: function (text_field) {
+                $('#output').text(text_field);
+                $('#dialog2').dialog();
+            },
+            error: function () {
+                console.log("Compile Failure: Aw, It didn't connect to the servlet :(");
+            }
+        });
 
     });
 
