@@ -156,6 +156,7 @@ margin-bottom: 5%;
     cursor: pointer;
 margin-left: 81.5%;
     font-weight: 500;
+    margin-top: 3%;
 
 }
 .ques_num{
@@ -178,5 +179,15 @@ margin-left: 81.5%;
     padding-top: 3%;
     padding-right: 1%;
     margin-top: 4%;
+}
 
+.compile_box{
+    border: 10px solid #fff06f;
+    background-color: #fff06f;
+    opacity: 0.8;
+    border-radius: 10%;
+    cursor: pointer;
+    margin-left: 80.5%;
+    font-weight: 500;
+    margin-top: 3%;
 }
