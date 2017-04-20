@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import com.hackerrank.api.client.*;
-import com.hackerrank.api.hackerrank.api.*;
+import com.hackerrank.api.hackerrank.api.CheckerApi;
 import com.hackerrank.api.hackerrank.model.*;
 
 import com.google.appengine.api.users.User;
@@ -97,8 +97,8 @@ public class URLMapping {
     @RequestMapping(value="Compile.htm", method = RequestMethod.GET)
     public void compileCode(HttpServletRequest request, HttpServletResponse response) throws IOException{
         String apiKey = "hackerrank|2458825-1355|a7001ed51bce45bd9f6cc1e4bf499ef05d8d4495";
-        String source = "puts 'Testing'";
-        Integer lang = new Integer(5);
+        String source = "int i = 1;";
+        Integer lang = new Integer(3);
         String testcases = "[\"Test 1\", \"Test 2\"]";
         String format = "JSON";
         String callbackUrl = "https://testing.com/response/handler";

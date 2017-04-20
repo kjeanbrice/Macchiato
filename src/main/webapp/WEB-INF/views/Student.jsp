@@ -29,6 +29,16 @@
                 <li><a href="/Student.htm" class="link">Home</a></li>
                 <li><a href="/CourseInfo.htm" class="link">Course Info</a></li>
                 <li><a href="/Discussionboard.htm" class="link">Forum</a></li>
+                <li>
+                    <ul class="dropdown menu" data-dropdown-menu>
+                        <li>
+                            <a href="#">Courses</a>
+                            <ul id = "crs_list" class="menu">
+                                <li><a id="new_enroll" href="#" data-open="enroll_modal">Enroll</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
                 <li><a href="/logout.htm" class="link">Logout</a></li>
             </ul>
         </div>
@@ -38,7 +48,7 @@
     </div>
 </div>
 
-<!-- MODAL AREA -->
+<!-- BODY -->
 <div class="row">
     <div class="medium-12 medium-centered columns" style="background: #FFFFFF; box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);" >
         <h3 style="text-align: center; padding: 25px 0px 0px">CSE 114 - Lecture Section 1 - Spring 2017</h3>
@@ -68,8 +78,25 @@
         </div>
     </div>
 </div>
-<!-- END MODAL AREA -->
+<!-- END BODY -->
 
+<!-- MODAL AREA-->
+<div id="enroll_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
+    <a class="close-button" data-close>&#215;</a>
+    <div class = "modal-heading-form">
+        <h3 class ="modal-heading-text">Enroll in a Course</h3>
+    </div>
+    <label><span class = "label-style-modal">Course Code</span>
+        <input id="txt_stud_crs_code" type="text" placeholder="Type your course code here...">
+    </label>
+
+
+    <div class="menu modal-area btn-username-submit">
+        <span id="btn_stud_enroll"class="modal-btn-full">Enroll</span>
+    </div>
+
+</div>
+<!-- END MODAL AREA-->
 
 
 <section class="row">
@@ -88,7 +115,15 @@
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
 <script src="js/student_transactions.js"></script>
+<script src="js/enrollment_transactions.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/foundation/6.0.1/js/vendor/jquery.min.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/foundation/6.0.1/js/foundation.min.js"></script>
 
+<script>
+    $(document).ready(function() {
+        $(document).foundation();
+    })
+</script>
 </body>
 
 
