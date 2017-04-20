@@ -97,7 +97,7 @@ public class URLMapping {
     @RequestMapping(value="Compile.htm", method = RequestMethod.GET)
     public void compileCode(HttpServletRequest request, HttpServletResponse response) throws IOException{
 
-        response.setContentType("application/json");
+        response.setContentType("text");
         PrintWriter out = response.getWriter();
         String text = request.getParameter("text");
         System.out.println(text);
@@ -114,9 +114,7 @@ public class URLMapping {
             Submission response1 = checkerApi.submission(apiKey, source, lang, testcases, format, callbackUrl, wait);
             Result answer = response1.getResult();
             System.out.println(answer.getCompilemessage());
-            String finmessage = "{\"output\":\"" + answer.getCompilemessage() + "\"";
-            finmessage += "}";
-
+            String finmessage = answer.getCompilemessage();
             out.println(finmessage);
         } catch (ApiException e) {
             System.out.printf("ApiException caught: %s\n", e.getMessage());
