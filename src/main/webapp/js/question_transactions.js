@@ -50,11 +50,25 @@ $(document).ready(function () {
     });
 
     $('body').on('click','.compile_box', function(e){
-        var $url = "/Compile.htm";
+        $('#output').val('');
 
-        $.ajax({url: $url, success: function(result){
-           alert("WORKING");
-        }});
+        var text = $('#myText').val();
+        text = text.replace(/\r?\n/g, '<br />');
+        var $url = "/Compile.htm?" + "&text=" + text;
+
+        $.ajax({
+            method: 'get',
+            url: $url,
+            dataType: 'text',
+            success: function (text_field){
+                var new_text = text_field.replace(/<br\s?\/?>/g,"\n");
+                $('#output').html(new_text);
+                $('#dialog2').dialog();
+            },
+            error: function () {
+                console.log("Compile Failure: Aw, It didn't connect to the servlet :(");
+            }
+        });
 
     });
 

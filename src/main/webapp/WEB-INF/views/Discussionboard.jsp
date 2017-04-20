@@ -28,14 +28,24 @@
             </div>
             <div class="top-bar-right">
                 <ul class="dropdown menu" data-dropdown-menu>
+                    <li><a id="current-user" href="javascript:void(0)" data-username="" class="scroll-nav welcome-name "></a></li>
                     <li><a href="/Student.htm" class="scroll-nav link">Home</a></li>
+                    <li>
+                        <a id = "nav_forum"  href="javascript:void(0)" class="scroll-nav link-highlight">Forum</a>
+                        <ul id = "load_forum_area" class="menu forum-links submenu-test">
+
+                        </ul>
+                        <form id="link-form" action=" " method="post" style="display: none;">
+                            <input name = "i_email" id = "form-iemail" type = "text" style="display:none;">
+                            <input name = "course" id = "form-course" type = "text" style="display:none;">
+
+                        </form>
+                    </li>
                     <li><a href="/CourseInfo.htm" class="scroll-nav link">Course Info</a></li>
-                    <li><a id = "nav_forum"  href="/Discussionboard.htm" class="scroll-nav link-highlight">Forum</a></li>
 
-
-                    <li><a href="#" class="project-btn-styles scroll-nav" id="create-new-post" data-open="change_post_modal">Create New
+                    <li><a href="javascript:void(0)"  class="project-btn-styles scroll-nav" id="create-new-post" data-open="create_post_modal">Create New
                         Post</a></li>
-                    <li class="extra-padding-left"><a href="#" class="project-btn-styles scroll-nav"
+                    <li class="extra-padding-left"><a href="javascript:void(0)" class="project-btn-styles scroll-nav"
                                                       id="change-user-name" data-open="change_username_modal">Change User Name</a></li>
 
 
@@ -54,10 +64,11 @@
     <div class = "modal-heading-form">
         <h3 class ="modal-heading-text">Change Your Username</h3>
     </div>
-    <label><span class = "label-style-modal">Username</span>
-        <input type="text" placeholder="Type your username here...">
+    <label><span class = "label-style-modal">Username (30 character limit)</span>
+        <input id="txt-username" type="text" maxlength="30" placeholder="Type your username here...">
     </label>
 
+    <span id="err-changeusername" class="lbl-error" style="opacity: 0;"></span>
 
     <div class="menu modal-area btn-username-submit">
         <span class="modal-btn-full">Submit Request</span>
@@ -69,21 +80,23 @@
 </div>
 
 
-<div id="change_post_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
-    <a class="close-button" data-close>&#215;</a>
+<div id="create_post_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
+    <a id = "close-createpost" class="close-button" data-close>&#215;</a>
     <div class = "modal-heading-form">
         <h3 class = "modal-heading-text">New Post</h3>
     </div>
     <label><span class = "label-style-modal">Title</span>
-        <input type="text" placeholder="Type your post title here...">
+        <input id = "post-title" type="text" placeholder="Type your post title here...">
     </label>
 
     <label><span class = "label-style-modal">Content</span>
-        <textarea class="height-transition comment_input"
+        <textarea id = "post-feed" class="height-transition comment_input"
                   placeholder="Write your post content here..."></textarea>
     </label>
 
-    <div class="menu modal-area btn-post-submit">
+    <span id="err-createpost" class="lbl-error" style="opacity: 0;"></span>
+
+    <div id="post-submit" class="menu modal-area btn-post-submit">
         <span class="modal-btn-full">Create Post</span>
     </div>
 
@@ -94,21 +107,24 @@
 
 
 <div id="edit_post_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
-    <a class="close-button" data-close>&#215;</a>
+    <a id = "close-editpost" class="close-button" data-close>&#215;</a>
     <div class = "modal-heading-form">
         <h3 class = "modal-heading-text">Modify Post</h3>
     </div>
     <label><span class = "label-style-modal">Title</span>
-        <input type="text" placeholder="Type your post title here...">
+        <input id="edit-title" type="text" placeholder="Type your post title here...">
     </label>
 
     <label><span class = "label-style-modal">New Content</span>
-        <textarea class="height-transition comment_input"
+        <textarea id="edit-post-feed" class="height-transition comment_input"
                   placeholder="Write your post content here..."></textarea>
     </label>
 
+    <span id="err-editpost" class="lbl-error" style="opacity:0;"></span>
+    <span id="val-editpost" data-postid="" style="display:none;"></span>
 
-    <div class="menu modal-area btn-post-submit">
+
+    <div id="editpost-submit" class="menu modal-area btn-post-submit">
         <span class="modal-btn-full">Confirm Changes</span>
     </div>
 
@@ -119,17 +135,20 @@
 
 
 <div id="edit_comment_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
-    <a class="close-button" data-close>&#215;</a>
+    <a id = "close-editcomment" class="close-button" data-close>&#215;</a>
     <div class = "modal-heading-form">
         <h3 class = "modal-heading-text">Modify Comment</h3>
     </div>
 
     <label><span class = "label-style-modal">New Content</span>
-        <textarea class="height-transition comment_input"
+        <textarea id="edit-comment-feed" class="height-transition comment_input"
                   placeholder="Write your comment content here..."></textarea>
     </label>
 
-    <div class="menu modal-area btn-post-submit">
+    <span id="err-editcomment" class="lbl-error" style="opacity:0;"></span>
+    <span id="val-editcomment" data-commentid="" style="display:none;"></span>
+
+    <div id = "editcomment-submit" class="menu modal-area btn-post-submit">
         <span class="modal-btn-full">Confirm Changes</span>
     </div>
 
@@ -140,7 +159,7 @@
 
 
 <div id="delete_post_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
-    <a class="close-button" data-close>&#215;</a>
+    <a id="close-deletepost" class="close-button" data-close>&#215;</a>
     <div class = "modal-heading-form">
         <h3 class = "modal-heading-text">Delete Confirmation</h3>
     </div>
@@ -149,8 +168,10 @@
         <span class = "notification-style-modal">Are you sure you want to delete this post?</span>
     </div>
 
+    <span id="err-deletepost" class="lbl-error"></span>
+    <span id="val-deletepost" data-postid="" style="display:none;"></span>
 
-    <div class="menu modal-area btn-deletepost-submit">
+    <div id = "deletepost-submit" class="menu modal-area btn-deletepost-submit">
         <span class="modal-btn-full">Delete Post</span>
     </div>
 
@@ -161,7 +182,7 @@
 
 
 <div id="delete_comment_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
-    <a class="close-button" data-close>&#215;</a>
+    <a id="close-deletecomment" class="close-button" data-close>&#215;</a>
     <div class = "modal-heading-form">
         <h3 class = "modal-heading-text">Delete Confirmation</h3>
     </div>
@@ -170,8 +191,10 @@
         <span class = "notification-style-modal">Are you sure you want to delete this comment?</span>
     </div>
 
+    <span id="err-deletecomment" class="lbl-error"></span>
+    <span id="val-deletecomment" data-commentid="" style="display:none;"></span>
 
-    <div class="menu modal-area btn-deletepost-submit">
+    <div id ="deletecomment-submit" class="menu modal-area btn-deletepost-submit">
         <span class="modal-btn-full">Delete Comment</span>
     </div>
 
@@ -179,6 +202,9 @@
     <p class="text-center"><a href="#"></a></p>
 
 </div>
+
+
+
 
 <!-- END MODAL AREA -->
 
@@ -190,11 +216,11 @@
         <div class="top-bar">
             <div class="top-bar-center">
                 <ul class="menu">
-                    <li><a  href="javascript:void(0)" id = "navbar-instructor"  class="scroll-nav">Instructor: Paul Fodor</a></li>
-                    <li><a  href="javascript:void(0)" id = "navbar-course" >Class: CSE 114</a></li>
-                    <li><a  href="javascript:void(0)" id = "navbar-enrolled" >Enrolled: 30</a></li>
-                    <li><a  href="javascript:void(0)" id = "navbar-posts" >Posts: 2</a></li>
-                    <li><a  href="javascript:void(0)" id = "navbar-comments" >Comments: 3</a></li>
+                    <li><a  href="javascript:void(0)" id = "navbar-instructor"  class="scroll-nav"></a></li>
+                    <li><a  href="javascript:void(0)" id = "navbar-course" ></a></li>
+                    <li><a  href="javascript:void(0)" id = "navbar-enrolled" ></a></li>
+                    <li><a  href="javascript:void(0)" id = "navbar-posts" ></a></li>
+                    <li><a  href="javascript:void(0)" id = "navbar-comments" ></a></li>
 
                 </ul>
             </div>
@@ -207,10 +233,9 @@
 <section class="row">
     <!-- DISCUSSION AREA -->
     <div id="extra-section" class="small-1 medium-1 large-1 columns">
-        <span id ="i_email" style="display: none;" >${i_email}</span>
-        <span id ="course" style="display: none;" >${course}</span>
+        <span id ="i_email" data-iemail="${i_email}" style="display:none;"></span>
+        <span id ="course" data-course="${course}" style="display:none;" ></span>
     </div>
-
 
     <div id="discussion-section" class="small-10 medium-10 large-10 columns">
         <div class="post-area">
@@ -219,206 +244,6 @@
                     <div class="clear"></div>
                     <div class="feed_div">
                         <div id="post_area_template" class="post-area-template">
-                            <div class="feed_box clearfix">
-                                <div class="feed_left">
-                                    <p><img class="userimg" src="images/user_icon.gif"></p>
-                                    <p>Ellie&nbsp;Franklin</p>
-                                </div>
-                                <div class="feed_right">
-                                    <span class="h2-title">Assignment One</span>
-                                    <span class="h2-title small-padding fi-comments"></span>
-                                    <span class="comment-count">2</span>
-                                    <span class= "h2-title small-padding fi-arrow-up arrow-up"></span>
-
-
-                                    <span class="block-style post_refresh">
-                                                A purple pig and a green donkey flew a kite in the middle of the night and ended up sunburnt.
-                                            </span>
-                                    <p class="likebox"><i class="fi-like"></i><span class="like-count">&nbsp;0</span>&nbsp;<span
-                                            class="darker-gray">·</span>
-                                        <a class="link_btn like_post_btn" post_userid="100004" postid="3333" href="#!">Like</a>&nbsp;<span
-                                                class="darker-gray">·</span>
-                                        <a class="link_btn dislike_post_btn" post_userid="100004" postid="3333"
-                                           href="#!">Dislike</a>&nbsp;<span class="darker-gray">·</span>
-                                        <a class="link_btn edit_post_btn" post_userid="100004" postid="3333" href="#!" data-open="edit_post_modal">Edit</a>&nbsp;<span
-                                                class="darker-gray">·</span>
-                                        <a class="link_btn delete_post_btn" post_userid="100004" data-open="delete_post_modal" postid="3333"
-                                           href="#!">Delete</a>
-                                    </p>
-
-
-                                    <div class="comment_div">
-                                        <div class=" comment_feed_left">
-                                            <p><img class="userimg" src="images/user_icon.gif"></p>
-                                            <p>Levi&nbsp;Ross</p>
-                                        </div>
-                                        <div class="comment_background comment_ele text-left">
-                                                 <span class="comment_refresh">The class teacher asks students to name an animal that begins with an “E”. One boy says, “Elephant.”
-                                                     Then the teacher asks for an animal that begins with a “T”. The same boy says, “Two elephants.”
-                                                     The teacher sends the boy out of the class for bad behavior. After that she asks for an animal beginning with “M”.
-                                                     The boy shouts from the other side of the wall: “Maybe an elephant!<br></span>
-                                            <p class="likebox"><i class="fi-like"></i><span
-                                                    class="like-count">&nbsp;0</span>&nbsp;<span
-                                                    class="darker-gray">·</span>
-                                                <a class="link_btn like_comment_btn" post_userid="100004"
-                                                   postid="3333"
-                                                   href="#!">Like</a>&nbsp;<span
-                                                        class="darker-gray">·</span>
-                                                <a class="link_btn dislike_comment_btn" post_userid="100004"
-                                                   postid="3333" href="#!">Dislike</a>&nbsp;<span
-                                                        class="darker-gray">·</span>
-                                                <a class="link_btn edit_comment_btn" data-open="edit_comment_modal" post_userid="100004"
-                                                   postid="3333"
-                                                   href="#!">Edit</a>&nbsp;<span
-                                                        class="darker-gray">·</span>
-                                                <a class="link_btn delete_comment_btn" data-open="delete_comment_modal" post_userid="100004"
-                                                   postid="3333" href="#!">Delete</a>
-                                            </p>
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="comment_div">
-                                        <div class=" comment_feed_left">
-                                            <p><img class="userimg" src="images/user_icon.gif"></p>
-                                            <p>Benjamin&nbsp;Franklin</p>
-                                        </div>
-                                        <div class="comment_background comment_ele text-left">
-                                                 <span class="comment_refresh">A Professor was traveling by boat. On his way he asked the sailor:
-                                                     “Do you know Biology, Ecology, Zoology, Geography, physiology?
-                                                     The sailor said no to all his questions.
-                                                     Professor: What the hell do you know on earth. You will die of illiteracy.
-                                                     After a while the boat started sinking. The Sailor asked the Professor, do you know swiminology & escapology from sharkology?
-                                                     The professor said no. Sailor: “Well, sharkology & crocodilogy will eat your assology, headology & you will dieology because of your mouthology.<br></span>
-                                            <p class="likebox"><i class="fi-like"></i><span
-                                                    class="like-count">&nbsp;0</span>&nbsp;<span
-                                                    class="darker-gray">·</span>
-                                                <a class="link_btn like_comment_btn" post_userid="100004"
-                                                   postid="3333"
-                                                   href="#!">Like</a>&nbsp;<span
-                                                        class="darker-gray">·</span>
-                                                <a class="link_btn dislike_comment_btn" post_userid="100004"
-                                                   postid="3333" href="#!">Dislike</a>&nbsp;<span
-                                                        class="darker-gray">·</span>
-                                                <a class="link_btn edit_comment_btn" data-open="edit_comment_modal" post_userid="100004"
-                                                   postid="3333"
-                                                   href="#!">Edit</a>&nbsp;<span
-                                                        class="darker-gray">·</span>
-                                                <a class="link_btn delete_comment_btn" post_userid="100004"
-                                                   postid="3333" href="#!">Delete</a>
-                                            </p>
-                                        </div>
-
-                                    </div>
-
-                                    <form id="commentform_3332" class="comment_submit" action="javascript:void(0);"
-                                          method="get">
-                                        <input name="action" value="comment" type="hidden">
-                                        <input name="post_id" value="3333" type="hidden">
-                                        <div class="comment_submit_section">
-                                            <div class="comment_textarea">
-                                                        <textarea class="height-transition comment_input"
-                                                                  name="comment" id="comment_3332"
-                                                                  placeholder="Write your comment here"></textarea>
-                                            </div>
-                                            <span class="lbl-error hide" name="err_comment">fdfsfdsfds<br></span>
-                                            <div class="comment_add extra-padding-bottom">
-                                                <ul class="menu">
-                                                    <li><span class="comment-btn">Submit</span></li>
-                                                    <li> &nbsp;&nbsp;<span class="comment-btn">Cancel</span></li>
-                                                </ul>
-
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-
-                            </div>
-
-
-
-                            <div class="feed_box clearfix">
-                                <div class="feed_left">
-                                    <p><img class="userimg" src="images/user_icon.gif"></p>
-                                    <p>Ellie&nbsp;Franklin</p>
-                                </div>
-                                <div class="feed_right">
-                                    <span class="h2-title">Question One</span>
-                                    <span class=" h2-title small-padding fi-comments"></span>
-                                    <span class="comment-count">2</span>
-                                    <span class=" h2-title small-padding fi-arrow-up arrow-up"></span>
-                                    <span class="post_refresh block-style">
-                                                If Purple People Eaters are real… where do they find purple people to eat?
-                                            </span>
-                                    <p class="likebox"><i class="fi-like"></i><span class="like-count">&nbsp;0</span>&nbsp;<span
-                                            class="darker-gray">·</span>
-                                        <a class="link_btn like_post_btn" post_userid="100004" postid="3333" href="#!">Like</a>&nbsp;<span
-                                                class="darker-gray">·</span>
-                                        <a class="link_btn dislike_post_btn" post_userid="100004" postid="3333"
-                                           href="#!">Dislike</a>&nbsp;<span class="darker-gray">·</span>
-                                        <a class="link_btn edit_post_btn" post_userid="100004" postid="3333" href="#!" data-open="edit_post_modal">Edit</a>&nbsp;<span
-                                                class="darker-gray">·</span>
-                                        <a class="link_btn delete_post_btn" post_userid="100004" postid="3333"
-                                           href="#!">Delete</a>
-                                    </p>
-
-
-                                    <div class="comment_div">
-                                        <div class=" comment_feed_left">
-                                            <p><img class="userimg" src="images/user_icon.gif"></p>
-                                            <p>Levi&nbsp;Ross</p>
-                                        </div>
-                                        <div class="comment_background comment_ele text-left">
-                                                 <span class="comment_refresh">A police officer found a perfect hiding place for watching for speeding motorists.
-                                                     One day, the officer was amazed when everyone was under the speed limit, so he investigated and found the problem.
-                                                     A 10 years old boy was standing on the side of the road with a huge hand painted sign which said “Radar Trap Ahead.”
-                                                     A little more investigative work led the officer to the boy’s accomplice: another boy about 100 yards beyond the radar trap with a sign reading “TIPS” and a bucket at his feet full of change. <br></span>
-                                            <p class="likebox"><i class="fi-like"></i><span
-                                                    class="like-count">&nbsp;0</span>&nbsp;<span
-                                                    class="darker-gray">·</span>
-                                                <a class="link_btn like_comment_btn" post_userid="100004"
-                                                   postid="3333"
-                                                   href="#!">Like</a>&nbsp;<span
-                                                        class="darker-gray">·</span>
-                                                <a class="link_btn dislike_comment_btn" post_userid="100004"
-                                                   postid="3333" href="#!">Dislike</a>&nbsp;<span
-                                                        class="darker-gray">·</span>
-                                                <a class="link_btn edit_comment_btn" post_userid="100004"
-                                                   postid="3333"
-                                                   href="#!">Edit</a>&nbsp;<span
-                                                        class="darker-gray">·</span>
-                                                <a class="link_btn delete_comment_btn" post_userid="100004"
-                                                   postid="3333" href="#!">Delete</a>
-                                            </p>
-                                        </div>
-
-                                    </div>
-
-
-                                    <form id="commentform_3333" class="comment_submit" action="javascript:void(0);"
-                                          method="get">
-                                        <input name="action" value="comment" type="hidden">
-                                        <input name="post_id" value="3333" type="hidden">
-                                        <div class="comment_submit_section">
-                                            <div class="comment_textarea">
-                                                        <textarea class="height-transition comment_input"
-                                                                  name="comment" id="comment_3333"
-                                                                  placeholder="Write your comment here"></textarea>
-                                            </div>
-                                            <span class="lbl-error hide" name="err_comment">fdfsfdsfds<br></span>
-                                            <div class="comment_add extra-padding-bottom">
-                                                <ul class="menu">
-                                                    <li><span class="comment-btn">Submit</span></li>
-                                                    <li> &nbsp;&nbsp;<span class="comment-btn">Cancel</span></li>
-                                                </ul>
-
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-
-                            </div>
 
                         </div>
                     </div>
@@ -426,10 +251,122 @@
             </div>
         </div>
     </div>
-
     <div id="stats-section" class="small-1 medium-1 large-1 columns">
+
     </div>
-    <!-- END DISCUSSION AREA -->
+
+</section>
+
+
+<script id= "discussion-list-template" type="text/x-handle-template">
+
+    {{#each Courses}}
+    <li class="list_file" data-list-email="{{instructorEmail}}" data-course ="{{course}}">
+        <a href="javascript:void(0)">{{course}}:{{instructorNickname}}</a>
+    </li>
+    {{else}}
+    <li><a href="javascript:void(0)" >None Available</a></li>
+    {{/each}}
+
+</script>
+
+
+<script id = "discussion-area-template" type = "text/x-handle-template">
+
+    {{#each Posts}}
+    <div class="feed_box clearfix" data-postid="{{postID}}">
+        <div class="feed_left">
+            <p><img class="userimg" src="images/user_icon.gif"></p>
+            <p data-access="{{pAccess}}">{{pUsername}}</p>
+        </div>
+        <div class="feed_right">
+            <span data-postid="{{postID}}" class="h2-title">{{postTitle}}</span>
+            <span class="h2-title small-padding fi-comments"></span>
+            <span class="comment-count">{{pCommentCount}}</span>
+            <span class= "h2-title small-padding fi-arrow-up arrow-up"></span>
+
+
+            <span data-postid="{{postID}}" class="block-style post_refresh">
+                {{postContent}}
+            </span>
+            <p class="likebox"><i class="fi-like"></i><span class="like-count">&nbsp;{{pLikes}}</span>&nbsp;<span
+                    class="darker-gray">·</span>
+                <a class="link_btn like_post_btn" data-post-userid="{{pEnrollmentID}}" data-postid="{{postID}}" href="javascript:void(0)">Like</a>&nbsp;<span
+                        class="darker-gray" >·</span>
+                <a class="link_btn dislike_post_btn" data-post-userid="{{pEnrollmentID}}" data-postid="{{postID}}" href="javascript:void(0)" >Dislike</a>&nbsp;
+
+                <span class="darker-gray" style="visibility: hidden;"  data-edit-permission="{{pEditPermission}}">·</span>
+
+                <a class="link_btn edit_post_btn" data-edit-permission="{{pEditPermission}}" data-post-userid="{{pEnrollmentID}}" data-postid="{{postID}}" href="javascript:void(0)" data-open="edit_post_modal" style="visibility: hidden;">Edit</a>&nbsp;
+
+                <span class="darker-gray" style="visibility: hidden;"  data-delete-permission="{{pDeletePermission}}">·</span>
+
+                <a  class="link_btn delete_post_btn" style="visibility: hidden;" data-delete-permission="{{pDeletePermission}}" data-post-userid="{{pEnrollmentID}}" data-postid="{{postID}}" href="javascript:void(0)" data-open="delete_post_modal">Delete</a>
+            </p>
+
+            {{#each Comments}}
+            <div class="comment_div">
+                <div class=" comment_feed_left">
+                    <p><img class="userimg" src="images/user_icon.gif"></p>
+                    <p data-access="{{cAccess}}">{{cUsername}}</p>
+                </div>
+                <div class="comment_background comment_ele text-left">
+                    <div class = "comment_content">
+                        <span data-commentid="{{commentID}}" class="comment_refresh">{{commentContent}}<br></span>
+
+                        <p class="likebox"><i class="fi-like"></i><span class="like-count">&nbsp;{{cLikes}}</span>&nbsp;
+                            <span class="darker-gray">·</span>
+                            <a class="link_btn like_comment_btn"
+                               data-comment-userid="{{cEnrollmentID}}" data-commentid="{{commentID}}" href="javascript:void(0)">Like</a>&nbsp;
+                            <span class="darker-gray">·</span>
+                            <a class="link_btn dislike_comment_btn"
+                               data-comment-userid="{{cEnrollmentID}}" data-commentid="{{commentID}}" href="javascript:void(0)">Dislike</a>&nbsp;
+
+                            <span class="darker-gray" style="visibility: hidden;" data-edit-permission="{{cEditPermission}}" >·</span>
+
+                            <a class="link_btn edit_comment_btn" data-open="edit_comment_modal"
+                               style="visibility: hidden;" data-comment-userid="{{cEnrollmentID}}" data-commentid="{{commentID}}" data-edit-permission="{{cEditPermission}}" href="javascript:void(0)">Edit</a>&nbsp;
+
+                            <span class="darker-gray" style="visibility: hidden;"  data-delete-permission="{{cDeletePermission}}">·</span>
+
+                            <a class="link_btn delete_comment_btn" data-open="delete_comment_modal"
+                               style="visibility: hidden;"  data-delete-permission="{{cDeletePermission}}" data-comment-userid="{{cEnrollmentID}}" data-commentid="{{commentID}}"  href="javascript:void(0)" >Delete</a>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            {{/each}}
+
+
+            <form id="commentform_{{postID}}" class="comment-submit" action="javascript:void(0);"
+                  method="get">
+                <input name="action" value="comment" type="hidden">
+                <input name="post_id" value="{{postID}}" type="hidden">
+                <div class="comment_submit_section">
+                    <span class="lbl-error" name="err_comment"><br></span>
+                    <div class="comment_textarea">
+                                                        <textarea class="height-transition comment_input"
+                                                                  name="comment_content" id="comment_{{postID}}"
+                                                                  placeholder="Write your comment here"></textarea>
+                    </div>
+
+                    <div class="comment_add extra-padding-bottom">
+                        <ul class="menu">
+                            <li class="comment-submit"><span class="comment-btn">Submit</span></li>
+                            <li class="comment-cancel"> &nbsp;&nbsp;<span class="comment-btn">Cancel</span></li>
+                        </ul>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    {{/each}}
+
+</script>
+<!-- END DISCUSSION AREA -->
 </section>
 
 
@@ -438,10 +375,9 @@
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
 <script src="libs/handlebars-v4.0.5.js" type="text/javascript"></script>
-
-<!-- Work in Progress
+<script src="libs/handlebars-v4.0.5.js" type="text/javascript"></script>
 <script src="js/discussion_board_transactions.js" type="text/javascript"></script>
-<script src="js/nav_bar_transactions.js" type="text/javascript"></script> -->
+<script src="js/nav_bar_transactions.js" type="text/javascript"></script>
 <script src="js/vendor/jquery.js"></script>
 <script src="js/vendor/what-input.js"></script>
 <script src="js/vendor/foundation.js"></script>

@@ -4,7 +4,7 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.macchiato.beans.UserBean;
+//import com.macchiato.beans.UserBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -95,7 +95,7 @@ public class LoadStudent {
             request.getSession().setAttribute("CrsNames", crsNames);
         }
 
-        UserBean newUser = new UserBean(email,userType);
+      //  UserBean newUser = new UserBean(email,userType);
         String outputJSON = "{\"email\":\"" + email + "\"," + "\"CrsNames\":[";
 
 

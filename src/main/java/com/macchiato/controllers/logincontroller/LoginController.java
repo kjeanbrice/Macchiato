@@ -3,6 +3,7 @@ package com.macchiato.controllers.logincontroller;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.macchiato.utility.DiscussionBoardUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +16,8 @@ public class LoginController {
     @RequestMapping(value="login.htm", method = RequestMethod.GET)
     public String LoginService (){
         UserService userService = UserServiceFactory.getUserService();
+        //Creates dummy data for the discussion board
+        DiscussionBoardUtils.createDummyDiscussionData();
         if(userService.isUserLoggedIn()){
             System.out.println("");
             User user = userService.getCurrentUser();
