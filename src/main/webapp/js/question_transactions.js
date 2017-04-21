@@ -57,7 +57,7 @@ $(document).ready(function () {
         var $url = "/Compile.htm?" + "&text=" + text;
 
         $.ajax({
-            method: 'get',
+            method: 'post',
             url: $url,
             dataType: 'text',
             success: function (text_field){

@@ -45,7 +45,7 @@ public class AssignmentController {
 
     }
 
-    @RequestMapping(value="Compile.htm", method = RequestMethod.GET)
+    @RequestMapping(value="Compile.htm", method = RequestMethod.POST)
     public void compileCode(HttpServletRequest request, HttpServletResponse response) throws IOException{
 
         response.setContentType("text");
@@ -55,7 +55,7 @@ public class AssignmentController {
         String apiKey = "hackerrank|2458825-1355|a7001ed51bce45bd9f6cc1e4bf499ef05d8d4495";
         String source = text;
         Integer lang = new Integer(3);
-        String testcases = "[\"int i = 1;\", \"Test 2\"]";
+        String testcases = "[int i = 1;]";
         String format = "JSON";
         String callbackUrl = "";
         String wait = "false";
@@ -85,23 +85,29 @@ public class AssignmentController {
 
     }
 
-//    public QuestionListBean getQuestionListInfo(Key assignmentKey){
-//
-//        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-//        Query.Filter questionkey_filter = new Query.FilterPredicate("question_key",Query.FilterOperator.EQUAL,assignmentKey);
-//        Query q = new Query("Question").setFilter(questionkey_filter);
-//        PreparedQuery pq = datastore.prepare(q);
-//        /*Retrieve question list*/
-//        List<Entity> question_list = pq.asList(FetchOptions.Builder.withDefaults());
-//        for(int i = 0; i < question_list.size(); i++){
-//
-//            Entity question = question_list.get(i);
-//            String problem = (String) question.getProperty("problem");
-//            String solution = (String) question.getProperty("solution");
-//            String answer = (String) question.getProperty("answer");
-//
-//        }
-//    }
+    public QuestionListBean getQuestionListInfo(Key assignmentKey){
+
+        QuestionListBean questions = new QuestionListBean();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter questionkey_filter = new Query.FilterPredicate("question_key",Query.FilterOperator.EQUAL,assignmentKey);
+        Query q = new Query("Question").setFilter(questionkey_filter);
+        PreparedQuery pq = datastore.prepare(q);
+        /*Retrieve question list*/
+        List<Entity> question_list = pq.asList(FetchOptions.Builder.withDefaults());
+        for(int i = 0; i < question_list.size(); i++){
+
+            Entity question = question_list.get(i);
+            String problem = (String) question.getProperty("problem");
+            String solution = (String) question.getProperty("solution");
+            String answer = (String) question.getProperty("answer");
+            QuestionBean qb = new QuestionBean(problem,solution,Integer.toString(i));
+            qb.setAnswer(answer);
+            questions.getProblems().add(qb);
+        }
+
+        return questions;
+
+    }
 
 
 }
