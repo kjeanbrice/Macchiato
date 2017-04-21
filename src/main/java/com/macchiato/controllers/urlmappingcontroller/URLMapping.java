@@ -72,4 +72,20 @@ public class URLMapping {
         ModelAndView model = new ModelAndView("Question");
         return model;
     }
+    @RequestMapping(value = "TeacherHomePage.htm", method = RequestMethod.GET)
+    public ModelAndView loadTeacherPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
+
+        ModelAndView model = new ModelAndView("TeacherHomePage");
+        return model;
+    }
+
+
+    @RequestMapping(value = "TeacherInformationPage.htm", method = RequestMethod.GET)
+    public ModelAndView loadClassInformationPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
+
+        ModelAndView model = new ModelAndView("ClassInformationPage");
+        return model;
+    }
 }
