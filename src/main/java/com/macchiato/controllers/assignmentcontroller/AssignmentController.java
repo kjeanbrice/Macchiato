@@ -1,5 +1,6 @@
 package com.macchiato.controllers.assignmentcontroller;
 
+import com.google.appengine.api.datastore.*;
 import com.hackerrank.api.client.ApiException;
 import com.hackerrank.api.hackerrank.api.CheckerApi;
 import com.hackerrank.api.hackerrank.model.Result;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * Created by Raymond on 4/20/2017.
@@ -55,8 +57,8 @@ public class AssignmentController {
         Integer lang = new Integer(3);
         String testcases = "[\"int i = 1;\", \"Test 2\"]";
         String format = "JSON";
-        String callbackUrl = "https://testing.com/response/handler";
-        String wait = "true";
+        String callbackUrl = "";
+        String wait = "false";
 
         try {
             CheckerApi checkerApi = new CheckerApi();
@@ -72,6 +74,34 @@ public class AssignmentController {
 
     @RequestMapping(value="SubmitSol.htm",method = RequestMethod.GET)
     public void submitSolution(HttpServletRequest request, HttpServletResponse response) throws IOException{
+
         response.setContentType("text/html;charset=UTF-8");
     }
+
+    @RequestMapping(value="LoadQues.htm",method = RequestMethod.GET)
+    public void loadQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException{
+
+        response.setContentType("application/json");
+
+    }
+
+//    public QuestionListBean getQuestionListInfo(Key assignmentKey){
+//
+//        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+//        Query.Filter questionkey_filter = new Query.FilterPredicate("question_key",Query.FilterOperator.EQUAL,assignmentKey);
+//        Query q = new Query("Question").setFilter(questionkey_filter);
+//        PreparedQuery pq = datastore.prepare(q);
+//        /*Retrieve question list*/
+//        List<Entity> question_list = pq.asList(FetchOptions.Builder.withDefaults());
+//        for(int i = 0; i < question_list.size(); i++){
+//
+//            Entity question = question_list.get(i);
+//            String problem = (String) question.getProperty("problem");
+//            String solution = (String) question.getProperty("solution");
+//            String answer = (String) question.getProperty("answer");
+//
+//        }
+//    }
+
+
 }
