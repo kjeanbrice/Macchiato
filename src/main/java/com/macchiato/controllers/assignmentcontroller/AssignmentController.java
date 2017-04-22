@@ -55,7 +55,7 @@ public class AssignmentController {
         String apiKey = "hackerrank|2458825-1355|a7001ed51bce45bd9f6cc1e4bf499ef05d8d4495";
         String source = text;
         Integer lang = new Integer(3);
-        String testcases = "[int i = 1;]";
+        String testcases = "[\"Test 1\", \"Test 2\"]";
         String format = "JSON";
         String callbackUrl = "";
         String wait = "false";
