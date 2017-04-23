@@ -58,15 +58,18 @@ public class AssignmentController {
         String testcases = "[\"Test 1\", \"Test 2\"]";
         String format = "JSON";
         String callbackUrl = "";
-        String wait = "false";
+        String wait = "true";
+
 
         try {
             CheckerApi checkerApi = new CheckerApi();
             Submission response1 = checkerApi.submission(apiKey, source, lang, testcases, format, callbackUrl, wait);
             Result answer = response1.getResult();
+
+            List<String> stdout = response1.getResult().getStdout();
             System.out.println(answer.getCompilemessage());
             String finmessage = answer.getCompilemessage();
-            out.println(finmessage);
+            out.println(stdout.get(0).trim());
         } catch (ApiException e) {
             System.out.printf("ApiException caught: %s\n", e.getMessage());
         }

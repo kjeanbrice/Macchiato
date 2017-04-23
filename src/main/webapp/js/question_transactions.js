@@ -53,7 +53,7 @@ $(document).ready(function () {
 
         $('#output').val('');
         var text = $('#myText').val();
-        text = text.replace(/\r?\n/g, '<br />');
+        //text = text.replace(/\r?\n/g, '<br />');
         var $url = "/Compile.htm?" + "&text=" + text;
 
         $.ajax({
