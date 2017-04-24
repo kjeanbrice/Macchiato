@@ -1,9 +1,11 @@
 package com.macchiato.beans;
 
+import java.io.Serializable;
+
 /**
  * Created by li on 4/18/2017.
  */
-public class EnrollmentBean {
+public class EnrollmentBean implements Serializable {
     private String email;
     private String crsCode;
 

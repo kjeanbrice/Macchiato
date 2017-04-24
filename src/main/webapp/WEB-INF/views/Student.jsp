@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Macchiato</title>
     <link rel="stylesheet" href="../../css/app.css">
+
+    <link rel="stylesheet" href="css/assignment.css">
     <link rel="stylesheet" href="../../icons/foundation-icons/foundation-icons/foundation-icons.css"/>
     <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
@@ -29,7 +31,7 @@
                 <li><a href="/Student.htm" class="link">Home</a></li>
                 <li><a href="/CourseInfo.htm" class="link">Course Info</a></li>
                 <li><a href="/Discussionboard.htm" class="link">Forum</a></li>
-                <li>
+                <!--<li>
                     <ul class="dropdown menu" data-dropdown-menu>
                         <li>
                             <a href="#">Courses</a>
@@ -38,13 +40,21 @@
                             </ul>
                         </li>
                     </ul>
-                </li>
+                </li> -->
                 <li><a href="/logout.htm" class="link">Logout</a></li>
             </ul>
         </div>
     </div>
-    <div class="top-bar" style="background-color:#515151;">
-        <h6 id="stud_name" style="color:#EAEAEA; text-align:center; "><b>Student</b></h6>
+    <div class="student_bar" style="padding:20px;">
+	    <span id="stud_name">
+            STUDENT: Raymond Xue
+	    </span>
+        <span class="class_dropdown" >
+            <button class="dropbtn">Class</button>
+                <div id="crs_list" class="dropdown-content">
+                    <a id="new_enroll" href="#" data-open="enroll_modal">Enroll</a>
+                </div>
+        </span>
     </div>
 </div>
 
@@ -80,24 +90,6 @@
 </div>
 <!-- END BODY -->
 
-<!-- MODAL AREA-->
-<div id="enroll_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
-    <a class="close-button" data-close>&#215;</a>
-    <div class = "modal-heading-form">
-        <h3 class ="modal-heading-text">Enroll in a Course</h3>
-    </div>
-    <label><span class = "label-style-modal">Course Code</span>
-        <input id="txt_stud_crs_code" type="text" placeholder="Type your course code here...">
-    </label>
-
-
-    <div class="menu modal-area btn-username-submit">
-        <span id="btn_stud_enroll"class="modal-btn-full">Enroll</span>
-    </div>
-
-</div>
-<!-- END MODAL AREA-->
-
 
 <section class="row">
     <div  class="small-4 medium-4 large-4 columns">
@@ -112,13 +104,29 @@
 
 </section>
 
+<!-- MODAL AREA-->
+<div id="enroll_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast" >
+    <a id ="close-enroll" class="close-button" data-close>&#215;</a>
+    <div class = "modal-heading-form">
+        <h3 class ="modal-heading-text">Enroll in a Course</h3>
+    </div>
+    <label><span class = "label-style-modal">Course Code</span>
+        <input id="txt_stud_crs_code" type="text" placeholder="Type your course code here..." >
+    </label>
 
+
+    <div id="enroll_submit" class="menu modal-area ">
+        <span class="modal-btn-full">Enroll</span>
+    </div>
+
+</div>
+<!-- END MODAL AREA-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
 <script src="js/student_transactions.js"></script>
-<script src="js/enrollment_transactions.js"></script>
-<script src = "https://cdnjs.cloudflare.com/ajax/libs/foundation/6.0.1/js/vendor/jquery.min.js"></script>
-<script src = "https://cdnjs.cloudflare.com/ajax/libs/foundation/6.0.1/js/foundation.min.js"></script>
-
+<script src="js/vendor/jquery.js"></script>
+<script src="js/vendor/what-input.js"></script>
+<script src="js/vendor/foundation.js"></script>
 <script>
     $(document).ready(function() {
         $(document).foundation();

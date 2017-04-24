@@ -1,11 +1,13 @@
 package com.macchiato.beans;
 
+import java.io.Serializable;
+
 /**
  * Created by li on 4/14/2017.
  */
-public class UserBean {
+public class UserBean implements Serializable {
     private String email;
-    // 0 is Instructor, 1 is Student
+    // 0 is Student, 1 is Instructor, 2 is Administrator
     private int userType;
 
     public UserBean(String email, int userType){
