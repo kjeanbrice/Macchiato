@@ -50,20 +50,20 @@ $(document).ready(function () {
     });
 
     $('body').on('click','.compile_box', function(e){
-        $('#output').val('');
 
+        $('#output').val('');
         var text = $('#myText').val();
-        text = text.replace(/\r?\n/g, '<br />');
+        //text = text.replace(/\r?\n/g, '<br />');
         var $url = "/Compile.htm?" + "&text=" + text;
 
         $.ajax({
-            method: 'get',
+            method: 'post',
             url: $url,
             dataType: 'text',
             success: function (text_field){
                 var new_text = text_field.replace(/<br\s?\/?>/g,"\n");
                 $('#output').html(new_text);
-                $('#dialog2').dialog();
+                $('#dialog2').dialog({height:'auto',width:'auto'});
             },
             error: function () {
                 console.log("Compile Failure: Aw, It didn't connect to the servlet :(");

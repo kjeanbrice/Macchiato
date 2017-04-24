@@ -27,7 +27,10 @@
         </div>
         <div class="top-bar-right">
             <ul class="menu">
-                <li><a href="/login.htm" class="link" id="login">Login</a></li>
+                <li><a href="/login.htm" class="link" id="login">Login As Student</a></li>
+            </ul>
+            <ul class="menu">
+                <li><a href="/logint.htm" class="link" id="logint">Login As Teacher</a></li>
             </ul>
         </div>
     </div>
