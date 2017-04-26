@@ -7,6 +7,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Macchiato</title>
+    <link rel="icon" href="images/favicon.png" type="image/png"/>
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="icons/foundation-icons/foundation-icons/foundation-icons.css"/>
     <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
