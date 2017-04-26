@@ -26,8 +26,8 @@ public class AssignmentController {
 
     @RequestMapping(value ="PopulateQues.htm",method = RequestMethod.GET)
     public void populateQuesRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
 
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
         /* FOR TESTING PURPOSE SINCE WE HAVE NO DATABASE YET */
@@ -51,7 +51,7 @@ public class AssignmentController {
         response.setContentType("text");
         PrintWriter out = response.getWriter();
         String text = request.getParameter("text");
-        System.out.println(text);
+     // System.out.println(text);
         String apiKey = "hackerrank|2458825-1355|a7001ed51bce45bd9f6cc1e4bf499ef05d8d4495";
         String source = text;
         Integer lang = new Integer(3);
@@ -67,9 +67,17 @@ public class AssignmentController {
             Result answer = response1.getResult();
 
             List<String> stdout = response1.getResult().getStdout();
-            System.out.println(answer.getCompilemessage());
+         //   System.out.println(answer.getCompilemessage());
             String finmessage = answer.getCompilemessage();
-            out.println(stdout.get(0).trim());
+         //   System.out.println("Compiler message is " + finmessage);
+         //   System.out.println("User entered text is " + text);
+            if (finmessage.equals("")){
+                out.println(stdout.get(0).trim());
+            }
+            else{
+                out.println(finmessage);
+            }
+
         } catch (ApiException e) {
             System.out.printf("ApiException caught: %s\n", e.getMessage());
         }
