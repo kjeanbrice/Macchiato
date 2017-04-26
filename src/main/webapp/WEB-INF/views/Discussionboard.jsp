@@ -17,7 +17,7 @@
 <body id="body-style">
 <!-- TOP BAR -->
 <div class="top-bar-container " data-sticky-container>
-    <div id= "navbar-static" class="sticky" data-sticky data-sticky data-options="stickTo:top; stickyOn:small;">
+    <div class="sticky" data-sticky data-options="stickTo:top; marginTop:0; stickyOn:small;" data-check-every="0">
         <div class="top-bar">
             <div class="top-bar-left">
                 <ul class="menu">
@@ -367,14 +367,12 @@
 
 </script>
 <!-- END DISCUSSION AREA -->
-</section>
 
 
 
 
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
-<script src="libs/handlebars-v4.0.5.js" type="text/javascript"></script>
 <script src="libs/handlebars-v4.0.5.js" type="text/javascript"></script>
 <script src="js/discussion_board_transactions.js" type="text/javascript"></script>
 <script src="js/nav_bar_transactions.js" type="text/javascript"></script>

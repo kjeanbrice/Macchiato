@@ -13,65 +13,84 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
 
-<body>
+<body id="body-style">
 <!-- TOP BAR -->
-<div class="top-bar-container" data-sticky-container>
+<div class="top-bar-container " data-sticky-container>
+    <div class="sticky" data-sticky data-options="stickTo:top; marginTop:0; stickyOn:small;" data-check-every="0">
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <ul class="menu">
+                    <li><img src="images/Macchiato.png" alt="Mock Image" height="32" width="32"></li>
+                    <li><a href="javascript:void(0);" class="scroll-nav logo-name">Macchiato</a></li>
 
-    <div class="top-bar">
-        <div class="top-bar-left">
-            <ul class="menu">
-                <li><img src="images/Macchiato.png" alt="JTE Image" height="32" width="32"></li>
-                <li><a href="#" class="logo-name">Macchiato</a></li>
-
-            </ul>
-        </div>
-        <div class="top-bar-right">
-            <ul class="menu">
-                <li><a href="/login.htm" class="link" id="login">Login As Student</a></li>
-            </ul>
-            <ul class="menu">
-                <li><a href="/logint.htm" class="link" id="logint">Login As Teacher</a></li>
-            </ul>
+                </ul>
+            </div>
+            <div class="top-bar-right">
+                <ul id = "home-area" class="menu">
+                    <li style="visibility: hidden;"><a href="javascript:void(0)" class="project-btn-styles scroll-nav">Invalid</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
+<!-- END TOP BAR -->
 
 
 
-<!-- MODAL AREA -->
-<div class="row">
-    <div class="medium-12 medium-centered columns" style="background: #FFFFFF; box-shadow: 1px 2px 4px rgba(0, 0, 0, .5); margin: 0px 0px" >
-        <h3 style="text-align: center; padding: 25px 0px 0px">Welcome</h3>
-        <h3 style="text-align: center;">to</h3>
-        <img src="../../images/Macchiato.png" alt="JTE Image" height="256" width="256" style="display: block; margin: auto;">
-        <h4 style="text-align: center;">Macchiato</h4>
-        <p style="padding: 0px 100px 0px 200px; margin:0px 0px;"><b>Macchiato</b> is a web-application that provides a platform for Computer Science professor to assign Java</p>
-        <p style="padding: 0px 100px 50px 150px; margin:0px 0px;">problems to students to solve.
-        Students will be able to ask the professors questions on the Discussion Board anything they need and can talk amongs themselves.</p>
-
+<section id="landing-section">
+    <div id="landing-text-area">
+        <div class="row">
+            <div class="center-text small-12 medium-12 large-12 columns">
+                <span id="landing-text-top"><b>Macchiato</b></span>
+                <span id="landing-text-bottom">Make simple Java assignments and collaborate with your students, for free.</span>
+                <br>
+                <ul class=" landing-padding landing-btn-area menu">
+                    <li><a href="#summary-section" class="btn-styles li-padding scroll-nav-home" id="learn-more">Learn more</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
-</div>
-<!-- END MODAL AREA -->
-
-
-
-<section class="row">
-    <div  class="small-4 medium-4 large-4 columns">
-
-    </div>
-    <div class="small-4 medium-4 large-4 columns">
-
-    </div>
-    <div class="small-4 medium-4 large-4 columns">
-
-    </div>
-
 </section>
 
+<section id="summary-section" class="background-color-lightgray">
+    <div class="summary-area-padding">
+        <div class="row">
+            <div class="center-text small-12 medium-12 large-12 columns h1-title-padding">
+                <h1><span class = "h1-title">What is Macchiato?</span></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="center-text small-12 medium-12 large-12 columns">
+                <p><span class="summary-des">Macchiato is a web-application that provides a platform for instructors to create and assign simple Java problems to their students.
+                This website also includes a discussion board, where students and instructors can work together to discuss assignments or anything related to the course. We hope you enjoy your stay!</span></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script id= "home-page-template" type="text/x-handle-template">
+    {{#if User}}
+    <li style="visibility: hidden;"><a href="javascript:void(0)" class="project-btn-styles scroll-nav" data-open="change_post_modal">Invalid</a></li>
+    <li>
+        <a id="current-user" href="javascript:void(0)" data-username="{{User.email}}" class="scroll-nav welcome-name ">Welcome, {{User.email}}</a>
+    </li>
+    <li><a href="/portalresolver.htm" class="scroll-nav link">Enter</a></li>
+    <li>
+        <a href="/login.htm?access=-1" class="scroll-nav link">Logout</a>
+    </li>
+    {{else}}
+    <li><a href="/login.htm?access=0" class="project-btn-styles scroll-nav" id="create-new-post" data-open="change_post_modal">&nbsp;&nbsp;Student Login&nbsp;&nbsp;</a></li>
+    <li class="extra-padding-left"><a href="/login.htm?access=1" class="project-btn-styles scroll-nav" id="change-user-name" data-open="change_username_modal">Instructor Login</a></li>
+    {{/if}}
+</script>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+<script src="libs/handlebars-v4.0.5.js" type="text/javascript"></script>
+<script src="js/nav_bar_transactions.js" type="text/javascript"></script>
+<script src="js/vendor/jquery.js"></script>
+<script src="js/vendor/what-input.js"></script>
+<script src="js/vendor/foundation.js"></script>
 <script src="js/app.js"></script>
-
 </body>
 
 

@@ -79,8 +79,6 @@ public class DiscussionBoardController {
                 datastore.put(group);
 
                 DiscussionBoardUtils.enrollUser(group.getKey(), email, user.getNickname(), 1);
-
-
                 break;
             default:
                 System.out.println("Switch Error. This area should have never been reached.");

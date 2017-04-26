@@ -32,7 +32,7 @@ import java.io.PrintWriter;
 public class URLMapping {
 
     @RequestMapping(value = "Home.htm", method = RequestMethod.GET)
-    public ModelAndView loadHomePage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static ModelAndView loadHomePage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         ModelAndView model = new ModelAndView("Home");
@@ -40,7 +40,7 @@ public class URLMapping {
     }
 
     @RequestMapping(value = "Student.htm", method = RequestMethod.GET)
-    public ModelAndView loadStudentPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static ModelAndView loadStudentPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         ModelAndView model = new ModelAndView("Student");
@@ -50,7 +50,7 @@ public class URLMapping {
 
 
     @RequestMapping(value = "CourseInfo.htm", method = RequestMethod.GET)
-    public ModelAndView loadCourseInfoPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static ModelAndView loadCourseInfoPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         ModelAndView model = new ModelAndView("CourseInfo");
@@ -58,7 +58,7 @@ public class URLMapping {
     }
 
     @RequestMapping(value = "Discussionboard.htm", method = RequestMethod.GET)
-    public ModelAndView loadDiscussionBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static ModelAndView loadDiscussionBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         ModelAndView model = new ModelAndView("Discussionboard");
@@ -66,14 +66,14 @@ public class URLMapping {
     }
 
     @RequestMapping(value = "Question.htm", method = RequestMethod.GET)
-    public ModelAndView loadQuestionPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static ModelAndView loadQuestionPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         ModelAndView model = new ModelAndView("Question");
         return model;
     }
     @RequestMapping(value = "TeacherHomePage.htm", method = RequestMethod.GET)
-    public ModelAndView loadTeacherPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static ModelAndView loadTeacherPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         ModelAndView model = new ModelAndView("TeacherHomePage");
@@ -82,7 +82,7 @@ public class URLMapping {
 
 
     @RequestMapping(value = "TeacherInformationPage.htm", method = RequestMethod.GET)
-    public ModelAndView loadClassInformationPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static ModelAndView loadClassInformationPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         ModelAndView model = new ModelAndView("ClassInformationPage");

@@ -3,16 +3,12 @@
  */
 $(document).ready(function () {
 
-    //show_welcome_area();
-    //hide_list_area();
-    //check_user_status();
+    check_user_status();
 
 
-    $(location).attr('href');
-
+    //$(location).attr('href');
     //pure javascript
-    var pathname = window.location.pathname;
-
+    //var pathname = window.location.pathname;
     // to show it in an alert window
     //alert(location.protocol + "//" + location.host);
 
@@ -46,46 +42,13 @@ $(document).ready(function () {
         });
     }
 
-
-    /*
-    $('body').on('click', 'li.list_file', function (e) {
-        var file_row = $(this);
-        var list_name = file_row.attr("list_name");
-        var owner_name = file_row.attr("owner_name");
-
-        var notification_textarea = $('#notification_textarea');
-        var notification_title = $('#notification_title');
-
-        var url = "/loadlist.htm?listName=" + list_name + "&owner=" + owner_name;
-        $.ajax({
-            method: 'get',
-            url: url,
-            dataType: 'text',
-            success: function (loadlist_status) {
-                console.log(loadlist_status);
-                if (loadlist_status.trim() === "SUCCESS") {
-                    hide_welcome_area();
-                    hide_list_area();
-                    //notification_title.html("Load Status");
-                    //notification_textarea.text("\"" + list_name + "\" has loaded successfully.");
-                    //$('#notification_modal').modal('show');
-                    load_table_items("LOADING");
-
-                    show_list_area();
-                }
-                else {
-                    console.log("LOAD FAILURE: This is strange. I wonder why it failed.");
-                }
-
-            },
-            error: function () {
-                console.log("LOAD LIST FAILURE: Aw, It didn't connect to the servlet :(");
-            }
-        });
-
-
-    });*/
-
+    $('body').on('click', '.scroll-nav-home', function (e) {
+        var linkHref = $(this).attr('href');
+        e.preventDefault();
+        $('html, body').animate({
+            scrollTop: $(linkHref).offset().top
+        },1000);
+    });
 
 
     $('body').on('click mouseover', '#nav_forum', function () {
@@ -99,7 +62,7 @@ $(document).ready(function () {
         var course = $(this).attr('data-course');
 
         if(!i_email || i_email.trim().length === 0 || !course || course.trim().length === 0){
-                return;
+            return;
         }
 
 
@@ -115,6 +78,38 @@ $(document).ready(function () {
         link_form.submit();
     });
 
+    function check_user_status(){
+        var home_area = $('#home-area');
+        if(home_area.length === 0){
+            return;
+        }
+
+        var $url = "/loginstatus.htm";
+        $.ajax({
+            method: 'get',
+            url: $url,
+            dataType: 'json',
+            success: function (login_status) {
+                console.log("Load Login Data:Success");
+                var JSON_login_status = login_status;
+                console.log(JSON_login_status);
+                var source = $('#home-page-template').html();
+                console.log(source);
+                var home_page_template = Handlebars.compile(source);
+                console.log(home_page_template);
+                var login_status_data = home_page_template(JSON_login_status);
+
+                home_area.html(login_status_data);
+                console.log(login_status_data);
+            },
+            error: function () {
+                console.log("Loading Login Data: Aw, It didn't connect to the servlet :(");
+            }
+
+        });
+
+
+    }
 
 
 
