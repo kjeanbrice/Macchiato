@@ -107,10 +107,8 @@ public class LoginController {
 
     }
 
-    @RequestMapping(value="portalresolver.htm", method = RequestMethod.GET)
+    @RequestMapping(value="enter.htm", method = RequestMethod.GET)
     public ModelAndView PortalResolver (HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
 
         User user = GenUtils.getActiveUser();
         if(user == null){

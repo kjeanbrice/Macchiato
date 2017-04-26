@@ -75,7 +75,7 @@
     <li>
         <a id="current-user" href="javascript:void(0)" data-username="{{User.email}}" class="scroll-nav welcome-name ">Welcome, {{User.email}}</a>
     </li>
-    <li><a href="/portalresolver.htm" class="scroll-nav link">Enter</a></li>
+    <li><a href="/enter.htm" class="scroll-nav link">Enter</a></li>
     <li>
         <a href="/login.htm?access=-1" class="scroll-nav link">Logout</a>
     </li>
