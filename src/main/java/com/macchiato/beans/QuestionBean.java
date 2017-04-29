@@ -3,6 +3,10 @@ package com.macchiato.beans;
 /**
  * Created by Raymond on 4/7/2017.
  */
+
+/**
+ * This class will be used to store all the fields necessary for a question
+ */
 public class QuestionBean {
     private String problem;
     private String solution;
@@ -39,6 +43,12 @@ public class QuestionBean {
         this.id = id;
     }
 
+
+    /**
+     * Used to allow us to bring our object to the front end through ajax
+     * It would generate a json object of a question
+     * @return String
+     */
     public String generateJSON() {
 
         String outputString = "{\"problem\":\"" + problem + "\","

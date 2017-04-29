@@ -2,6 +2,9 @@
  * Created by Raymond on 4/7/2017.
  */
 
+/**
+ * This javascript will handle all the actions a user will perform on the question webpage
+ */
 $(document).ready(function () {
 
     var JSON_list_items;
@@ -24,12 +27,18 @@ $(document).ready(function () {
     });
 
 
+    /**
+     * Allows the user to move onto the next question
+     */
     $('body').on('click','.next_box', function(e) {
 
         clearText();
         nextQues();
     });
 
+    /**
+     * Allows the user to move onto the prev question
+     */
     $('body').on('click','.prev_box', function(e) {
 
         clearText();
@@ -43,12 +52,18 @@ $(document).ready(function () {
         $('.the_ques').text(JSON_list_items.Questions[i].problem);
     });
 
+    /**
+     * Allows the user to see the solution
+     */
     $('body').on('click','.sol_box', function(e){
 
         $('#solution').text(JSON_list_items.Questions[i].solution);
         $('#dialog').dialog();
     });
 
+    /**
+     * Allows the user to check their code that they wrote to see if it has errors or it is fine
+     */
     $('body').on('click','.compile_box', function(e){
 
         $('#output').val('');
@@ -72,6 +87,10 @@ $(document).ready(function () {
 
     });
 
+    /**
+     * Allows the user to submit their code  so that they can get a point value associated with each
+     * question
+     */
     $('body').on('click','.sub_box', function(e){
 
         $('#code').text( $('#myText').val());
@@ -93,9 +112,12 @@ $(document).ready(function () {
         });
     });
 
+    /**
+     * Helper function to populate the web page by modifying the elements in the jsp
+     */
     function nextQues(){
-
-        if (i == 2){
+        alert(i);
+        if (i == JSON_list_items.Questions.length - 1){
             i = 0;
         }
         else {
@@ -105,6 +127,9 @@ $(document).ready(function () {
         $('.the_ques').text(JSON_list_items.Questions[i].problem);
     }
 
+    /**
+     * Helper function to clear what a user has written in a text area
+     */
     function clearText(){
 
         $('#myText').val('');

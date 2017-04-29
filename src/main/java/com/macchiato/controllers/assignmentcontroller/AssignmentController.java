@@ -22,27 +22,36 @@ import java.util.List;
  */
 
 @Controller
+/**
+ * This controller will be used to map our urls to the frontend so we can activate our javascript
+ * functions
+ */
 public class AssignmentController {
 
+    /**
+     * This method will be used to populate the question page with info
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     @RequestMapping(value ="PopulateQues.htm",method = RequestMethod.GET)
     public void populateQuesRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-
-        /* FOR TESTING PURPOSE SINCE WE HAVE NO DATABASE YET */
         QuestionListBean newList = new QuestionListBean();
-        QuestionBean q1 = new QuestionBean("Initialize an integer i with the value 1","int i = 1;","1");
-        QuestionBean q2 = new QuestionBean("Initialize an integer i with the value 2","int i = 2;","2");
-        QuestionBean q3 = new QuestionBean("Initialize an integer i with the value 3","int i = 3;","3");
-        newList.getProblems().add(q1);
-        newList.getProblems().add(q2);
-        newList.getProblems().add(q3);
-
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter assignment_filter = new Query.FilterPredicate("assignmentKey",Query.FilterOperator.EQUAL,"turtle");
+        Query q = new Query("question").setFilter(assignment_filter);
+        PreparedQuery pq = datastore.prepare(q);
+        System.out.println("pq as a list is" + pq.asList(FetchOptions.Builder.withDefaults()));
+        for(Entity e : pq.asList(FetchOptions.Builder.withDefaults())){
+            QuestionBean question = new QuestionBean((String)e.getProperty("problem"),(String)e.getProperty("solution"),(String)e.getProperty("questionnum"));
+            question.setAnswer((String)e.getProperty("studentans"));
+            System.out.println("problem is" + question.getProblem());
+            newList.getProblems().add(question);
+        }
         System.out.println(newList.generateJSON());
         out.println(newList.generateJSON());
-
-
     }
 
     @RequestMapping(value="Compile.htm", method = RequestMethod.POST)
@@ -59,7 +68,6 @@ public class AssignmentController {
         String format = "JSON";
         String callbackUrl = "";
         String wait = "true";
-
 
         try {
             CheckerApi checkerApi = new CheckerApi();
@@ -96,29 +104,28 @@ public class AssignmentController {
 
     }
 
-    public QuestionListBean getQuestionListInfo(Key assignmentKey){
-
-        QuestionListBean questions = new QuestionListBean();
+    /**
+     * Helper method to store dummy data for testing purposes
+     */
+    public void useDummyData(){
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Query.Filter questionkey_filter = new Query.FilterPredicate("question_key",Query.FilterOperator.EQUAL,assignmentKey);
-        Query q = new Query("Question").setFilter(questionkey_filter);
-        PreparedQuery pq = datastore.prepare(q);
-        /*Retrieve question list*/
-        List<Entity> question_list = pq.asList(FetchOptions.Builder.withDefaults());
-        for(int i = 0; i < question_list.size(); i++){
-
-            Entity question = question_list.get(i);
-            String problem = (String) question.getProperty("problem");
-            String solution = (String) question.getProperty("solution");
-            String answer = (String) question.getProperty("answer");
-            QuestionBean qb = new QuestionBean(problem,solution,Integer.toString(i));
-            qb.setAnswer(answer);
-            questions.getProblems().add(qb);
-        }
-
-        return questions;
-
+        Entity exam1 = new Entity("assignment");
+        exam1.setProperty("crsCode","1234");
+        exam1.setProperty("assignmentKey","turtle");
+        datastore.put(exam1);
+        Entity question1 = new Entity("question");
+        question1.setProperty("problem","Initialize an integer i with the value 1");
+        question1.setProperty("solution","int i = 1;");
+        question1.setProperty("studentans","");
+        question1.setProperty("assignmentKey","turtle");
+        question1.setProperty("questionnum","1");
+        datastore.put(question1);
+        Entity question2 = new Entity("question");
+        question2.setProperty("problem","Initialize an integer i with the value 2");
+        question2.setProperty("solution","int i = 2;");
+        question2.setProperty("studentans","");
+        question2.setProperty("assignmentKey","turtle");
+        question2.setProperty("questionnum","2");
+        datastore.put(question2);
     }
-
-
 }
