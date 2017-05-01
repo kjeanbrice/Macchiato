@@ -20,52 +20,6 @@
     <link rel="stylesheet" href="icons/foundation-icons/foundation-icons/foundation-icons.css"/>
     <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <script src="teacher.js"></script>
-
-    <script type="text/javascript">
-        window.onload = function(){
-
-            document.getElementById("addUser").onclick = function(){
-
-                //获取姓名 电话 住址
-                var name = document.getElementById("name").value;
-
-
-
-                //把数据封装到数组中，然后遍历数组，取出每个值，在循环中创建单元格
-                var info =[name];
-
-                //创建行
-                var tr = document.createElement("tr");
-
-                for( var i=0;i<info.length ; i++){
-                    var td = document.createElement("td");
-                    td.innerHTML = info[i];
-                    //把单元格添加到行上
-                    tr.appendChild(td);
-                }
-
-                //需要单独创建删除的单元格
-                var del = document.createElement("td");
-
-                //创建一个超链接
-                var a = document.createElement("a");
-                var linkText = document.createTextNode("my title text");
-                a.appendChild(linkText);
-                a.title = "my title text";
-                a.href = "TeacherInformationPage.htm";
-                a.innerHTML = "Class Information";
-
-
-
-                del.appendChild(a);
-
-                tr.appendChild(del);
-
-                document.getElementById("usertable").appendChild(tr);
-            }
-        }
-    </script>
 </head>
 
 <body>
@@ -84,7 +38,8 @@
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="TeachersPage.html">Home</a></li>
                     <li><a href="#">FORUM</a></li>
-                    <button type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#myModal">CREATE A CLASS</button>
+                    <li><a href="/logoutTeacher.htm" class="link">Logout</a></li>
+                    <button type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#add_modal">CREATE A CLASS</button>
                 </ul>
             </div>
         </div>
@@ -92,28 +47,27 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" role="dialog">
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="add_modal" class="modal fade"
+     style="display: none;">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">CREATE A CLASS</h4>
             </div>
-                Name of Course: <input type="text" name="name" id="name" />&nbsp;&nbsp;
+                Name of Course: <input id="course_name_text" type="text" name="name" id="name" />&nbsp;&nbsp;
                 <br>
             <div class="form-group">
                 <label for="comment">Course Description:</label>
-                <textarea name="classDis" class="form-control" rows="20" id="comment"></textarea>
+                <textarea id="course_dis_text" name="classDis" class="form-control" rows="20" id="comment"></textarea>
             </div>
-                <button id="addUser" >SUBMIT</button>
-                <button type="button" class="btn" data-dismiss="modal">CLOSE</button>
+            <button type="button" class="btn btn-primary pull-right"  id="add_course_submit" data-dismiss="modal" >CREATE</button>
+            <button type="button" class="btn btn-primary pull-right" id="close_modal" data-dismiss="modal">CLOSE</button>
             <div class="modal-footer">
             </div>
         </div>
     </div>
-
 </div>
 
 <div class="container-fluid text-center">
@@ -130,12 +84,26 @@
                     <tbody>
                     <tr>
                         <td><div class="container">
-                            <table id="usertable" border="1" cellpadding="5" cellspacing="0">
-                                <tr>
-                                    <th>Name of Course</th>
-                                </tr>
+                            <%--<table id="usertable" border="1" cellpadding="5" cellspacing="0">--%>
+                                <%--<tr>--%>
+                                    <%--<th>Name of Course</th>--%>
+                                <%--</tr>--%>
+                                <%----%>
 
-                            </table>
+                            <%--</table>--%>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Name of Course</th>
+                                        <th>Course Information</th>
+                                        <th>Assignments</th>
+                                        <th>Course Code</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="item_area" class="tbody-default">
+                                    </tbody>
+                                </table>
+
 
                         </div></td>
                     </tr>
@@ -151,8 +119,9 @@
         <script src="bower_components/jquery/dist/jquery.js"></script>
         <script src="bower_components/what-input/dist/what-input.js"></script>
         <script src="bower_components/foundation-sites/dist/js/foundation.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
         <script src="js/app.js"></script>
-
+        <script src="js/teacher_transactions.js"></script>
 </body>
 
 
