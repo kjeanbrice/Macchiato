@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 /**
  * Created by Karl on 4/5/2017.
  * Edited by Raymond Xue
+ * Edited by Xiangbin Zeng
  */
 @Controller
 public class URLMapping {
@@ -86,6 +87,20 @@ public class URLMapping {
         response.setContentType("text/html;charset=UTF-8");
 
         ModelAndView model = new ModelAndView("ClassInformationPage");
+        return model;
+    }
+
+    @RequestMapping(value = "TeacherAssignmentPage.htm", method = RequestMethod.GET)
+    public ModelAndView loadTeacherAssignmentsPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        ModelAndView model = new ModelAndView("TeacherAssignmentPage");
+        return model;
+    }
+
+    @RequestMapping(value = "TeacherGradingPage.htm", method = RequestMethod.GET)
+    public ModelAndView loadTeacherGradingPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        ModelAndView model = new ModelAndView("TeacherGradePage");
         return model;
     }
 }

@@ -1,8 +1,12 @@
-<!doctype html>
-<html class="no-js" lang="en">
-<style>
-
-</style>
+<%--
+  Created by IntelliJ IDEA.
+  User: Xiangbin
+  Date: 4/21/2017
+  Time: 6:23 PM
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -26,36 +30,30 @@
         <div class="top-bar">
             <div class="top-bar-left">
                 <ul class="menu">
-                    <li><img src="images/mklogo.png" alt="JTE Image" height="32" width="32"></li>
+                    <li><img src="images/mklogo.png" alt="JTE Image" height="35" width="35"></li>
                     <li><a href="#" class="logo-name">Macchiato</a></li>
                 </ul>
                 <p style="color:#ffffff;"><strong>Instructor: Thomas Shapipo</strong></p>
             </div>
             <div class="top-bar-right">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="TeachersPage.html">Home</a></li>
+                    <p style="color:#ffffff;"><strong>CLASS NAME: CSE353</strong></p>
+                    <li class="active"><a href="TeachersPage.html">HOME</a></li>
                     <li><a href="#">FORUM</a></li>
-                    <button type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#myModal">CREATE A CLASS</button>
+                    <li class="active"><a href="#">DISCUSSION BOARD</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal -->
-<<div class="container">
+<div class="container">
     <h2>ASSIGNMENTS</h2>
     <table class="table">
         <thead>
         <tr>
-            <th>Assignments Name</th>
-            <th>Due Date</th>
-            <th>Grades</th>
-        </tr>
-        <tr>
-            <td><li><a href=# class="link">Logout</a></li></td>
-            <td>10/10/2017</td>
-            <th><li><a href=# class="link">Logout</a></li></th>
+            <th>Student Name</th>
+            <th>Student Grade</th>
         </tr>
         </thead>
         <tbody>
@@ -63,6 +61,26 @@
         </tr>
         </tbody>
     </table>
+</div>||
+<div class="container">
+    <h2>Question Grade</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Question Name</th>
+            <th>Average Grade</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+
+
 </div>
 
 <!-- Latest compiled and minified JavaScript -->
@@ -73,7 +91,6 @@
 <script src="bower_components/what-input/dist/what-input.js"></script>
 <script src="bower_components/foundation-sites/dist/js/foundation.js"></script>
 <script src="js/app.js"></script>
-
 </body>
 
 

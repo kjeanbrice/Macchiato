@@ -4,15 +4,14 @@ import java.util.ArrayList;
 
 /**
  * Created by Raymond on 4/7/2017.
- */
-
-/**
- * This class will be used so we can store multople questions under one object called
- * assignment because each assignment would
- * have multiple questions nested in it.
+ * Edited by Xiangbin Zeng
+ * This class is made for assignment which help us the build each assignment, this assignment
+ * list include all the information we need from a assignment
  */
 public class QuestionListBean {
     private ArrayList<QuestionBean> problems;
+    private String  CrsCode;
+    private String  assignmentKey;
 
     public QuestionListBean(){
         this.problems = new ArrayList<QuestionBean>();
@@ -26,11 +25,7 @@ public class QuestionListBean {
         this.problems = problems;
     }
 
-    /**
-     * Used to allow us to bring our object to the front end through ajax
-     * It would generate a json array of questions for an assignment
-     * @return String
-     */
+    // generate json object for js
     public String generateJSON() {
         String outputString = "{\"Questions\":[";
 
@@ -49,5 +44,22 @@ public class QuestionListBean {
         outputString += "}";
 
         return outputString;
+    }
+
+    //getter and setter
+    public String getCrsCode() {
+        return CrsCode;
+    }
+
+    public void setCrsCode(String crsCode) {
+        CrsCode = crsCode;
+    }
+
+    public String getAssignmentKey() {
+        return assignmentKey;
+    }
+
+    public void setAssignmentKey(String assignmentKey) {
+        this.assignmentKey = assignmentKey;
     }
 }
