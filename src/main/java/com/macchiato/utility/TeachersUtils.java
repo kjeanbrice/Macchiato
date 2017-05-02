@@ -16,37 +16,33 @@ public class TeachersUtils {
     public static ArrayList<CourseBean> isOwned(String email){
         System.out.print(123);
         String CrsName;
+        String CrsCode;
         ArrayList<CourseBean> classList=new ArrayList<CourseBean>();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 
-        Query.Filter CrsCode_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email);
-        Query q = new Query("Course").setFilter(CrsCode_filter);
+        Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email);
+        Query q = new Query("Course").setFilter(email_filter);
         PreparedQuery pq = datastore.prepare(q);
         int numberOfClass = pq.asList(FetchOptions.Builder.withDefaults()).size();
+        System.out.println("number of course;"+numberOfClass);
         if (numberOfClass == 0) {
             System.out.println("There is no class that you own");
         }else{
             for (Entity result : pq.asIterable()) {
-                Key key = (Key) result.getProperty("crsCode");
-                if(key==null){
-                    System.out.print("no key");
-                    break;
-                }
-                try {
-                    Entity Course = datastore.get(key);
-                    email = (String)Course.getProperty("email");
-                    CrsName = (String)Course.getProperty("crsName");
+                    email = (String)result.getProperty("email");
+                    CrsName = (String)result.getProperty("crsName");
+                    CrsCode=(String)result.getProperty("crsCode");
                     CourseBean newBean =new CourseBean();
                     newBean.setInstrEmail(email);
                     newBean.setCrsName(CrsName);
-                    newBean.setCrsCode(key.toString());
+                    newBean.setCrsCode(CrsCode);
                     classList.add(newBean);
-                } catch (EntityNotFoundException e) {
-                    System.out.println("Can't find group with key:" + key);
-                }
             }
         }
+
+
+        System.out.println("number of class in the list:" + classList.size());
         return classList;
     }
 

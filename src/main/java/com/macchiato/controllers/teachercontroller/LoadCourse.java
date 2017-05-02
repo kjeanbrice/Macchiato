@@ -27,26 +27,26 @@ public class LoadCourse {
     //Load course function will load all the course owned by this teacher, and it will listed on teacher home page
     @RequestMapping(value = "/LoadCourse.htm", method = RequestMethod.GET)
     public void LoadCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        //response.setContentType("text/html;charset=UTF-8");
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         User active_user = GenUtils.getActiveUser();
         String instructor_email = active_user.getEmail();
         if (instructor_email== null) {
-            System.out.print("ERROR2");
+            System.out.print("There is no active_user");
         }
         else{
             System.out.println("instructor email: "+instructor_email);
             //System.out.print("Part3");
             ArrayList<CourseBean> newList= isOwned(instructor_email);
-            //test---
+//            test---
 //            CourseBean newBean=new CourseBean("CSE123","teacher1@gmial.com","yes");
 //            CourseBean newBean2=new CourseBean("CSE122","teacher1@gmial.com","yes");
 //            newList.add(newBean2);
 //            newList.add(newBean);
-            //test---
-            System.out.println(CourseListJson(newList));
-            out.println(CourseListJson(newList));
+//            test---
+           System.out.println(CourseListJson(newList));
+              out.println(CourseListJson(newList));
         }
     }
 }

@@ -26,7 +26,7 @@ $(document).ready(function () {
                 $.each(JSON_list_items, function (i, item) {
                     list_data += '<tr><td>' + item.crsName + '</td><td>' + "123" + '</td><td>' + "123" + '</td><td>' + item.crsCode + '</td></tr>';
                 });
-                item_area.append(list_data);
+                item_area.html(list_data);
             },
             error: function () {
                 console.log("Loading the course table: Aw, It didn't connect to the servlet :(");
@@ -50,11 +50,10 @@ $(document).ready(function () {
                 if(course_name.length==0||course_dis.length==0){
                     alert("Can not create course with course name or course description is empty")
                     console.log("ADD COURSE ERROR");
-                    clear_form_data();
-                    load_course_item('ADD_COURSE');
-
                 }
                 else{
+                    clear_form_data();
+                    load_course_item('ADD_COURSE');
                     console.log("ADD ITEM: SUCCESS");
                 }
             },
@@ -70,21 +69,18 @@ $(document).ready(function () {
 
         $.ajax({
             method: 'get',
-            url: $url,
+            url: "/LoadCourse.htm",
             dataType: 'json',
-
 
             success: function (course_table) {
                 var item_area=$('#item_area');
                 console.log("Get Courses :Success");
                 JSON_list_items = course_table;
-
                 var list_data="";
-
                 $.each( JSON_list_items, function (i, item) {
                     list_data += '<tr><td>' + item.crsName + '</td><td>' +"123" + '</td><td>' + "123" + '</td><td>' + item.crsCode + '</td></tr>';
                 });
-                item_area.append(list_data);
+                item_area.html(list_data);
             },
             error: function () {
                 console.log("Loading the course table: Aw, It didn't connect to the servlet :(");
@@ -93,6 +89,9 @@ $(document).ready(function () {
     }
 
     function clear_form_data() {
+        var item_area=$('#item_area');
+        console.log("Clear all data");
+        item_area.val("");
         $('#course_name_text').val("");
         $('#course_dis_text').val("");
     }

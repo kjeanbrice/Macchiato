@@ -29,6 +29,7 @@ public class Addcourse {
 @RequestMapping(value="addCourse.htm", method = RequestMethod.POST)
     public void addCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User active_user = GenUtils.getActiveUser();
+    //PrintWriter out = response.getWriter();
     String instructor_email =active_user.getEmail();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -38,7 +39,6 @@ public class Addcourse {
     else{
         String ClassName=request.getParameter("crsName");
         String ClassDis=request.getParameter("description");
-        System.out.println("____________"+ClassDis+"_______________");
         String email=instructor_email;
         CourseBean newClass=new  CourseBean(ClassName,email,ClassDis);
         Entity user = new Entity("Course");
@@ -47,7 +47,8 @@ public class Addcourse {
         user.setProperty("description", ClassDis);
         user.setProperty("email",email);
         datastore.put(user);
-        System.out.print(newClass.generateJSON());
+        System.out.print("From add: "+" "+newClass.generateJSON());
+        //out.println(newClass.generateJSON());
     }
 
 }
