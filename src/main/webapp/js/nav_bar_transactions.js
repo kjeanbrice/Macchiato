@@ -60,19 +60,22 @@ $(document).ready(function () {
         //data-list_name="{{instructorEmail}}" data-course
         var i_email = $(this).attr('data-list-email');
         var course = $(this).attr('data-course');
+        var section = $(this).attr('data-section');
 
-        if(!i_email || i_email.trim().length === 0 || !course || course.trim().length === 0){
+        if(!i_email || i_email.trim().length === 0 || !course || course.trim().length === 0 || !section || section.trim().length === 0){
             return;
         }
 
 
         var form_iemail = $('#form-iemail');
         var form_course = $('#form-course');
+        var form_section = $('#form-section');
 
         var link_form = $('#link-form');
 
         form_iemail.attr("value",i_email.trim());
         form_course.attr("value",course.trim());
+        form_section.attr("value",section.trim());
         var url = location.protocol + "//" + location.host + "/discussionboard.htm";
         link_form.attr("action",url);
         link_form.submit();

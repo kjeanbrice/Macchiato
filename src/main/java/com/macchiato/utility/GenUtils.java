@@ -16,7 +16,14 @@ public class GenUtils {
     public static final int STUDENT = 0;
     public static final int INSTRUCTOR = 1;
     public static final int ADMIN = 2;
-    public static final int NOT_LOGGED_IN = 3;
+    public final static int SUCCESS = 3;
+    public final static int FAILURE = 4;
+    public static final int NOT_LOGGED_IN = 5;
+    public static final int NO_PERMISSION = 6;
+    public static final int EMPTY_PARAMETERS = 7;
+    public final static int DUPLICATE_COURSE = 8;
+
+
 
 
     public static void createInstructor(String email){
@@ -40,14 +47,14 @@ public class GenUtils {
 
         try {
             user = datastore.get(key);
-            user.setProperty("access",1);
+            user.setProperty("access",GenUtils.INSTRUCTOR);
             //user.setProperty("course","336");
             user.setProperty("email",email.trim());
             System.out.println("Create Instructor: Key: " + user.getKey());
             System.out.println("Create Instructor: User already in datastore");
         } catch (EntityNotFoundException e) {
             user = new Entity("User",email);
-            user.setProperty("access",1);
+            user.setProperty("access",GenUtils.INSTRUCTOR);
             //user = new Entity("Course","cse336",key1);
             System.out.println("Create Instructor: Key " + user.getKey());
             //user.setProperty("course","336");
@@ -82,14 +89,14 @@ public class GenUtils {
 
         try {
             user = datastore.get(key);
-            user.setProperty("access",0);
+            user.setProperty("access",GenUtils.STUDENT);
             //user.setProperty("course","336");
             user.setProperty("email",email.trim());
             System.out.println("Create Instructor: Key: " + user.getKey());
             System.out.println("Create Student: User already in datastore");
         } catch (EntityNotFoundException e) {
             user = new Entity("User",email);
-            user.setProperty("access",0);
+            user.setProperty("access",GenUtils.STUDENT);
             //user = new Entity("Course","cse336",key1);
             System.out.println("Create Student: Key " + user.getKey());
             //user.setProperty("course","336");

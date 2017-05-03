@@ -39,6 +39,7 @@
                         <form id="link-form" action=" " method="post" style="display: none;">
                             <input name = "i_email" id = "form-iemail" type = "text" style="display:none;">
                             <input name = "course" id = "form-course" type = "text" style="display:none;">
+                            <input name = "section" id = "form-section" type = "text" style="display:none;">
 
                         </form>
                     </li>
@@ -61,17 +62,17 @@
 
 <!-- MODAL AREA -->
 <div id="change_username_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
-    <a class="close-button" data-close>&#215;</a>
+    <a id="close-username-modal" class="close-button" data-close>&#215;</a>
     <div class = "modal-heading-form">
         <h3 class ="modal-heading-text">Change Your Username</h3>
     </div>
-    <label><span class = "label-style-modal">Username (30 character limit)</span>
+    <label><span class = "label-style-modal">Username (5 characters minimum)</span>
         <input id="txt-username" type="text" maxlength="30" placeholder="Type your username here...">
     </label>
 
     <span id="err-changeusername" class="lbl-error" style="opacity: 0;"></span>
 
-    <div class="menu modal-area btn-username-submit">
+    <div id = "btn-username-submit" class="menu modal-area btn-username-submit">
         <span class="modal-btn-full">Submit Request</span>
     </div>
 
@@ -236,6 +237,7 @@
     <div id="extra-section" class="small-1 medium-1 large-1 columns">
         <span id ="i_email" data-iemail="${i_email}" style="display:none;"></span>
         <span id ="course" data-course="${course}" style="display:none;" ></span>
+        <span id ="section" data-section="${section}" style="display:none;" ></span>
     </div>
 
     <div id="discussion-section" class="small-10 medium-10 large-10 columns">
@@ -262,8 +264,8 @@
 <script id= "discussion-list-template" type="text/x-handle-template">
 
     {{#each Courses}}
-    <li class="list_file" data-list-email="{{instructorEmail}}" data-course ="{{course}}">
-        <a href="javascript:void(0)">{{course}}:{{instructorNickname}}</a>
+    <li class="list_file" data-list-email="{{instructorEmail}}" data-course ="{{course}}"  data-section ="{{section}}">
+        <a href="javascript:void(0)">{{course}}:{{section}}</a>
     </li>
     {{else}}
     <li><a href="javascript:void(0)" >None Available</a></li>

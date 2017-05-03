@@ -2,7 +2,8 @@ package com.macchiato.controllers.discussioncontroller;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
-import com.macchiato.utility.discussiondata.*;
+import com.macchiato.general.discussiondata.*;
+import com.macchiato.utility.*;
 import com.macchiato.utility.DiscussionBoardUtils;
 import com.macchiato.utility.GenUtils;
 import org.springframework.stereotype.Controller;
@@ -24,21 +25,21 @@ import java.util.List;
 @Controller
 public class DiscussionBoardController {
 
-    public static String createDiscussionBoard(String course) {
+    public static int createDiscussionBoard(long course_id) {
         final int STUDENT = 0;
         final int NOT_LOGGED_IN = 1;
         final int INSTRUCTOR = 2;
 
         int status = (int) (GenUtils.checkCredentials().get(0));
         switch (status) {
-            case STUDENT:
-                return "F:STUDENT";
-            case NOT_LOGGED_IN:
-                return "F:LOGIN";
-            case INSTRUCTOR:
+            case GenUtils.STUDENT:
+                return DiscussionBoardUtils.NO_ACCESS;
+            case GenUtils.NOT_LOGGED_IN:
+                return DiscussionBoardUtils.NOT_LOGGED_IN;
+            case GenUtils.INSTRUCTOR:
                 User user = GenUtils.getActiveUser();
                 if (user == null) {
-                    return "F:LOGIN";
+                    return DiscussionBoardUtils.NOT_LOGGED_IN;
                 }
                 String email = user.getEmail();
                 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -50,41 +51,43 @@ public class DiscussionBoardController {
 
                 int user_size = pq.asList(FetchOptions.Builder.withDefaults()).size();
                 if (user_size != 1) {
-                    return "F:DATA_ERROR";
+                    return DiscussionBoardUtils.DATABASE_ERROR;
                 }
 
 
-                key = new KeyFactory.Builder("User", email).addChild("Course", course.trim()).getKey();
-                Query.Filter course_key_filter = new Query.FilterPredicate(Entity.KEY_RESERVED_PROPERTY, Query.FilterOperator.EQUAL, key);
-                q = new Query("Course").setFilter(course_key_filter);
+                Query.Filter course_id_filter = new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, course_id);
+                q = new Query("Course").setFilter(course_id_filter);
                 pq = datastore.prepare(q);
                 int course_size = pq.asList(FetchOptions.Builder.withDefaults()).size();
                 if (course_size != 1) {
-                    return "F:DATA_ERROR";
+                    return DiscussionBoardUtils.DATABASE_ERROR;
                 }
 
-                Key key1 = new KeyFactory.Builder("User", email).addChild("Course", course.trim()).addChild("Group", course.trim()).getKey();
-                Query.Filter group_key_filter = new Query.FilterPredicate(Entity.KEY_RESERVED_PROPERTY, Query.FilterOperator.EQUAL, key1);
-                q = new Query("Group").setFilter(group_key_filter);
+                String course_name = (String)pq.asList(FetchOptions.Builder.withDefaults()).get(0).getProperty("name");
+                String section = (String)pq.asList(FetchOptions.Builder.withDefaults()).get(0).getProperty("section");
+                course_id_filter = new Query.FilterPredicate("course_id", Query.FilterOperator.EQUAL, course_id);
+                q = new Query("Forum").setFilter(course_id_filter);
                 pq = datastore.prepare(q);
                 int group_size = pq.asList(FetchOptions.Builder.withDefaults()).size();
                 if (group_size != 0) {
-                    return "F:DATA_ERROR";
+                    return DiscussionBoardUtils.DATABASE_ERROR;
                 }
 
-                Entity group = new Entity("Group", course.trim(), key);
-                System.out.println("groupkey" + group.getKey());
-                group.setProperty("email", email);
-                group.setProperty("course", course);
-                datastore.put(group);
+                KeyRange kr = datastore.allocateIds("Forum",1);
+                key = kr.getEnd();
+                Entity forum = new Entity("Forum",key);
+                System.out.println("forum_key" + forum.getKey());
+                forum.setProperty("email",email);
+                forum.setProperty("course_name",course_name);
+                forum.setProperty("section",section);
+                forum.setProperty("course_id",course_id);
+                forum.setProperty("id",key.getId());
+                datastore.put(forum);
 
-                DiscussionBoardUtils.enrollUser(group.getKey(), email, user.getNickname(), 1);
-                break;
-            default:
-                System.out.println("Switch Error. This area should have never been reached.");
+                DiscussionBoardUtils.enrollUser(forum.getKey(), email, user.getNickname(), GenUtils.INSTRUCTOR);
                 break;
         }
-        return "S";
+        return DiscussionBoardUtils.SUCCESS;
     }
 
     @RequestMapping(value = "getcourselist.htm", produces = "text/html;charset=UTF-8" ,method = RequestMethod.GET)
@@ -122,16 +125,17 @@ public class DiscussionBoardController {
 
         String instructor_email = request.getParameter("i_email");
         String course = request.getParameter("course");
+        String section = request.getParameter("section");
         ModelAndView model;
 
 
-        if (instructor_email == null || course == null || course.trim().length() == 0 || instructor_email.trim().length() == 0) {
+        if (instructor_email == null || course == null || section == null ||course.trim().length() == 0 || section.trim().length() == 0 || instructor_email.trim().length() == 0) {
             model = new ModelAndView("error");
             return model;
         }
 
-        Key groupkey = DiscussionBoardUtils.getGroupKey(instructor_email.trim(), course.trim());
-        if (groupkey == null) {
+        Key forumKey = DiscussionBoardUtils.getForumKey(instructor_email.trim(), course.trim(),section.trim());
+        if (forumKey == null) {
             model = new ModelAndView("error");
             return model;
         }
@@ -143,18 +147,19 @@ public class DiscussionBoardController {
         }
 
         String email = active_user.getEmail();
-        int enrollment_status = DiscussionBoardUtils.isEnrolled(groupkey, email);
+        int enrollment_status = DiscussionBoardUtils.isEnrolled(forumKey, email);
         switch (enrollment_status) {
             case DiscussionBoardUtils.NOT_ENROLLED:
                 model = new ModelAndView("error");
                 return model;
-            case DiscussionBoardUtils.DUPLICATE_STUDENT:
+            case DiscussionBoardUtils.DUPLICATE_ENTRY:
                 model = new ModelAndView("error");
                 return model;
             case DiscussionBoardUtils.ENROLLED:
                 model = new ModelAndView("Discussionboard");
                 model.addObject("i_email",instructor_email);
                 model.addObject("course",course);
+                model.addObject("section",section);
                 return model;
             default:
                 model = new ModelAndView("error");
@@ -169,19 +174,20 @@ public class DiscussionBoardController {
 
         String instructor_email = request.getParameter("i_email");
         String course = request.getParameter("course");
+        String section = request.getParameter("section");
         String post_title = request.getParameter("title");
         String post_content = request.getParameter("content");
 
 
-        if (instructor_email == null || course == null || post_title == null || post_content == null
-                || course.trim().length() == 0 || instructor_email.trim().length() == 0 ||
+        if (instructor_email == null || course == null || section == null ||post_title == null || post_content == null
+                || course.trim().length() == 0 || section.trim().length() == 0 || instructor_email.trim().length() == 0 ||
                 post_title.trim().length() == 0 || post_content.trim().length() == 0) {
             out.println(DiscussionBoardUtils.EMPTY_PARAMETERS);
             return;
         }
 
-        Key groupkey = DiscussionBoardUtils.getGroupKey(instructor_email.trim(), course.trim());
-        if (groupkey == null) {
+        Key forumkey = DiscussionBoardUtils.getForumKey(instructor_email.trim(), course.trim(),section.trim());
+        if (forumkey == null) {
             out.println(DiscussionBoardUtils.BOARD_NOT_FOUND);
             return;
         }
@@ -197,12 +203,12 @@ public class DiscussionBoardController {
         //DiscussionBoardUtils.updateUsername(groupkey,"kjeanbri@yahoo.com", "Karl Wilson");
         //DiscussionBoardUtils.updateUsername(groupkey,email,"Karl Wilson");
         //DiscussionBoardUtils.updateUsername(groupkey,email,"Paul Fodor");
-        int enrollment_status = DiscussionBoardUtils.isEnrolled(groupkey, email);
+        int enrollment_status = DiscussionBoardUtils.isEnrolled(forumkey, email);
         switch (enrollment_status) {
             case DiscussionBoardUtils.NOT_ENROLLED:
                 out.println(DiscussionBoardUtils.NOT_ENROLLED);
                 return;
-            case DiscussionBoardUtils.DUPLICATE_STUDENT:
+            case DiscussionBoardUtils.DUPLICATE_ENTRY:
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 return;
             case DiscussionBoardUtils.ENROLLED:
@@ -211,7 +217,7 @@ public class DiscussionBoardController {
                 user.setProperty("title", post_title);
                 user.setProperty("content", post_content);
                 user.setProperty("email", email);
-                user.setProperty("groupkey", groupkey);
+                user.setProperty("forum_id", forumkey.getId());
                 user.setProperty("timestamp",new Date().getTime());
                 datastore.put(user);
                 out.println(DiscussionBoardUtils.SUCCESS);
@@ -228,19 +234,20 @@ public class DiscussionBoardController {
 
         String instructor_email = request.getParameter("i_email");
         String course = request.getParameter("course");
+        String section = request.getParameter("section");
         String post_id = request.getParameter("post_id");
         String comment_content = request.getParameter("content");
 
 
-        if (instructor_email == null || course == null || comment_content == null || post_id == null
-                || course.trim().length() == 0 || instructor_email.trim().length() == 0 ||
+        if (instructor_email == null || course == null || section == null ||comment_content == null || post_id == null
+                || course.trim().length() == 0 || section.trim().length() == 0 ||instructor_email.trim().length() == 0 ||
                 comment_content.trim().length() == 0 || post_id.trim().length() == 0) {
             out.println(DiscussionBoardUtils.EMPTY_PARAMETERS);
             return;
         }
 
-        Key groupkey = DiscussionBoardUtils.getGroupKey(instructor_email.trim(), course.trim());
-        if (groupkey == null) {
+        Key forumkey = DiscussionBoardUtils.getForumKey(instructor_email.trim(), course.trim(),section.trim());
+        if (forumkey == null) {
             out.println(DiscussionBoardUtils.BOARD_NOT_FOUND);
             return;
         }
@@ -252,17 +259,13 @@ public class DiscussionBoardController {
         }
 
         String email = active_user.getEmail();
-        DiscussionBoardUtils.enrollUser(groupkey, "kjeanbri@yahoo.com", "Jake Wilson ", 0);
-        //DiscussionBoardUtils.updateUsername(groupkey,"kjeanbri@yahoo.com", "Karl Wilson");
-        //DiscussionBoardUtils.updateUsername(groupkey,email,"Karl Wilson");
-        //DiscussionBoardUtils.updateUsername(groupkey,email,"Paul Fodor");
-        int enrollment_status = DiscussionBoardUtils.isEnrolled(groupkey, email);
+        int enrollment_status = DiscussionBoardUtils.isEnrolled(forumkey, email);
         switch (enrollment_status) {
             case DiscussionBoardUtils.NOT_ENROLLED:
                 out.println(DiscussionBoardUtils.NOT_LOGGED_IN);
                 break;
-            case DiscussionBoardUtils.DUPLICATE_STUDENT:
-                out.println(DiscussionBoardUtils.DUPLICATE_STUDENT);
+            case DiscussionBoardUtils.DUPLICATE_ENTRY:
+                out.println(DiscussionBoardUtils.DUPLICATE_ENTRY);
                 break;
             case DiscussionBoardUtils.ENROLLED:
                 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -280,7 +283,7 @@ public class DiscussionBoardController {
                 user.setProperty("postkey", post_key.getId());
                 user.setProperty("content", comment_content);
                 user.setProperty("email", email);
-                user.setProperty("groupkey", groupkey);
+                user.setProperty("forum_id", forumkey.getId());
                 user.setProperty("timestamp",new Date().getTime());
                 datastore.put(user);
                 out.println(DiscussionBoardUtils.SUCCESS);
@@ -295,16 +298,18 @@ public class DiscussionBoardController {
 
         String instructor_email = request.getParameter("i_email");
         String course = request.getParameter("course");
+        String section = request.getParameter("section");
         String post_id = request.getParameter("post_id");
 
 
-        if (instructor_email == null || course == null || post_id == null) {
+
+        if (instructor_email == null || course == null || post_id == null || section == null) {
             out.println(DiscussionBoardUtils.EMPTY_PARAMETERS);
             return;
         }
 
-        Key groupkey = DiscussionBoardUtils.getGroupKey(instructor_email.trim(), course.trim());
-        if (groupkey == null) {
+        Key forumkey = DiscussionBoardUtils.getForumKey(instructor_email.trim(), course.trim(),section.trim());
+        if (forumkey == null) {
             out.println(DiscussionBoardUtils.BOARD_NOT_FOUND);
             return;
         }
@@ -316,16 +321,16 @@ public class DiscussionBoardController {
         }
 
         String email = active_user.getEmail();
-        int enrollment_status = DiscussionBoardUtils.isEnrolled(groupkey, email);
+        int enrollment_status = DiscussionBoardUtils.isEnrolled(forumkey, email);
         switch (enrollment_status) {
             case DiscussionBoardUtils.NOT_ENROLLED:
                 out.println(DiscussionBoardUtils.NOT_ENROLLED);
                 return;
-            case DiscussionBoardUtils.DUPLICATE_STUDENT:
+            case DiscussionBoardUtils.DUPLICATE_ENTRY:
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 return;
             case DiscussionBoardUtils.ENROLLED:
-                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,groupkey);
+                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
                 if(user.getAccess().equals("INSTRUCTOR")){
                     try {
                         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -366,6 +371,7 @@ public class DiscussionBoardController {
         String instructor_email = request.getParameter("i_email");
         String course = request.getParameter("course");
         String comment_id = request.getParameter("comment_id");
+        String section = request.getParameter("section");
 
 
         if (instructor_email == null || course == null || comment_id == null) {
@@ -373,8 +379,8 @@ public class DiscussionBoardController {
             return;
         }
 
-        Key groupkey = DiscussionBoardUtils.getGroupKey(instructor_email.trim(), course.trim());
-        if (groupkey == null) {
+        Key forumkey = DiscussionBoardUtils.getForumKey(instructor_email.trim(), course.trim(),section.trim());
+        if (forumkey == null) {
             out.println(DiscussionBoardUtils.BOARD_NOT_FOUND);
             return;
         }
@@ -386,16 +392,16 @@ public class DiscussionBoardController {
         }
 
         String email = active_user.getEmail();
-        int enrollment_status = DiscussionBoardUtils.isEnrolled(groupkey, email);
+        int enrollment_status = DiscussionBoardUtils.isEnrolled(forumkey, email);
         switch (enrollment_status) {
             case DiscussionBoardUtils.NOT_ENROLLED:
                 out.println(DiscussionBoardUtils.NOT_ENROLLED);
                 return;
-            case DiscussionBoardUtils.DUPLICATE_STUDENT:
+            case DiscussionBoardUtils.DUPLICATE_ENTRY:
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 return;
             case DiscussionBoardUtils.ENROLLED:
-                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,groupkey);
+                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
                 if(user.getAccess().equals("INSTRUCTOR")){
                     try {
                         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -426,20 +432,21 @@ public class DiscussionBoardController {
 
         String instructor_email = request.getParameter("i_email");
         String course = request.getParameter("course");
+        String section = request.getParameter("section");
         String post_id = request.getParameter("post_id");
         String post_title = request.getParameter("title");
         String post_content = request.getParameter("content");
 
 
-        if (instructor_email == null || course == null || post_id == null || post_title == null || post_content == null
-                || instructor_email.trim().isEmpty() || course.trim().isEmpty() || post_id.trim().isEmpty()
+        if (instructor_email == null || course == null || post_id == null || post_title == null || section == null || post_content == null
+                || instructor_email.trim().isEmpty() || course.trim().isEmpty() || section.trim().isEmpty() || post_id.trim().isEmpty()
                 || post_title.trim().isEmpty() || post_content.trim().isEmpty() ) {
             out.println(DiscussionBoardUtils.EMPTY_PARAMETERS);
             return;
         }
 
-        Key groupkey = DiscussionBoardUtils.getGroupKey(instructor_email.trim(), course.trim());
-        if (groupkey == null) {
+        Key forumkey = DiscussionBoardUtils.getForumKey(instructor_email.trim(), course.trim(),section.trim());
+        if (forumkey == null) {
             out.println(DiscussionBoardUtils.BOARD_NOT_FOUND);
             return;
         }
@@ -451,16 +458,16 @@ public class DiscussionBoardController {
         }
 
         String email = active_user.getEmail();
-        int enrollment_status = DiscussionBoardUtils.isEnrolled(groupkey, email);
+        int enrollment_status = DiscussionBoardUtils.isEnrolled(forumkey, email);
         switch (enrollment_status) {
             case DiscussionBoardUtils.NOT_ENROLLED:
                 out.println(DiscussionBoardUtils.NOT_ENROLLED);
                 return;
-            case DiscussionBoardUtils.DUPLICATE_STUDENT:
+            case DiscussionBoardUtils.DUPLICATE_ENTRY:
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 return;
             case DiscussionBoardUtils.ENROLLED:
-                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,groupkey);
+                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
                     try {
                         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
                         long id = Long.parseLong(post_id);
@@ -494,19 +501,20 @@ public class DiscussionBoardController {
 
         String instructor_email = request.getParameter("i_email");
         String course = request.getParameter("course");
+        String section = request.getParameter("section");
         String comment_id = request.getParameter("comment_id");
         String comment_content = request.getParameter("content");
 
 
-        if (instructor_email == null || course == null || comment_id == null || comment_content == null
-                || instructor_email.trim().isEmpty() || course.trim().isEmpty() || comment_id.trim().isEmpty()
+        if (instructor_email == null || course == null || comment_id == null || section == null||comment_content == null
+                || instructor_email.trim().isEmpty() || course.trim().isEmpty() || section.trim().isEmpty() ||comment_id.trim().isEmpty()
                 || comment_content.trim().isEmpty() ) {
             out.println(DiscussionBoardUtils.EMPTY_PARAMETERS);
             return;
         }
 
-        Key groupkey = DiscussionBoardUtils.getGroupKey(instructor_email.trim(), course.trim());
-        if (groupkey == null) {
+        Key forumkey = DiscussionBoardUtils.getForumKey(instructor_email.trim(), course.trim(),section.trim());
+        if (forumkey == null) {
             out.println(DiscussionBoardUtils.BOARD_NOT_FOUND);
             return;
         }
@@ -518,16 +526,16 @@ public class DiscussionBoardController {
         }
 
         String email = active_user.getEmail();
-        int enrollment_status = DiscussionBoardUtils.isEnrolled(groupkey, email);
+        int enrollment_status = DiscussionBoardUtils.isEnrolled(forumkey, email);
         switch (enrollment_status) {
             case DiscussionBoardUtils.NOT_ENROLLED:
                 out.println(DiscussionBoardUtils.NOT_ENROLLED);
                 return;
-            case DiscussionBoardUtils.DUPLICATE_STUDENT:
+            case DiscussionBoardUtils.DUPLICATE_ENTRY:
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 return;
             case DiscussionBoardUtils.ENROLLED:
-                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,groupkey);
+                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
                 try {
                     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
                     long id = Long.parseLong(comment_id);
@@ -560,19 +568,20 @@ public class DiscussionBoardController {
 
         String instructor_email = request.getParameter("i_email");
         String course = request.getParameter("course");
+        String section = request.getParameter("section");
         String request_for = request.getParameter("for");
         String request_type = request.getParameter("type");
         String request_id = request.getParameter("id");
 
 
-        if (instructor_email == null || course == null || request_id == null || request_type == null || request_for == null
-                || instructor_email.trim().isEmpty() || course.trim().isEmpty() || request_id.trim().isEmpty() || request_type.trim().isEmpty() || request_for.trim().isEmpty()) {
+        if (instructor_email == null || course == null || request_id == null || request_type == null || request_for == null || section == null
+                || instructor_email.trim().isEmpty() || course.trim().isEmpty() || section.trim().isEmpty() ||request_id.trim().isEmpty() || request_type.trim().isEmpty() || request_for.trim().isEmpty()) {
             out.println(DiscussionBoardUtils.EMPTY_PARAMETERS);
             return;
         }
 
-        Key groupkey = DiscussionBoardUtils.getGroupKey(instructor_email.trim(), course.trim());
-        if (groupkey == null) {
+        Key forumkey = DiscussionBoardUtils.getForumKey(instructor_email.trim(), course.trim(),section.trim());
+        if (forumkey == null) {
             out.println(DiscussionBoardUtils.BOARD_NOT_FOUND);
             return;
         }
@@ -584,16 +593,16 @@ public class DiscussionBoardController {
         }
 
         String email = active_user.getEmail();
-        int enrollment_status = DiscussionBoardUtils.isEnrolled(groupkey, email);
+        int enrollment_status = DiscussionBoardUtils.isEnrolled(forumkey, email);
         switch (enrollment_status) {
             case DiscussionBoardUtils.NOT_ENROLLED:
                 out.println(DiscussionBoardUtils.NOT_ENROLLED);
                 return;
-            case DiscussionBoardUtils.DUPLICATE_STUDENT:
+            case DiscussionBoardUtils.DUPLICATE_ENTRY:
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 return;
             case DiscussionBoardUtils.ENROLLED:
-                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,groupkey);
+                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
                 try {
                     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
                     long id = Long.parseLong(request_id);
@@ -635,10 +644,10 @@ public class DiscussionBoardController {
                             datastore.delete(temp.getKey());
                             out.println(DiscussionBoardUtils.SUCCESS);
                     }else if(likes_list_size == 1 && request_type.trim().equalsIgnoreCase("like")){
-                        out.println(DiscussionBoardUtils.DUPLICATE_STUDENT);
+                        out.println(DiscussionBoardUtils.DUPLICATE_ENTRY);
                     }
                     else if(likes_list_size == 0 && request_type.trim().equalsIgnoreCase("dislike")){
-                        out.println(DiscussionBoardUtils.DUPLICATE_STUDENT);
+                        out.println(DiscussionBoardUtils.DUPLICATE_ENTRY);
                     }
                     else{
                         out.println(DiscussionBoardUtils.DATABASE_ERROR);
@@ -649,6 +658,59 @@ public class DiscussionBoardController {
                     return;
                 }
                 break;
+        }
+        return;
+    }
+
+
+    @RequestMapping(value = "discussion_changeusername.htm", method = RequestMethod.GET)
+    public void changeUsername(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
+        String instructor_email = request.getParameter("i_email");
+        String course = request.getParameter("course");
+        String section = request.getParameter("section");
+        String username = request.getParameter("username");
+
+
+
+        if (instructor_email == null || course == null || username == null  || section == null
+                || instructor_email.trim().isEmpty() || course.trim().isEmpty() || section.trim().isEmpty() ||username.trim().isEmpty()) {
+            out.println(DiscussionBoardUtils.EMPTY_PARAMETERS);
+            return;
+        }
+
+        if(username.trim().length() < 5){
+            out.println(DiscussionBoardUtils.INVALID_LENGTH);
+            return;
+        }
+
+        Key forumkey = DiscussionBoardUtils.getForumKey(instructor_email.trim(), course.trim(),section.trim());
+        if (forumkey == null) {
+            out.println(DiscussionBoardUtils.BOARD_NOT_FOUND);
+            return;
+        }
+
+        User active_user = GenUtils.getActiveUser();
+        if (active_user == null) {
+            out.println(DiscussionBoardUtils.NOT_LOGGED_IN);
+            return;
+        }
+
+        String email = active_user.getEmail();
+        int enrollment_status = DiscussionBoardUtils.isEnrolled(forumkey, email);
+        switch (enrollment_status) {
+            case DiscussionBoardUtils.NOT_ENROLLED:
+                out.println(DiscussionBoardUtils.NOT_ENROLLED);
+                return;
+            case DiscussionBoardUtils.DUPLICATE_ENTRY:
+                out.println(DiscussionBoardUtils.DATABASE_ERROR);
+                return;
+            case DiscussionBoardUtils.ENROLLED:
+                int status = DiscussionBoardUtils.updateUsername(forumkey,email,username);
+                out.println(status);
+                return;
         }
         return;
     }
@@ -672,14 +734,15 @@ public class DiscussionBoardController {
 
         String instructor_email = request.getParameter("i_email");
         String course = request.getParameter("course");
+        String section = request.getParameter("section");
 
-        if (instructor_email == null || course == null || course.trim().length() == 0 || instructor_email.trim().length() == 0) {
+        if (instructor_email == null || course == null || section == null || section.trim().length() == 0 || course.trim().length() == 0 || instructor_email.trim().length() == 0) {
             out.println(DiscussionBoardUtils.EMPTY_PARAMETERS);
             return;
         }
 
-        Key groupkey = DiscussionBoardUtils.getGroupKey(instructor_email.trim(), course.trim());
-        if (groupkey == null) {
+        Key forumkey = DiscussionBoardUtils.getForumKey(instructor_email.trim(), course.trim(), section.trim());
+        if (forumkey == null) {
             out.println(DiscussionBoardUtils.BOARD_NOT_FOUND);
             return;
         }
@@ -691,22 +754,22 @@ public class DiscussionBoardController {
         }
 
         String email = active_user.getEmail();
-        int enrollment_status = DiscussionBoardUtils.isEnrolled(groupkey, email);
+        int enrollment_status = DiscussionBoardUtils.isEnrolled(forumkey, email);
         switch (enrollment_status) {
             case DiscussionBoardUtils.NOT_ENROLLED:
                 out.println(DiscussionBoardUtils.NOT_ENROLLED);
                 break;
-            case DiscussionBoardUtils.DUPLICATE_STUDENT:
+            case DiscussionBoardUtils.DUPLICATE_ENTRY:
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 break;
             case DiscussionBoardUtils.ENROLLED:
 
                 try {
                     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-                    Entity group = datastore.get(groupkey);
+                    Entity forum = datastore.get(forumkey);
 
-                    Query.Filter groupkey_filter = new Query.FilterPredicate("groupkey", Query.FilterOperator.EQUAL, groupkey);
-                    Query q = new Query("Enrollment").setFilter(groupkey_filter);
+                    Query.Filter forumkey_filter = new Query.FilterPredicate("forum_key", Query.FilterOperator.EQUAL, forumkey);
+                    Query q = new Query("Enrollment").setFilter(forumkey_filter);
                     PreparedQuery pq = datastore.prepare(q);
 
                     /*Retrieve enrollment list*/
@@ -717,14 +780,15 @@ public class DiscussionBoardController {
                     ArrayList<PostData> post_array_list = new ArrayList<>();
 
                     /*Retrieve data about the creator of the discussion group*/
-                    EnrollmentData instructor_data = DiscussionBoardUtils.getEnrolledUser(instructor_email,course,groupkey);
+                    EnrollmentData instructor_data = DiscussionBoardUtils.getEnrolledUser(instructor_email,course,forumkey);
 
                     /*Retrieve data about the user accessing the discussion board*/
-                    EnrollmentData active_user_enrollment_data = DiscussionBoardUtils.getEnrolledUser(email,course,groupkey);
+                    EnrollmentData active_user_enrollment_data = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
 
                     /*Retrieve Posts*/
                     PostData postData;
-                    q = new Query("Post").setFilter(groupkey_filter);
+                    Query.Filter forumid_filter = new Query.FilterPredicate("forum_id", Query.FilterOperator.EQUAL, forumkey.getId());
+                    q = new Query("Post").setFilter(forumid_filter);
                     q.addSort("timestamp", Query.SortDirection.DESCENDING);
                     pq = datastore.prepare(q);
 
@@ -739,7 +803,7 @@ public class DiscussionBoardController {
                         long post_id =  post.getKey().getId();
 
                         /*Retrieve details about the user that made this post*/
-                        EnrollmentData post_user = DiscussionBoardUtils.getEnrolledUser(post_email,course,groupkey);
+                        EnrollmentData post_user = DiscussionBoardUtils.getEnrolledUser(post_email,course,forumkey);
 
                         /*Retrieve the number of "likes" this post has.*/
                         Query.Filter postid_filter = new Query.FilterPredicate("postid", Query.FilterOperator.EQUAL, post_id);
@@ -763,7 +827,7 @@ public class DiscussionBoardController {
                                 String comment_content = (String) comment_list.get(j).getProperty("content");
 
                                 /*Retrieve details about the user that made this comment*/
-                                EnrollmentData comment_user = DiscussionBoardUtils.getEnrolledUser(comment_email,course,groupkey);
+                                EnrollmentData comment_user = DiscussionBoardUtils.getEnrolledUser(comment_email,course,forumkey);
 
                                 /*Retrieve the number of "likes" this comment has.*/
                                 Query.Filter commentid_filter = new Query.FilterPredicate("commentid", Query.FilterOperator.EQUAL, comment_id);
@@ -786,7 +850,7 @@ public class DiscussionBoardController {
 
 
                     //Key groupID, String email, String course, String username, String access, ArrayList<PostData> postData
-                    DiscussionBoardData discussionBoardData = new DiscussionBoardData(groupkey, enrollment_list_size,
+                    DiscussionBoardData discussionBoardData = new DiscussionBoardData(forumkey, enrollment_list_size,
                             post_list_size, comment_list_size,instructor_data, post_array_list,active_user_enrollment_data);
 
                     out.println(discussionBoardData.generateJSON());

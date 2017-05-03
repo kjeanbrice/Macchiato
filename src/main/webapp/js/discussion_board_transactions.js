@@ -13,6 +13,9 @@ $(document).ready(function () {
     var DATABASE_ERROR = "7";
     var POST_NOT_FOUND = "8";
     var NO_ACCESS = "9";
+    var INVALID_ARGS = "10";
+    var ALREADY_ACTIVE = "11";
+    var INVALID_LENGTH = "12";
 
     load_discussionpage();
 
@@ -22,6 +25,9 @@ $(document).ready(function () {
     function load_discussionpage() {
         var email_area = $('#i_email').attr('data-iemail');
         var course_area = $('#course').attr('data-course');
+        var section = $('#section').attr('data-section');
+
+
 
         var navbar_instructor = $('#navbar-instructor');
         var navbar_course = $('#navbar-course');
@@ -30,7 +36,7 @@ $(document).ready(function () {
         var navbar_posts = $('#navbar-posts');
 
         var post_comment_area = $('#post_area_template');
-        var $url = "/populate_discussionboard.htm?i_email=" + email_area + "&course=" + course_area ;
+        var $url = "/populate_discussionboard.htm?i_email=" + email_area + "&course=" + course_area + "&section=" + section ;
 
         $.ajax({
             method: 'get',
@@ -85,6 +91,78 @@ $(document).ready(function () {
         var current_user =  $('#current-user').attr("data-username");
         $('#txt-username').val(current_user);
         err_label.css("opacity","0");
+
+    });
+
+    $('body').on('click', '#btn-username-submit', function () {
+        var i_email = $('#i_email').attr('data-iemail');
+        var course = $('#course').attr('data-course');
+        var section = $('#section').attr('data-section');
+        var username = $('#txt-username').val().trim();
+        var err_label = $('#err-changeusername');
+
+        var url = "/discussion_changeusername.htm?&i_email=" + i_email + "&course=" + course + "&section=" + section + "&username=" + username;
+        err_label.fadeTo(0,0);
+        $.ajax({
+            method: 'get',
+            url: url,
+            dataType: 'text',
+            success: function (edit_status) {
+                console.log("Username Change:Success");
+                console.log("Username Change: " + edit_status);
+                switch(edit_status.trim()){
+                    case SUCCESS:
+                        load_discussionpage();
+                        $('#close-username-modal').click();
+                        console.log("It got here");
+                        break;
+                    case ENROLLED:
+                        break;
+                    case NOT_ENROLLED:
+                        err_label.text("You must first be enrolled in this course before you can make changes to your username.");
+                        err_label.fadeTo(1000,1);
+                        break;
+                    case NOT_LOGGED_IN:
+                        err_label.text("You must login and enroll in this course before you can modify your username.");
+                        err_label.fadeTo(1000,1);
+                        break;
+                    case DUPLICATE_STUDENT:
+                        err_label.text("There is a problem with our database. Please try again later.");
+                        err_label.fadeTo(1000,1);
+                        break;
+                    case EMPTY_PARAMETERS:
+                        err_label.text("Your username cannot be empty.");
+                        err_label.fadeTo(1000,1);
+                        break;
+                    case BOARD_NOT_FOUND:
+                        err_label.text("We're having an issue locating the discussion board for this course. Please try again later.");
+                        err_label.fadeTo(1000,1);
+                        break;
+                    case DATABASE_ERROR:
+                        err_label.text("There is a problem with our database. Please try again later.");
+                        err_label.fadeTo(1000,1);
+                        break;
+                    case ALREADY_ACTIVE:
+                        err_label.text("This username is already taken on this forum.");
+                        err_label.fadeTo(1000,1);
+                        break;
+                    case INVALID_LENGTH:
+                        err_label.text("Your username must have at least 5 characters.");
+                        err_label.fadeTo(1000,1);
+                        console.log("Invalid_Length:It got here");
+                        break;
+                    case POST_NOT_FOUND:
+                        err_label.text("This post has already been deleted or doesn't exist. Please refresh your page.");
+                        err_label.fadeTo(1000,1);
+                        break;
+                }
+            },
+            error: function () {
+                console.log("Post:Delete: Aw, It didn't connect to the servlet :(");
+            }
+
+        });
+
     });
 
 
@@ -119,7 +197,8 @@ $(document).ready(function () {
         else {
             var i_email = $('#i_email').attr('data-iemail');
             var course = $('#course').attr('data-course');
-            var url = "/discussion_addpost.htm?&i_email=" + i_email + "&course=" + course + "&title=" + post_title + "&content=" + post_content;
+            var section = $('#section').attr('data-section');
+            var url = "/discussion_addpost.htm?&i_email=" + i_email + "&course=" + course + "&title=" + post_title + "&content=" + post_content + "&section=" + section;
 
             $.ajax({
                 method: 'get',
@@ -159,12 +238,13 @@ $(document).ready(function () {
     $('body').on('click', '#editpost-submit', function () {
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
+        var section = $('#section').attr('data-section');
         var post_id = $('#val-editpost').attr('data-postid');
         var post_title = $('#edit-title').val().trim();
         var post_content =$('#edit-post-feed').val().trim();
         var err_label = $('#err-editpost');
 
-        var url = "/discussion_editpost.htm?&i_email=" + i_email + "&course=" + course + "&post_id=" + post_id + "&title=" + post_title + "&content=" + post_content;
+        var url = "/discussion_editpost.htm?&i_email=" + i_email + "&course=" + course + "&section=" + section + "&post_id=" + post_id + "&title=" + post_title + "&content=" + post_content;
         err_label.fadeTo(0,0);
         $.ajax({
             method: 'get',
@@ -235,11 +315,12 @@ $(document).ready(function () {
     $('body').on('click', '#editcomment-submit', function () {
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
+        var section = $('#section').attr('data-section');
         var comment_id = $('#val-editcomment').attr('data-commentid');
         var comment_content =$('#edit-comment-feed').val().trim();
         var err_label = $('#err-editcomment');
 
-        var url = "/discussion_editcomment.htm?&i_email=" + i_email + "&course=" + course + "&comment_id=" + comment_id + "&content=" + comment_content;
+        var url = "/discussion_editcomment.htm?&i_email=" + i_email + "&course=" + course  + "&section=" + section + "&comment_id=" + comment_id + "&content=" + comment_content;
         err_label.fadeTo(0,0);
         $.ajax({
             method: 'get',
@@ -320,6 +401,7 @@ $(document).ready(function () {
         var err_label = comment_form.find('span[name=err_comment]');
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
+        var section = $('#section').attr('data-section');
         //var control = '#post_area_template';
 
         err_label.fadeTo(0,0);
@@ -328,7 +410,7 @@ $(document).ready(function () {
             err_label.fadeTo(1000,1);
         } else {
             err_label.text("");
-            var url = "/discussion_addcomment.htm?&i_email=" + i_email + "&course=" + course + "&post_id=" + post_id + "&content=" + content;
+            var url = "/discussion_addcomment.htm?&i_email=" + i_email + "&course=" + course + "&section=" + section +"&post_id=" + post_id + "&content=" + content;
 
             $.ajax({
                 method: 'get',
@@ -405,10 +487,11 @@ $(document).ready(function () {
 
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
+        var section = $('#section').attr('data-section');
         var post_id = $('#val-deletepost').attr('data-postid');
         var err_label = $('#err-deletepost');
 
-        var url = "/discussion_deletepost.htm?&i_email=" + i_email + "&course=" + course + "&post_id=" + post_id;
+        var url = "/discussion_deletepost.htm?&i_email=" + i_email + "&course=" + course + "&section=" + section + "&post_id=" + post_id;
         err_label.fadeTo(0,0);
         $.ajax({
             method: 'get',
@@ -477,10 +560,11 @@ $(document).ready(function () {
 
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
+        var section = $('#section').attr('data-section');
         var comment_id = $('#val-deletecomment').attr('data-commentid');
         var err_label = $('#err-deletecomment');
 
-        var url = "/discussion_deletecomment.htm?&i_email=" + i_email + "&course=" + course + "&comment_id=" + comment_id;
+        var url = "/discussion_deletecomment.htm?&i_email=" + i_email + "&course=" + course + "&section=" + section + "&comment_id=" + comment_id;
         err_label.fadeTo(0,0);
         $.ajax({
             method: 'get',
@@ -540,11 +624,12 @@ $(document).ready(function () {
 
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
+        var section = $('#section').attr('data-section');
         var transaction_type = "like";
         var for_type = "post"
         var post_id = $(this).attr("data-postid");
 
-        var url = "/discussion_voterequest.htm?&i_email=" + i_email + "&course=" + course + "&id=" + post_id + "&type=" + transaction_type + "&for=" + for_type;
+        var url = "/discussion_voterequest.htm?&i_email=" + i_email + "&course=" + course + "&section=" + section + "&id=" + post_id + "&type=" + transaction_type + "&for=" + for_type;
 
         $.ajax({
             method: 'get',
@@ -588,11 +673,12 @@ $(document).ready(function () {
 
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
+        var section = $('#section').attr('data-section');
         var transaction_type = "dislike";
         var for_type = "post"
         var post_id = $(this).attr("data-postid");
 
-        var url = "/discussion_voterequest.htm?&i_email=" + i_email + "&course=" + course + "&id=" + post_id + "&type=" + transaction_type + "&for=" + for_type;
+        var url = "/discussion_voterequest.htm?&i_email=" + i_email + "&course=" + course + "&section=" + section + "&id=" + post_id + "&type=" + transaction_type + "&for=" + for_type;
 
         $.ajax({
             method: 'get',
@@ -636,11 +722,12 @@ $(document).ready(function () {
 
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
+        var section = $('#section').attr('data-section');
         var transaction_type = "like";
         var for_type = "comment"
         var post_id = $(this).attr("data-commentid");
 
-        var url = "/discussion_voterequest.htm?&i_email=" + i_email + "&course=" + course + "&id=" + post_id + "&type=" + transaction_type + "&for=" + for_type;
+        var url = "/discussion_voterequest.htm?&i_email=" + i_email + "&course=" + course + "&section=" + section + "&id=" + post_id + "&type=" + transaction_type + "&for=" + for_type;
 
         $.ajax({
             method: 'get',
@@ -685,6 +772,7 @@ $(document).ready(function () {
 
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
+        var section = $('#section').attr('data-section');
         var transaction_type = "dislike";
         var for_type = "comment"
         var post_id = $(this).attr("data-commentid");
@@ -697,7 +785,7 @@ $(document).ready(function () {
          String request_id = request.getParameter("id");
          */
 
-        var url = "/discussion_voterequest.htm?&i_email=" + i_email + "&course=" + course + "&id=" + post_id + "&type=" + transaction_type + "&for=" + for_type;
+        var url = "/discussion_voterequest.htm?&i_email=" + i_email + "&course=" + course + "&section=" + section + "&id=" + post_id + "&type=" + transaction_type + "&for=" + for_type;
 
         $.ajax({
             method: 'get',

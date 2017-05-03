@@ -27,8 +27,6 @@ public class LoginController {
     public String LoginService (HttpServletRequest request, HttpServletResponse response){
         UserService userService = UserServiceFactory.getUserService();
         //Creates dummy data for the discussion board
-        DiscussionBoardUtils.createDummyDiscussionData();
-
 
 
         if(userService.isUserLoggedIn()){
@@ -58,6 +56,7 @@ public class LoginController {
     public String LoginResolver (HttpServletRequest request, HttpServletResponse response){
         String access_str = request.getParameter("access");
 
+        DiscussionBoardUtils.createDummyDiscussionData();
         if(access_str == null || access_str.trim().isEmpty()){
             return "redirect:/login.htm";
         }

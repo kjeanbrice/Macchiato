@@ -9,15 +9,17 @@ public class CourseData implements Serializable {
     private String instructor_email;
     private String instructor_nickname;
     private String course;
+    private String section;
 
-    public CourseData(String instructor_email, String instructor_nickname, String course) {
+    public CourseData(String instructor_email, String instructor_nickname, String course, String section) {
         this.instructor_email = instructor_email;
         this.instructor_nickname = instructor_nickname;
         this.course = course;
+        this.section = section;
     }
 
     public CourseData() {
-        this("default", "default", "default");
+        this("default", "default", "default","default");
     }
 
     public String getInstructor_email() {
@@ -57,6 +59,7 @@ public class CourseData implements Serializable {
 
         String outputString = "{\"instructorEmail\":\"" + this.instructor_email + "\","
                 + "\"instructorNickname\":\"" + this.instructor_nickname + "\","
+                + "\"section\":\"" + this.section + "\","
                 + "\"course\":\"" + this.course + "\"";
 
         outputString += "}";
