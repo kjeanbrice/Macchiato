@@ -1,4 +1,4 @@
-package com.macchiato.general.discussiondata;
+package com.macchiato.general;
 
 import java.io.Serializable;
 import java.util.ArrayList;
