@@ -1,4 +1,4 @@
-package com.macchiato.general;
+package com.macchiato.general.discussiondata;
 
 import com.macchiato.utility.GenUtils;
 import org.apache.commons.lang.StringEscapeUtils;

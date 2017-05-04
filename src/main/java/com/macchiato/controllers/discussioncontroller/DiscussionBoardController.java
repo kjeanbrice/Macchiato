@@ -2,8 +2,8 @@ package com.macchiato.controllers.discussioncontroller;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
-import com.macchiato.general.*;
 
+import com.macchiato.general.discussiondata.*;
 import com.macchiato.utility.DiscussionBoardUtils;
 import com.macchiato.utility.GenUtils;
 import org.springframework.stereotype.Controller;

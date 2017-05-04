@@ -3,10 +3,10 @@ package com.macchiato.utility;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
 import com.macchiato.controllers.discussioncontroller.DiscussionBoardController;
-import com.macchiato.general.CourseData;
-import com.macchiato.general.CourseDataHelper;
-import com.macchiato.general.EnrollmentData;
-import com.macchiato.general.PostData;
+import com.macchiato.general.discussiondata.CourseData;
+import com.macchiato.general.discussiondata.CourseDataHelper;
+import com.macchiato.general.discussiondata.EnrollmentData;
+import com.macchiato.general.discussiondata.PostData;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;

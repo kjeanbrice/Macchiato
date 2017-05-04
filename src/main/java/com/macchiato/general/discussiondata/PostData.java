@@ -1,7 +1,9 @@
-package com.macchiato.general;
+package com.macchiato.general.discussiondata;
 
 
 
+import com.macchiato.general.discussiondata.CommentData;
+import com.macchiato.general.discussiondata.EnrollmentData;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.Serializable;

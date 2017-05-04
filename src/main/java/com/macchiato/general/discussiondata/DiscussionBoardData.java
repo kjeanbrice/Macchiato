@@ -1,4 +1,4 @@
-package com.macchiato.general;
+package com.macchiato.general.discussiondata;
 
 
 import com.google.appengine.api.datastore.Key;
