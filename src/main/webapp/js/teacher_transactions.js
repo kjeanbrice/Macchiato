@@ -11,7 +11,7 @@ $(document).ready(function () {
 
         $.ajax({
             method: 'get',
-            url: $url,
+   Assignmentsrl: $url,
             dataType: 'json',
 
 
@@ -25,8 +25,8 @@ $(document).ready(function () {
 
                 $.each(JSON_list_items, function (i, item) {
                     list_data += '<tr><td>' + item.crsName + '</td><td>' +'' +
-                        '<button onclick="edit_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#info_modal">Edit</button>'+ '</td><td>'+
-                    '<button type="button" class="btn btn-link"'+ 'value='+item.crsCode+'>'+"Assignments</button>" +'</td><td>' +
+                        '<button onclick="edit_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-link" data-toggle="modal" data-target="#info_modal">Edit</button>'+ '</td><td>'+
+                        '<button onclick="edit_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-link" >Assigments</button>'+'</td><td>' +
                                  item.crsCode + '</td></tr>';
                 });
                 item_area.html(list_data);
@@ -82,8 +82,8 @@ $(document).ready(function () {
                 var list_data="";
                 $.each(JSON_list_items, function (i, item) {
                     list_data += '<tr><td>' + item.crsName + '</td><td>' +'' +
-                        '<button type="button" class="btn btn-link"'+ 'value='+item.crsCode+'>'+"Sup</button>" + '</td><td>' +'' +
-                        '<button type="button" class="btn btn-link"'+ 'value='+item.crsCode+'>'+"Assignments</button>" +'</td><td>' +
+                        '<button onclick="edit_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-link" data-toggle="modal" data-target="#info_modal">Edit</button>'+ '</td><td>'+
+                        '<button onclick="edit_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-link" >Assigments</button>'+'</td><td>' +
                         item.crsCode + '</td></tr>';
                 });
                 item_area.html(list_data);
