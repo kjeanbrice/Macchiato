@@ -28,7 +28,6 @@
                 </ul>
             </div>
             <div class="top-bar-right">
-                +
                 <ul class="dropdown menu" data-dropdown-menu>
                     <li><a id="current-user" href="javascript:void(0)" data-username="" class="scroll-nav welcome-name "></a></li>
                     <li><a href="/Student.htm" class="scroll-nav link">Home</a></li>
@@ -41,7 +40,6 @@
                             <input name = "i_email" id = "form-iemail" type = "text" style="display:none;">
                             <input name = "course" id = "form-course" type = "text" style="display:none;">
                             <input name = "section" id = "form-section" type = "text" style="display:none;">
-
                         </form>
                     </li>
                     <li><a href="/CourseInfo.htm" class="scroll-nav link">Course Info</a></li>
