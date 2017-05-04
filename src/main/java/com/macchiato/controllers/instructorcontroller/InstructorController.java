@@ -3,7 +3,6 @@ package com.macchiato.controllers.instructorcontroller;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
 import com.macchiato.controllers.discussioncontroller.DiscussionBoardController;
-import com.macchiato.general.discussiondata.CourseDataHelper;
 import com.macchiato.utility.DiscussionBoardUtils;
 import com.macchiato.utility.GenUtils;
 import org.springframework.stereotype.Controller;
