@@ -5,8 +5,14 @@
   Time: 6:23 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<!doctype html>
+<html class="no-js" lang="en">
+
+<style>
+
+</style>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -94,4 +100,3 @@
 </body>
 
 
-</html>

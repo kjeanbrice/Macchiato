@@ -29,10 +29,8 @@ public class Addcourse {
 @RequestMapping(value="addCourse.htm", method = RequestMethod.POST)
     public void addCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User active_user = GenUtils.getActiveUser();
-    //PrintWriter out = response.getWriter();
     String instructor_email =active_user.getEmail();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
     if (instructor_email == null ) {
         System.out.println("active_user is null");
     }

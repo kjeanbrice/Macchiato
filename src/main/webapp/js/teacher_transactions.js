@@ -24,7 +24,10 @@ $(document).ready(function () {
                 var list_data = "";
 
                 $.each(JSON_list_items, function (i, item) {
-                    list_data += '<tr><td>' + item.crsName + '</td><td>' + "123" + '</td><td>' + "123" + '</td><td>' + item.crsCode + '</td></tr>';
+                    list_data += '<tr><td>' + item.crsName + '</td><td>' +'' +
+                        '<button onclick="edit_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#info_modal">Edit</button>'+ '</td><td>'+
+                    '<button type="button" class="btn btn-link"'+ 'value='+item.crsCode+'>'+"Assignments</button>" +'</td><td>' +
+                                 item.crsCode + '</td></tr>';
                 });
                 item_area.html(list_data);
             },
@@ -77,8 +80,11 @@ $(document).ready(function () {
                 console.log("Get Courses :Success");
                 JSON_list_items = course_table;
                 var list_data="";
-                $.each( JSON_list_items, function (i, item) {
-                    list_data += '<tr><td>' + item.crsName + '</td><td>' +"123" + '</td><td>' + "123" + '</td><td>' + item.crsCode + '</td></tr>';
+                $.each(JSON_list_items, function (i, item) {
+                    list_data += '<tr><td>' + item.crsName + '</td><td>' +'' +
+                        '<button type="button" class="btn btn-link"'+ 'value='+item.crsCode+'>'+"Sup</button>" + '</td><td>' +'' +
+                        '<button type="button" class="btn btn-link"'+ 'value='+item.crsCode+'>'+"Assignments</button>" +'</td><td>' +
+                        item.crsCode + '</td></tr>';
                 });
                 item_area.html(list_data);
             },
@@ -88,6 +94,7 @@ $(document).ready(function () {
         });
     }
 
+    //this function will help clean some data in teacher home page
     function clear_form_data() {
         var item_area=$('#item_area');
         console.log("Clear all data");
@@ -96,8 +103,43 @@ $(document).ready(function () {
         $('#course_dis_text').val("");
     }
 
+    //this function will change the description of the course
+    $('body').on('click', '#info_course_submit', function (e) {
+        var course_code = localStorage.getItem("crsCode");
+        var course_dis = $('#change_course_dis_text').val().trim();
+        // console.log("123");
+        // console.log(course_dis);
+        var url = "/editCourse.htm?crsCode=" +course_code + "&description=" + course_dis ;
+
+        $.ajax({
+            method: 'post',
+            url: url,
+            dataType: 'text',
+            success: function (h) {
+                if(course_dis.length==0){
+                    alert("Can not create course,because description is empty")
+                    console.log("Change Description ERROR");
+                }
+                else{
+                    clear_form_data();
+                    console.log(course_code);
+                    console.log("Change Description Successes");
+                }
+            },
+            error: function () {
+                console.log("Add Item Failure: Aw, It didn't connect to the servlet :(");
+            }
+        });
+    });
+
 
 })
+
+//function will help put course code to local Storage of HTML5
+function edit_course_helper(CourseCode){
+    localStorage.setItem("crsCode",CourseCode);
+    console.log("dasdsdawa");
+}
 
 
 

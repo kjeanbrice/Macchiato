@@ -21,13 +21,14 @@ import static com.macchiato.utility.TeachersUtils.isOwned;
 
 /**
  * Created by Xiangbin on 4/19/2017.
+ * Load course function will load all the course owned by this teacher,
+ * and it will listed on teacher home page
  */
 @Controller
 public class LoadCourse {
     //Load course function will load all the course owned by this teacher, and it will listed on teacher home page
     @RequestMapping(value = "/LoadCourse.htm", method = RequestMethod.GET)
     public void LoadCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //response.setContentType("text/html;charset=UTF-8");
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         User active_user = GenUtils.getActiveUser();
@@ -37,14 +38,7 @@ public class LoadCourse {
         }
         else{
             System.out.println("instructor email: "+instructor_email);
-            //System.out.print("Part3");
             ArrayList<CourseBean> newList= isOwned(instructor_email);
-//            test---
-//            CourseBean newBean=new CourseBean("CSE123","teacher1@gmial.com","yes");
-//            CourseBean newBean2=new CourseBean("CSE122","teacher1@gmial.com","yes");
-//            newList.add(newBean2);
-//            newList.add(newBean);
-//            test---
            System.out.println(CourseListJson(newList));
               out.println(CourseListJson(newList));
         }

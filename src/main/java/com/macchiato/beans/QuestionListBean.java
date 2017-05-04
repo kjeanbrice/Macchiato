@@ -1,5 +1,6 @@
 package com.macchiato.beans;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 
 /**
@@ -12,6 +13,7 @@ public class QuestionListBean {
     private ArrayList<QuestionBean> problems;
     private String  CrsCode;
     private String  assignmentKey;
+    private Data dueData;
 
     public QuestionListBean(){
         this.problems = new ArrayList<QuestionBean>();
@@ -61,5 +63,13 @@ public class QuestionListBean {
 
     public void setAssignmentKey(String assignmentKey) {
         this.assignmentKey = assignmentKey;
+    }
+
+    public Data getDueData() {
+        return dueData;
+    }
+
+    public void setDueData(Data dueData) {
+        this.dueData = dueData;
     }
 }

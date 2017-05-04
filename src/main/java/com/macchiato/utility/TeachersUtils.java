@@ -17,6 +17,7 @@ public class TeachersUtils {
         System.out.print(123);
         String CrsName;
         String CrsCode;
+        String Crsdis;
         ArrayList<CourseBean> classList=new ArrayList<CourseBean>();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -33,10 +34,12 @@ public class TeachersUtils {
                     email = (String)result.getProperty("email");
                     CrsName = (String)result.getProperty("crsName");
                     CrsCode=(String)result.getProperty("crsCode");
+                    Crsdis=(String)result.getProperty("description");
                     CourseBean newBean =new CourseBean();
                     newBean.setInstrEmail(email);
                     newBean.setCrsName(CrsName);
                     newBean.setCrsCode(CrsCode);
+                newBean.setDescription(Crsdis);
                     classList.add(newBean);
             }
         }

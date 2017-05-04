@@ -28,6 +28,7 @@
                 </ul>
             </div>
             <div class="top-bar-right">
+                +
                 <ul class="dropdown menu" data-dropdown-menu>
                     <li><a id="current-user" href="javascript:void(0)" data-username="" class="scroll-nav welcome-name "></a></li>
                     <li><a href="/Student.htm" class="scroll-nav link">Home</a></li>
