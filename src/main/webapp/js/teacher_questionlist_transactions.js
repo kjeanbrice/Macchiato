@@ -70,9 +70,27 @@ function load_question_item(type){
 function delete_helper(questionkey){
     localStorage.setItem("questionkey",questionkey);
     console.log("Set new value to local Storage "+questionkey);
-    //var url="TeacherAssignmentPage.htm"
-    //location.href =url;
-    console.log(localStorage.getItem("questionkey"));
+    var url="/deleteQuestion.htm?questionKey="+questionkey;
+    console.log(url);
+
+    $.ajax({
+        method: 'post',
+        url: url,
+        dataType: 'text',
+        success: function (h) {
+            if(localStorage.getItem("questionkey")==0){
+                console.log("ADD QUESTION ERROR");
+            }
+            else{
+                clear_form_data();
+                load_question_item('delete_QUESTION');
+                console.log("Question Delete: SUCCESS");
+            }
+        },
+        error: function () {
+            console.log("Add Item Failure: Aw, It didn't connect to the servlet :(");
+        }
+    });
 }
 
 function Question_helper(questionkey){
@@ -82,3 +100,4 @@ function Question_helper(questionkey){
     // location.href =url;
     console.log(localStorage.getItem(questionkey));
 }
+

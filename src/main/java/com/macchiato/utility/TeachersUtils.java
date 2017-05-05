@@ -163,4 +163,9 @@ public class TeachersUtils {
         return outputString;
     }
 
+
+    public static String numberkeeper(String a){
+       String c= a.replaceAll("[^\\d.]", "");
+        return c;
+    }
 }

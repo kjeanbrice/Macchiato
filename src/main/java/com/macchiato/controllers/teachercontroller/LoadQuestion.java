@@ -35,17 +35,6 @@ public class LoadQuestion {
         else{
             System.out.println("instructor email: "+instructor_email);
             ArrayList<QuestionBean> newList= findAllQuestionBean(assignmentKey);
-            //test data
-            QuestionBean a=  new QuestionBean();
-            a.setId("123");
-            a.setSolution("hahah");
-            a.setProblem("this is a test");
-            QuestionBean b=  new QuestionBean();
-            b.setId("123");
-            b.setSolution("hahah");
-            b.setProblem("this is a test");
-            newList.add(a);
-            newList.add(b);
 
             System.out.println(QuestionListJson(newList));
             out.println(QuestionListJson(newList));

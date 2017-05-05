@@ -41,9 +41,9 @@ public class AddQuestion {
             user.setProperty("problem",problem);
             user.setProperty("solution", solution);
             user.setProperty("assignmentKey",assignmentKey);
-
             datastore.put(user);
-            newQuestion.setId(user.getKey().toString());
+            user.setProperty("questionKey",user.getKey().toString());
+            datastore.put(user);
             System.out.println("this is new key for this question: "+user.getKey().toString());
             System.out.print("From add: "+newQuestion.generateJSON());
             //out.println(newClass.generateJSON());
