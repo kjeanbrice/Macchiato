@@ -40,37 +40,64 @@
             </div>
             <div class="top-bar-right">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="TeachersPage.html">Home</a></li>
+                    <li class="active"><a href="TeacherHomePage.htm">Home</a></li>
                     <li><a href="#">FORUM</a></li>
-                    <button type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#myModal">CREATE A CLASS</button>
+                    <li><a href="/logoutTeacher.htm" class="link">Logout</a></li>
+                    <button type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#add_modal">Add An Assignment</button>
                 </ul>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Add Modal -->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="add_modal" class="modal fade"
+     style="display: none;">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">CREATE A ASSIGNMENT</h4>
+            </div>
+            Name of Assignment: <input id="assignment_name_text" type="text" name="name" id="name" />&nbsp;&nbsp;
+            Due Date: <input id="assignment_due_text" type="text" name="name" id="time" />&nbsp;&nbsp;
+            <br>
+
+            <span id="val-editCourse" data-comment-crdCode="" style="display:none;"></span>
+
+            <button type="button" class="btn btn-primary pull-right"  id="add_assignment_submit" data-dismiss="modal" >CREATE</button>
+            <button type="button" class="btn btn-primary pull-right" id="close_modal" data-dismiss="modal">CLOSE</button>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Page -->
 <<div class="container">
     <h2>ASSIGNMENTS</h2>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Assignments Name</th>
-            <th>Due Date</th>
-            <th>Grades</th>
-        </tr>
-        <tr>
-            <td><li><a href=# class="link">Assigment 1</a></li></td>
-            <td>10/10/2017</td>
-            <th><li><a href=# class="link">86%</a></li></th>
-        </tr>
-        </thead>
+    <table class="table table-striped">
         <tbody>
-        <tr>
-        </tr>
-        </tbody>
-    </table>
+            <div class="container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>AssignmentName</th>
+                        <th>Questions</th>
+                        <th>Grades</th>
+                        <th>DueDate</th>
+                    </tr>
+                    </thead>
+                    <tbody id="item_area" class="tbody-default">
+                    </tbody>
+                </table>
+
 </div>
+
+
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
@@ -80,7 +107,7 @@
 <script src="bower_components/what-input/dist/what-input.js"></script>
 <script src="bower_components/foundation-sites/dist/js/foundation.js"></script>
 <script src="js/app.js"></script>
-
+<script src="js/teacher_assignment_transactions.js"></script>
 </body>
 
 

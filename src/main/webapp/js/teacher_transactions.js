@@ -5,36 +5,10 @@
 //this page is all the JS function to support teacher home page
 $(document).ready(function () {
 
-        alert("Heyyyy  No");
         var JSON_list_items;
         var $url = "/LoadCourse.htm";
 
-        $.ajax({
-            method: 'get',
-   Assignmentsrl: $url,
-            dataType: 'json',
-
-
-            //this function will bring json file and load course list to JSP file on teacher page
-            success: function (course_table) {
-                var item_area = $('#item_area');
-                console.log("Get Courses :Success");
-                JSON_list_items = course_table;
-
-                var list_data = "";
-
-                $.each(JSON_list_items, function (i, item) {
-                    list_data += '<tr><td>' + item.crsName + '</td><td>' +'' +
-                        '<button onclick="edit_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-link" data-toggle="modal" data-target="#info_modal">Edit</button>'+ '</td><td>'+
-                        '<button onclick="edit_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-link" >Assigments</button>'+'</td><td>' +
-                                 item.crsCode + '</td></tr>';
-                });
-                item_area.html(list_data);
-            },
-            error: function () {
-                console.log("Loading the course table: Aw, It didn't connect to the servlet :(");
-            }
-        });
+         load_course_item("LOAD");
 
 
     // this function will control the button in the teacher home page to create a new class
@@ -83,7 +57,7 @@ $(document).ready(function () {
                 $.each(JSON_list_items, function (i, item) {
                     list_data += '<tr><td>' + item.crsName + '</td><td>' +'' +
                         '<button onclick="edit_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-link" data-toggle="modal" data-target="#info_modal">Edit</button>'+ '</td><td>'+
-                        '<button onclick="edit_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-link" >Assigments</button>'+'</td><td>' +
+                        '<button onclick="assignment_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-link"  >Assigments</button>'+'</td><td>' +
                         item.crsCode + '</td></tr>';
                 });
                 item_area.html(list_data);
@@ -133,13 +107,24 @@ $(document).ready(function () {
     });
 
 
+
+
+
 })
 
 //function will help put course code to local Storage of HTML5
 function edit_course_helper(CourseCode){
     localStorage.setItem("crsCode",CourseCode);
-    console.log("dasdsdawa");
+    console.log("Set new value to local Storage "+CourseCode);
 }
 
+
+function assignment_course_helper(CourseCode){
+    localStorage.setItem("crsCode",CourseCode);
+    console.log("Set new value to local Storage "+CourseCode+" ,And junmp to assignment page");
+    var url="TeacherAssignmentPage.htm"
+    location.href =url;
+    console.log(localStorage.getItem("crsCode"));
+}
 
 

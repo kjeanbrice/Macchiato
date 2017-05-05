@@ -35,7 +35,7 @@
             </div>
             <div class="top-bar-right">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="TeachersPage.html">Home</a></li>
+                    <li class="active"><a href="TeacherHomePage.htm">Home</a></li>
                     <li><a href="#">FORUM</a></li>
                     <li><a href="/logoutTeacher.htm" class="link">Logout</a></li>
                     <button type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#add_modal">CREATE A CLASS</button>
@@ -110,13 +110,6 @@
                     <tbody>
                     <tr>
                         <td><div class="container">
-                            <%--<table id="usertable" border="1" cellpadding="5" cellspacing="0">--%>
-                                <%--<tr>--%>
-                                    <%--<th>Name of Course</th>--%>
-                                <%--</tr>--%>
-                                <%----%>
-
-                            <%--</table>--%>
                                 <table>
                                     <thead>
                                     <tr>

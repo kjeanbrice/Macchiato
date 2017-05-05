@@ -4,17 +4,14 @@ import com.google.appengine.api.users.User;
 import com.macchiato.beans.CourseBean;
 import com.macchiato.utility.GenUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
+
 
 import static com.macchiato.utility.TeachersUtils.CourseListJson;
 import static com.macchiato.utility.TeachersUtils.isOwned;

@@ -46,7 +46,6 @@ public class Addcourse {
         user.setProperty("email",email);
         datastore.put(user);
         System.out.print("From add: "+" "+newClass.generateJSON());
-        //out.println(newClass.generateJSON());
     }
 
 }
