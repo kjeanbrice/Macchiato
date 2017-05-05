@@ -33,17 +33,11 @@ load_assignment_item("Load the Assignment");
         });
     });
 
-
-
-
-
-
-
-
-
 });
 function clear_form_data(){
-
+    $('#assignment_name_text').val("");
+    $('#assignment_due_text').val("");
+    console.log("Clear all data");
 }
 
 //this function will bring json file and load course list to JSP file on teacher page
@@ -75,8 +69,8 @@ function load_assignment_item(type){
 function assignment_helper(assignmentkey){
     localStorage.setItem("assignmentKey",assignmentkey);
     console.log("Set new value to local Storage "+assignmentkey+" ,And junmp to question page");
-    //var url="TeacherAssignmentPage.htm"
-    //location.href =url;
+    var url="TeacherQuestionPage.htm"
+    location.href =url;
     console.log(localStorage.getItem("assignmentKey"));
 }
 

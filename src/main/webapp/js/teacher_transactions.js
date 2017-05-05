@@ -73,8 +73,9 @@ $(document).ready(function () {
         var item_area=$('#item_area');
         console.log("Clear all data");
         item_area.val("");
-        $('#course_name_text').val("");
-        $('#course_dis_text').val("");
+       $('#course_name_text').val("");
+     $('#course_dis_text').val("");
+
     }
 
     //this function will change the description of the course

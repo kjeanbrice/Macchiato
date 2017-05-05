@@ -3,6 +3,8 @@ package com.macchiato.utility;
 import com.google.appengine.api.datastore.*;
 import com.macchiato.beans.AssignmentBean;
 import com.macchiato.beans.CourseBean;
+import com.macchiato.beans.QuestionBean;
+
 import java.util.Date;
 
 
@@ -69,7 +71,6 @@ public class TeachersUtils {
 
     //this function will help user to find all the assignment from this course
     public static ArrayList<AssignmentBean> findAllAssigmentBean(String crsCode) {
-       // System.out.print("hahahahahahhahahahahahahahah"+crsCode);
         String assignmentName;
         Date dueData;
         String key;
@@ -112,4 +113,54 @@ public class TeachersUtils {
         }
         return outputString;
     }
+
+
+    public static ArrayList<QuestionBean> findAllQuestionBean(String assignmentKey) {
+        String problem;
+        String solution;
+        String id;
+        System.out.println("Load all the Question :"+assignmentKey);
+        ArrayList<QuestionBean> questionList = new ArrayList<QuestionBean>();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter assignmentKey_filter = new Query.FilterPredicate("assignmentKey", Query.FilterOperator.EQUAL, assignmentKey);
+        Query q = new Query("Question").setFilter(assignmentKey_filter);
+        PreparedQuery pq = datastore.prepare(q);
+        int numberOfQuestion = pq.asList(FetchOptions.Builder.withDefaults()).size();
+        if (numberOfQuestion == 0) {
+            System.out.println("There is no assignment that you own");
+        } else {
+            for (Entity result : pq.asIterable()) {
+                problem = (String) result.getProperty("problem");
+                solution = (String) result.getProperty("solution");
+                id = result.getKey().toString();
+                QuestionBean newBean = new QuestionBean();
+                newBean.setProblem(problem);
+                newBean.setSolution(solution);
+                newBean.setAssignmentKey(assignmentKey);
+                newBean.setId(id);
+                questionList.add(newBean);
+            }
+        }
+        System.out.println("number of  assignment in the list:" + questionList.size());
+        return questionList;
+    }
+
+
+
+    //this function  helps generate  QuestionBean list to a List of json type of string
+    public static String QuestionListJson(ArrayList<QuestionBean> QuestionList) {
+        String outputString = "[";
+        if (QuestionList.size() <= 0) {
+            return "[]";
+        }
+        for (int i = 0; i < QuestionList.size(); i++) {
+            if (i == QuestionList.size() - 1) {
+                outputString += QuestionList.get(i).generateJSONwithAssignmentKey() + "]";
+            } else {
+                outputString += QuestionList.get(i).generateJSONwithAssignmentKey() + ",";
+            }
+        }
+        return outputString;
+    }
+
 }
