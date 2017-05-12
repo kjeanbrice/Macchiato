@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+
+import static com.macchiato.utility.TeachersUtils.AssignmentListJson;
 
 /**
- * Created by Xiangbin on 5/3/2017.
+ * Created by Xiangbin on 5/9/2017.
  */
 @Controller
-public class EditCourseINFO {
-    //this function will help teacher to change the information about this course
-    @RequestMapping(value="editCourse.htm", method = RequestMethod.POST)
+public class EditCourseHelper {
+    @RequestMapping(value="/findDes.htm", method = RequestMethod.GET)
     public void editCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String ClassCode=request.getParameter("crsCode");
-        String ClassDis=request.getParameter("description");
-        System.out.println("Change description from "+ClassCode+" to "+ClassDis);
+        PrintWriter out = response.getWriter();
         User active_user = GenUtils.getActiveUser();
         String instructor_email =active_user.getEmail();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -30,7 +30,7 @@ public class EditCourseINFO {
             System.out.println("active_user is null");
         }
         else{
-
+            String ClassCode=request.getParameter("crsCode");
             Query.Filter CrsCode_filter = new Query.FilterPredicate("crsCode", Query.FilterOperator.EQUAL,ClassCode );
             Query q = new Query("Course").setFilter(CrsCode_filter);
             PreparedQuery pq = datastore.prepare(q);
@@ -40,18 +40,19 @@ public class EditCourseINFO {
             }
             else{
                 for (Entity result : pq.asIterable()) {
-                        result.setProperty("description", ClassDis);
-                        System.out.print(result.getProperty("crsName")+":"+result.getProperty("description"));
-                        datastore.put(result);
+                    String email = (String) result.getProperty("email");
+                    String CrsName = (String) result.getProperty("crsName");
+                    String CrsCode = (String) result.getProperty("crsCode");
+                    String Crsdis = (String) result.getProperty("description");
+                    CourseBean newBean = new CourseBean();
+                    newBean.setInstrEmail(email);
+                    newBean.setCrsName(CrsName);
+                    newBean.setCrsCode(CrsCode);
+                    newBean.setDescription(Crsdis);
+                    out.println(newBean.generateJSON());
+                    System.out.print("Load description success");
                 }
             }
         }
     }
-
-
-
-
-
-
-
 }

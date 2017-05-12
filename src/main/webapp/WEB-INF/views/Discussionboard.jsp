@@ -82,7 +82,7 @@
 
 
 <div id="create_post_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
-    <a id = "close-createpost" class="close-button" data-close>&#215;</a>
+    <a id = "close-createpost" class="close-button" x>&#215;</a>
     <div class = "modal-heading-form">
         <h3 class = "modal-heading-text">New Post</h3>
     </div>
