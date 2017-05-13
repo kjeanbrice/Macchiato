@@ -1,36 +1,35 @@
 /**
- * Created by li on 4/5/2017.
+ * Created by li on 5/12/2017.
  */
 
 $(document).ready(function () {
     var currCrsList;
-    load_student("/LoadStudent.htm");
-    // Loads in the student information.
-    function load_student($url) {
+    load_info("/LoadStudent.htm");
 
+    function load_info($url) {
         $.ajax({
             method: 'get',
             url: $url,
             dataType: 'json',
-            success: function (stud_user) {
-                console.log("Get Email:Success");
-                var JSON_stud_user = stud_user;
-                $('#stud_name').text(JSON_stud_user.Student[0].email);
-                $('#class_title').text(JSON_stud_user.Student[2].crsName);
-                currCrsList = JSON_stud_user.Student[1]
+            success: function (crs_info) {
+                console.log("Get Info:Success");
+                var JSON_crs_info = crs_info;
+                $('#stud_name').text(JSON_crs_info.Student[0].email);
+                $('#class_title').text(JSON_crs_info.Student[2].crsName);
+                $('#crs_desc').text(JSON_crs_info.Student[2].description);
+                currCrsList = JSON_crs_info.Student[1]
                 load_course_list(currCrsList);
             },
             error: function () {
-                console.log("Email Failure: Aw, It didn't connect to the servlet :(");
+                console.log("Get Info Failure: Aw, It didn't connect to the servlet :(");
             }
         });
-        console.log("Load Student is done");
+        console.log("Load Course Info is done");
     }
-
 
     /*
      Loads the list of courses the Student is enrolled in
-    * */
+     * */
     function load_course_list(crs_list){
         var assignment_area = $('#load_assignment_area');
         var hostname = window.location.host;
@@ -45,8 +44,6 @@ $(document).ready(function () {
         assignment_area.html(list_data);
         console.log(list_data);
     }
-
-
 
     $('body').on('click mouseover', '#nav_assignments', function () {
         load_course_list(currCrsList);
@@ -69,14 +66,9 @@ $(document).ready(function () {
         console.log(crsCode);
         var url = "/LoadStudent.htm?crsName=" + crsCode;
         console.log(url);
-        load_student(url);
-        //var url = location.protocol + "//" + location.host + "/LoadStudent.htm";
-        //link_form.attr("action",url);
-        //console.log(url);
-        //link_form.submit();
+        load_info(url);
+
     });
 
 
 });
-
-
