@@ -5,19 +5,18 @@
 //this page is all the JS function to support teacher home page
 $(document).ready(function () {
 
-        var JSON_list_items;
-        var $url = "/LoadCourse.htm";
-
-         load_course_item("LOAD");
+    var JSON_list_items;
+    var $url = "/LoadCourse.htm";
+    load_course_item("LOAD");
 
 
     // this function will control the button in the teacher home page to create a new class
     $('body').on('click', '#add_course_submit', function (e) {
         var course_name = $('#course_name_text').val().trim();
         var course_dis = $('#course_dis_text').val().trim();
-        console.log("123");
+        var course_section=$('#course_section_text').val().trim();
         console.log(course_dis);
-        var url = "/addCourse.htm?crsName=" +course_name + "&description=" + course_dis;
+        var url = "/addCourse.htm?name=" +course_name + "&description=" + course_dis+"&section="+course_section;
 
         $.ajax({
             method: 'post',
@@ -56,10 +55,10 @@ $(document).ready(function () {
                 JSON_list_items = course_table;
                 var list_data="";
                 $.each(JSON_list_items, function (i, item) {
-                    list_data += '<tr><td>' + item.crsName + '</td><td>' +'' +
-                        '<button onclick="edit_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-link" data-toggle="modal" data-target="#info_modal">Edit</button>'+ '</td><td>'+
-                        '<button onclick="assignment_course_helper('+'\''+item.crsCode+'\''+')" type="button" class="btn btn-link"  >Assigments</button>'+'</td><td>' +
-                        item.crsCode + '</td></tr>';
+                    list_data += '<tr><td>' + item.name + '</td><td>' + item.section + '</td><td>'+
+                        '<button onclick="edit_course_helper('+'\''+item.course_code+'\''+')" type="button" class="btn btn-link" data-toggle="modal" data-target="#info_modal">Edit</button>'+ '</td><td>'+
+                        '<button onclick="assignment_course_helper('+'\''+item.course_code+'\''+')" type="button" class="btn btn-link"  >Assigments</button>'+'</td><td>' +
+                        item.course_code + '</td></tr>';
                 });
                 item_area.html(list_data);
             },
@@ -75,18 +74,18 @@ $(document).ready(function () {
         console.log("Clear all data");
         item_area.val("");
         $('#change_course_dis_text').val("");
-       $('#course_name_text').val("");
-     $('#course_dis_text').val("");
+        $('#course_name_text').val("");
+        $('#course_dis_text').val("");
 
     }
 
     //this function will change the description of the course
     $('body').on('click', '#info_course_submit', function (e) {
-        var course_code = localStorage.getItem("crsCode");
+        var course_code = localStorage.getItem("course_code");
         var course_dis = $('#change_course_dis_text').val().trim();
         // console.log("123");
-         console.log(course_dis);
-        var url = "/editCourse.htm?crsCode=" +course_code + "&description=" + course_dis ;
+        console.log(course_dis);
+        var url = "/editCourse.htm?course_code=" +course_code + "&description=" + course_dis ;
 
         $.ajax({
             method: 'post',
@@ -113,11 +112,11 @@ $(document).ready(function () {
 
 
 //function will help put course code to local Storage of HTML5 and load desertion from the database
-function edit_course_helper(CourseCode){
+function edit_course_helper(course_code){
     //clear_form_data();
-    localStorage.setItem("crsCode",CourseCode);
-    console.log("Set new value to local Storage "+CourseCode);
-    var url = "/findDes.htm?crsCode=" +CourseCode;
+    localStorage.setItem("course_code",course_code);
+    console.log("Set new value to local Storage "+course_code);
+    var url = "/findDes.htm?course_code=" +course_code;
     $.ajax({
         method: 'get',
         url: url,
@@ -132,12 +131,12 @@ function edit_course_helper(CourseCode){
     });
 }
 
-function assignment_course_helper(CourseCode){
-    localStorage.setItem("crsCode",CourseCode);
-    console.log("Set new value to local Storage "+CourseCode+" ,And junmp to assignment page");
+function assignment_course_helper(course_code){
+    localStorage.setItem("course_code",course_code);
+    console.log("Set new value to local Storage "+course_code+" ,And junmp to assignment page");
     var url="TeacherAssignmentPage.htm"
     location.href =url;
-    console.log(localStorage.getItem("crsCode"));
+    console.log(localStorage.getItem("course_code"));
 }
 
 

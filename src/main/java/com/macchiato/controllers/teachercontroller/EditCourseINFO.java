@@ -2,7 +2,6 @@ package com.macchiato.controllers.teachercontroller;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
-import com.macchiato.beans.CourseBean;
 import com.macchiato.utility.GenUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,7 @@ public class EditCourseINFO {
     //this function will help teacher to change the information about this course
     @RequestMapping(value="editCourse.htm", method = RequestMethod.POST)
     public void editCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String ClassCode=request.getParameter("crsCode");
+        String ClassCode=request.getParameter("course_code");
         String ClassDis=request.getParameter("description");
         System.out.println("Change description from "+ClassCode+" to "+ClassDis);
         User active_user = GenUtils.getActiveUser();
@@ -31,7 +30,7 @@ public class EditCourseINFO {
         }
         else{
 
-            Query.Filter CrsCode_filter = new Query.FilterPredicate("crsCode", Query.FilterOperator.EQUAL,ClassCode );
+            Query.Filter CrsCode_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL,ClassCode );
             Query q = new Query("Course").setFilter(CrsCode_filter);
             PreparedQuery pq = datastore.prepare(q);
             int numberOfClass = pq.asList(FetchOptions.Builder.withDefaults()).size();
@@ -40,9 +39,9 @@ public class EditCourseINFO {
             }
             else{
                 for (Entity result : pq.asIterable()) {
-                        result.setProperty("description", ClassDis);
-                        System.out.print(result.getProperty("crsName")+":"+result.getProperty("description"));
-                        datastore.put(result);
+                    result.setProperty("description", ClassDis);
+                    System.out.print(result.getProperty("name")+":"+result.getProperty("description"));
+                    datastore.put(result);
                 }
             }
         }

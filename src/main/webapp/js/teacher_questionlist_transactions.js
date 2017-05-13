@@ -77,12 +77,14 @@ function load_question_item(type){
         dataType: 'json',
 
         success: function (question_table) {
+            var a;
             var item_area=$('#item_area');
             console.log("Get Question :Success");
             JSON_list_items = question_table;
             var list_data="";
             $.each(JSON_list_items, function (i, item) {
-                list_data += '<tr><td>' + i + '</td><td>'+ '<button onclick="delete_helper('+'\''+item.id+'\''+')" type="button" class="btn btn-link" >delete</button>'+'</td><td>' +
+                a=1+i;
+                list_data += '<tr><td>' +a + '</td><td>'+ '<button onclick="delete_helper('+'\''+item.id+'\''+')" type="button" class="btn btn-link" >delete</button>'+'</td><td>' +
                     '<button onclick="Question_helper('+'\''+item.id+'\''+')" type="button" class="btn btn-link" data-toggle="modal" data-target="#edit_modal">Edit</button>'+'</td><td>'+item.problem+ '</td></tr>';
             });
             item_area.html(list_data);
@@ -138,3 +140,7 @@ function Question_helper(questionKey){
     });
     console.log(localStorage.getItem(questionKey));
 }
+
+
+
+

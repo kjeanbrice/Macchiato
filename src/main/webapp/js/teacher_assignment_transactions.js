@@ -2,7 +2,7 @@
  * Created by Xiangbin on 5/4/2017.
  */
 $(document).ready(function () {
-load_assignment_item("Load the Assignment");
+    load_assignment_item("Load the Assignment");
 
 
     // this function will control the button in the teacher home page to create a new assignment
@@ -10,7 +10,7 @@ load_assignment_item("Load the Assignment");
         var assignment_name = $('#assignment_name_text').val().trim();
         var assignment_due = $('#assignment_due_text').val().trim();
         console.log("ADD ASSIGNEMTN");
-        var url = "/addAssignment.htm?assignmentName=" +assignment_name + "&duedate=" + assignment_due+"&crsCode=" + localStorage.getItem("crsCode");
+        var url = "/addAssignment.htm?assignmentName=" +assignment_name + "&duedate=" + assignment_due+"&course_code=" + localStorage.getItem("course_code");
 
         $.ajax({
             method: 'post',
@@ -47,7 +47,7 @@ function load_assignment_item(type){
 
     $.ajax({
         method: 'get',
-        url: "/LoadAssignment.htm?crsCode="+localStorage.getItem("crsCode"),
+        url: "/LoadAssignment.htm?course_code="+localStorage.getItem("course_code"),
         dataType: 'json',
 
         success: function (assignment_table) {
