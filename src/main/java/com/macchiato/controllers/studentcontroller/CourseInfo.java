@@ -19,14 +19,12 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
- * Created by li on 4/17/2017.
+ * Created by li on 5/12/2017.
  */
 @Controller
-public class StudentController {
-    @RequestMapping(value = "LoadStudent.htm", method = RequestMethod.GET)
+public class CourseInfo {
+    @RequestMapping(value = "stud_crs_info.htm", method = RequestMethod.GET)
     public void loadStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //storeDummyData();
-        //System.out.println("Dummy");
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         UserBean currUser;
@@ -151,55 +149,5 @@ public class StudentController {
         currStudent = new StudentBean(currUser,currList,currCourse);
         System.out.println(currStudent.generateJSON());
         out.println(currStudent.generateJSON());
-    }
-
-
-
-
-
-    @RequestMapping(value = "LoadStudentAssignments.htm", method = RequestMethod.GET)
-    public void loadStudentAssignments(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Email should be set in session
-        // crsList of courses should be set in session
-        // currCourse should be set in session
-        // Find the list of assignments
-        // Sort them alphabetically
-        // Return them
-    }
-
-    public void storeDummyData(){
-        // Store 3 dummy courses
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Entity cse114 = new Entity("course");
-        cse114.setProperty("crsCode", "1111");
-        cse114.setProperty("crsName", "CSE114");
-        cse114.setProperty("instrEmail", "teacher1@gmail.com");
-        cse114.setProperty("description", "This is CSE114");
-        datastore.put(cse114);
-        Entity cse307 = new Entity("course");
-        cse307.setProperty("crsCode", "2222");
-        cse307.setProperty("crsName", "CSE307");
-        cse307.setProperty("instrEmail", "teacher1@gmail.com");
-        cse307.setProperty("description", "This is CSE307");
-        datastore.put(cse307);
-        Entity cse308 = new Entity("course");
-        cse308.setProperty("crsCode", "3333");
-        cse308.setProperty("crsName", "CSE308");
-        cse308.setProperty("instrEmail", "teacher1@gmail.com");
-        cse308.setProperty("description", "This is CSE308");
-        datastore.put(cse308);
-        // Store 2 dummy enrollment
-        Entity enrollmentEntity = new Entity("enrollment");
-        enrollmentEntity.setProperty("crsCode", "1111");
-        enrollmentEntity.setProperty("email", "test@example.com");
-        datastore.put(enrollmentEntity);
-        //System.out.println("Enroll in 114");
-        Entity enrollment307 = new Entity("enrollment");
-        enrollment307.setProperty("crsCode", "2222");
-        enrollment307.setProperty("email", "test@example.com");
-        datastore.put(enrollment307);
-        //System.out.println("Enroll in 307");
-
-        // Store 6 dummy assignments
     }
 }

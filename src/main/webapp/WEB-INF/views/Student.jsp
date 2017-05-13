@@ -31,37 +31,37 @@
                 <li><a href="/Student.htm" class="link">Home</a></li>
                 <li><a href="/CourseInfo.htm" class="link">Course Info</a></li>
                 <li><a href="/Discussionboard.htm" class="link">Forum</a></li>
-                <!--<li>
-                    <ul class="dropdown menu" data-dropdown-menu>
-                        <li>
-                            <a href="#">Courses</a>
-                            <ul id = "crs_list" class="menu">
-                                <li><a id="new_enroll" href="#" data-open="enroll_modal">Enroll</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li> -->
                 <li><a href="/logout.htm" class="link">Logout</a></li>
             </ul>
         </div>
     </div>
-    <div class="student_bar" style="padding:20px;">
-	    <span id="stud_name">
-            STUDENT: Raymond Xue
-	    </span>
-        <span class="class_dropdown" >
-            <button class="dropbtn">Class</button>
-                <div id="crs_list" class="dropdown-content">
-                    <a id="new_enroll" href="#" data-open="enroll_modal">Enroll</a>
-                </div>
-        </span>
+    <div class="top_bar_container" style="padding:1.5%;" >
+        <div class="top_bar">
+            <div class="top-bar-left">
+	            <div id="stud_name" ></div>
+            </div>
+            <div class="top-bar-right">
+                <ul class="dropdown menu" data-dropdown-menu>
+                    <li>
+                        <a id = "nav_assignments"  href="javascript:void(0)" class="scroll-nav link-highlight">Courses</a>
+                        <ul id = "load_assignment_area" class="menu forum-links submenu-test">
+
+                        </ul>
+                        <form id="link-form" action=" " method="get" style="display: none;">
+                            <input name = "crsName" id = "form-crsName" type = "text" style="display:none;">
+                            <input name = "crsCode" id = "form-crsCode" type = "text" style="display:none;">
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- BODY -->
 <div class="row">
     <div class="medium-12 medium-centered columns" style="background: #FFFFFF; box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);" >
-        <h3 style="text-align: center; padding: 25px 0px 0px">CSE 114 - Lecture Section 1 - Spring 2017</h3>
+        <h3 id="class_title" style="text-align: center; padding: 25px 0px 0px"></h3>
         <div class="row" style="padding: 0px 25px" >
             <div class="small-4 medium-6 large-6 columns">
                 <h4 style="text-align:center">Assignments</h4>
@@ -121,12 +121,33 @@
 
 </div>
 <!-- END MODAL AREA-->
+
+
+<!-- SCRIPTS TO POPULATE LISTS-->
+<script id= "course-list-template" type="text/x-handle-template">
+
+    {{#each Courses}}
+    <li class="list_file" data-crsName ="{{crsName}}" data-crsCode="{{crsCode}}">
+        <a href="javascript:void(0)">{{crsName}}</a>
+    </li>
+    {{else}}
+    {{/each}}
+    <li>
+        <a id="new_enroll" href="#" data-open="enroll_modal">Enroll</a>
+    </li>
+
+
+</script>
+
+<script src="libs/handlebars-v4.0.5.js" type="text/javascript"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
 <script src="js/student_transactions.js"></script>
 <script src="js/vendor/jquery.js"></script>
 <script src="js/vendor/what-input.js"></script>
 <script src="js/vendor/foundation.js"></script>
+<script src="js/app.js"></script>
+
 <script>
     $(document).ready(function() {
         $(document).foundation();
