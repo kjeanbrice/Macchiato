@@ -103,4 +103,14 @@ public class URLMapping {
         ModelAndView model = new ModelAndView("TeacherGradePage");
         return model;
     }
+
+    @RequestMapping(value = "TeacherQuestionPage.htm", method = RequestMethod.GET)
+    public static ModelAndView loadTeacherQuestionPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        ModelAndView model = new ModelAndView("TeacherQuestionListPage");
+        return model;
+    }
+
+
+
 }

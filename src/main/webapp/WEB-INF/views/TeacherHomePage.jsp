@@ -35,7 +35,7 @@
             </div>
             <div class="top-bar-right">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="TeachersPage.html">Home</a></li>
+                    <li class="active"><a href="TeacherHomePage.htm">Home</a></li>
                     <li><a href="#">FORUM</a></li>
                     <li><a href="/logoutTeacher.htm" class="link">Logout</a></li>
                     <button type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#add_modal">CREATE A CLASS</button>
@@ -52,20 +52,24 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">CREATE A CLASS</h4>
+                <button type="button" class="close" data-dismiss="modal" id="close_add_modal">&times;</button>
+                <h5 class="modal-title">CREATE COURSE</h5>
             </div>
-                Name of Course: <input id="course_name_text" type="text" name="name" id="name" />&nbsp;&nbsp;
-                <br>
+            <input id="course_name_text" type="text" name="name" id="name"
+                                   placeholder="Type your course name here..."/>&nbsp;&nbsp;
+            <br>
             <div class="form-group">
-                <label for="comment">Course Description:</label>
-                <textarea id="course_dis_text" name="classDis" class="form-control" rows="20" id="comment"></textarea>
+                <textarea id="course_dis_text" name="classDis" class="form-control" rows="10" id="comment"
+                          placeholder="Write your description content here..."
+                ></textarea>
             </div>
 
             <span id="val-editCourse" data-comment-crdCode="" style="display:none;"></span>
 
-            <button type="button" class="btn btn-primary pull-right"  id="add_course_submit" data-dismiss="modal" >CREATE</button>
-            <button type="button" class="btn btn-primary pull-right" id="close_modal" data-dismiss="modal">CLOSE</button>
+            <div id="add_course_submit" class="menu modal-area btn-post-submit" >
+                <span class="modal-btn-full">CREATE</span>
+            </div>
+
             <div class="modal-footer">
             </div>
         </div>
@@ -74,9 +78,9 @@
 
 <!-- information Modal -->
 <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="info_modal" class="modal fade"
-     style="display: none;">
-    <div class="modal-dialog">
+         style="display: none;">
         <!-- Modal content-->
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -84,11 +88,15 @@
             </div>
             <br>
             <div class="form-group">
-                <label for="comment">Course Description:</label>
-                <textarea id="change_course_dis_text" name="classDis" class="form-control" rows="20" id="ccomment"></textarea>
+                Course Description:
+                <textarea id="change_course_dis_text" name="classDis" class="form-control" rows="10" id="ccomment"
+                          placeholder="Write your description content here..."
+                ></textarea>
             </div>
-            <button type="button" class="btn btn-primary pull-right"  id="info_course_submit" data-dismiss="modal" >SUBMIT</button>
-            <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">CLOSE</button>
+
+            <div id="info_course_submit" class="menu modal-area btn-post-submit" >
+                <span class="modal-btn-full">SUBMIT</span>
+            </div>
             <div class="modal-footer">
             </div>
         </div>
@@ -101,7 +109,7 @@
         <div class="col-sm-8 text-left">
             <h1>Welcome</h1>
             <p>MACCHIATO is a web-application that provides a platform for Computer Science professor to assign to students to solve.
-            Students will be able to ask the professors questions on the Discussion Board anything they need and can talk amongst themselves.</p>
+                Students will be able to ask the professors questions on the Discussion Board anything they need and can talk amongst themselves.</p>
             <hr>
         </div>
         <div class="col-sm-1 sidenav">
@@ -110,25 +118,18 @@
                     <tbody>
                     <tr>
                         <td><div class="container">
-                            <%--<table id="usertable" border="1" cellpadding="5" cellspacing="0">--%>
-                                <%--<tr>--%>
-                                    <%--<th>Name of Course</th>--%>
-                                <%--</tr>--%>
-                                <%----%>
-
-                            <%--</table>--%>
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>Name of Course</th>
-                                        <th>Course Information</th>
-                                        <th>Assignments</th>
-                                        <th>Course Code</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="item_area" class="tbody-default">
-                                    </tbody>
-                                </table>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Name of Course</th>
+                                    <th>Course Information</th>
+                                    <th>Assignments</th>
+                                    <th>Course Code</th>
+                                </tr>
+                                </thead>
+                                <tbody id="item_area" class="tbody-default">
+                                </tbody>
+                            </table>
                         </div></td>
                     </tr>
                     </tbody>

@@ -116,7 +116,6 @@ $(document).ready(function () {
      * Helper function to populate the web page by modifying the elements in the jsp
      */
     function nextQues(){
-        alert(i);
         if (i == JSON_list_items.Questions.length - 1){
             i = 0;
         }

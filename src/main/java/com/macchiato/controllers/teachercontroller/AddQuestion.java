@@ -5,6 +5,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.users.User;
 import com.macchiato.beans.AssignmentBean;
+import com.macchiato.beans.QuestionBean;
 import com.macchiato.utility.GenUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by Xiangbin on 4/27/2017.
+ * Created by Xiangbin on 5/5/2017.
  */
 @Controller
-public class AddAssignment {
+public class AddQuestion {
     //this function add the new course to the database
-    @RequestMapping(value="addAssignment.htm", method = RequestMethod.POST)
-    public void addCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @RequestMapping(value="addQuestion.htm", method = RequestMethod.POST)
+    public void addQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException {
         User active_user = GenUtils.getActiveUser();
         String instructor_email =active_user.getEmail();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -29,19 +30,25 @@ public class AddAssignment {
             System.out.println("active_user is null");
         }
         else{
-            String crsCode=request.getParameter("crsCode");
-            String assignmentName=request.getParameter("assignmentName");
-            AssignmentBean newAissignment=new  AssignmentBean(crsCode,assignmentName);
-            Entity user = new Entity("Assignment");
+            String assignmentKey=request.getParameter("assignmentKey");
+            String problem=request.getParameter("problem");
+            String solution=request.getParameter("solution");
+            QuestionBean newQuestion=new QuestionBean();
+            newQuestion.setProblem(problem);
+            newQuestion.setSolution(solution);
+            Entity user = new Entity("Question");
 
-            System.out.println("this is new key for this assignment: "+user.getKey().toString());
-            user.setProperty("crsCode",crsCode);
-            user.setProperty("assignmentName", assignmentName);
-            System.out.println();
+            user.setProperty("problem",problem);
+            user.setProperty("solution", solution);
+            user.setProperty("assignmentKey",assignmentKey);
             datastore.put(user);
-            System.out.println(user.getKey().toString());
-            System.out.print("From add: "+newAissignment.generateJSON());
+            user.setProperty("questionKey",user.getKey().toString());
+            datastore.put(user);
+            System.out.println("this is new key for this question: "+user.getKey().toString());
+            System.out.print("From add: "+newQuestion.generateJSON());
             //out.println(newClass.generateJSON());
         }
     }
+
+
 }

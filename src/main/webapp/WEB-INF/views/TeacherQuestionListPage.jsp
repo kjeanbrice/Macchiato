@@ -1,12 +1,11 @@
 <%--
   Created by IntelliJ IDEA.
   User: Xiangbin
-  Date: 4/21/2017
-  Time: 6:23 PM
+  Date: 5/5/2017
+  Time: 3:31 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -43,7 +42,7 @@
                     <li class="active"><a href="TeacherHomePage.htm">Home</a></li>
                     <li><a href="#">FORUM</a></li>
                     <li><a href="/logoutTeacher.htm" class="link">Logout</a></li>
-                    <button type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#add_modal">Add An Assignment</button>
+                    <button type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#add_modal">Add An Question</button>
                 </ul>
             </div>
         </div>
@@ -58,15 +57,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">CREATE A ASSIGNMENT</h4>
+                <h4 class="modal-title">Add Question</h4>
             </div>
-            Name of Assignment: <input id="assignment_name_text" type="text" name="name" id="name" />&nbsp;&nbsp;
-            Due Date: <input id="assignment_due_text" type="text" name="name" id="time" />&nbsp;&nbsp;
+            Problem: <input id="question_problem_text" type="text" name="name"  />&nbsp;&nbsp;
+            Answer: <input id="question_answer_text" type="text" name="name" />&nbsp;&nbsp;
             <br>
 
             <span id="val-editCourse" data-comment-crdCode="" style="display:none;"></span>
 
-            <button type="button" class="btn btn-primary pull-right"  id="add_assignment_submit" data-dismiss="modal" >CREATE</button>
+            <button type="button" class="btn btn-primary pull-right"  id="add_question_submit" data-dismiss="modal" >ADD</button>
             <button type="button" class="btn btn-primary pull-right" id="close_modal" data-dismiss="modal">CLOSE</button>
             <div class="modal-footer">
             </div>
@@ -81,37 +80,35 @@
     <h2>ASSIGNMENTS</h2>
     <table class="table table-striped">
         <tbody>
-            <div class="container">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>AssignmentName</th>
-                        <th>Questions</th>
-                        <th>Grades</th>
-                        <th>DueDate</th>
-                    </tr>
-                    </thead>
-                    <tbody id="item_area" class="tbody-default">
-                    </tbody>
-                </table>
+        <div class="container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Question number</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                    <th>Problem</th>
+                </tr>
+                </thead>
+                <tbody id="item_area" class="tbody-default">
+                </tbody>
+            </table>
 
-</div>
+        </div>
 
 
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="bower_components/what-input/dist/what-input.js"></script>
-<script src="bower_components/foundation-sites/dist/js/foundation.js"></script>
-<script src="js/app.js"></script>
-<script src="js/teacher_assignment_transactions.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/what-input/dist/what-input.js"></script>
+        <script src="bower_components/foundation-sites/dist/js/foundation.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/teacher_questionlist_transactions.js"></script>
 </body>
 
 
 </html>
-
-
 
