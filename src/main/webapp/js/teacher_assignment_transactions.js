@@ -24,6 +24,7 @@ load_assignment_item("Load the Assignment");
                 else{
                     clear_form_data();
                     load_assignment_item('ADD_ASSIGNMENT');
+                    $('#close_add_assignment').click();
                     console.log("ADD ITEM: SUCCESS");
                 }
             },

@@ -98,6 +98,7 @@ $(document).ready(function () {
                     console.log("Change Description ERROR");
                 }
                 else{
+                    $('#close_information_modal').click();
                     clear_form_data();
                     console.log(course_code);
                     console.log("Change Description Successes");
@@ -108,10 +109,6 @@ $(document).ready(function () {
             }
         });
     });
-
-
-
-
 });
 
 

@@ -83,7 +83,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" id="close_information_modal">&times;</button>
                 <h4 class="modal-title">Edit Course Information</h4>
             </div>
             <br>
