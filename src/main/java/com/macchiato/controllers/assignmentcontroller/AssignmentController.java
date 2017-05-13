@@ -1,12 +1,14 @@
 package com.macchiato.controllers.assignmentcontroller;
 
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.users.User;
 import com.hackerrank.api.client.ApiException;
 import com.hackerrank.api.hackerrank.api.CheckerApi;
 import com.hackerrank.api.hackerrank.model.Result;
 import com.hackerrank.api.hackerrank.model.Submission;
 import com.macchiato.beans.QuestionBean;
 import com.macchiato.beans.QuestionListBean;
+import com.macchiato.utility.GenUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,20 +40,16 @@ public class AssignmentController {
     public void populateQuesRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        QuestionListBean newList = new QuestionListBean();
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Query.Filter assignment_filter = new Query.FilterPredicate("assignmentKey",Query.FilterOperator.EQUAL,"turtle");
-        Query q = new Query("question").setFilter(assignment_filter);
-        PreparedQuery pq = datastore.prepare(q);
-        System.out.println("pq as a list is" + pq.asList(FetchOptions.Builder.withDefaults()));
-        for(Entity e : pq.asList(FetchOptions.Builder.withDefaults())){
-            QuestionBean question = new QuestionBean((String)e.getProperty("problem"),(String)e.getProperty("solution"),(String)e.getProperty("questionnum"));
-            question.setAnswer((String)e.getProperty("studentans"));
-            System.out.println("problem is" + question.getProblem());
-            newList.getProblems().add(question);
+        User active_user = GenUtils.getActiveUser();
+        String student_email =active_user.getEmail();
+        if (student_email == null ) {
+            System.out.println("active_user is null");
         }
-        System.out.println(newList.generateJSON());
-        out.println(newList.generateJSON());
+        else {
+            QuestionListBean newList = populateQuestion("Assignment(4644337115725824)");
+            System.out.println(newList.generateJSON());
+            out.println(newList.generateJSON());
+        }
     }
 
     @RequestMapping(value="Compile.htm", method = RequestMethod.POST)
@@ -127,5 +125,21 @@ public class AssignmentController {
         question2.setProperty("assignmentKey","turtle");
         question2.setProperty("questionnum","2");
         datastore.put(question2);
+    }
+
+    public QuestionListBean populateQuestion(String assignmentKey){
+        int i = 1;
+        QuestionListBean newList = new QuestionListBean();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter assignment_filter = new Query.FilterPredicate("assignmentKey",Query.FilterOperator.EQUAL,assignmentKey);
+        Query q = new Query("Question").setFilter(assignment_filter);
+        PreparedQuery pq = datastore.prepare(q);
+        System.out.println("pq as a list is" + pq.asList(FetchOptions.Builder.withDefaults()));
+        for(Entity e : pq.asList(FetchOptions.Builder.withDefaults())){
+            QuestionBean question = new QuestionBean((String)e.getProperty("problem"),(String)e.getProperty("solution"), Integer.toString(i));
+            newList.getProblems().add(question);
+            i++;
+        }
+        return newList;
     }
 }
