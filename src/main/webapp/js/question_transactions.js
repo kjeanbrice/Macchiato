@@ -80,7 +80,7 @@ $(document).ready(function () {
      */
     $('body').on('click','.sol_box', function(e){
 
-        $('#solution').text(JSON_list_items.Questions[i].solution);
+        $('#solution').text(JSON_list_items.Questions[i].teacherAnswer);
         $('#dialog').dialog();
     });
 

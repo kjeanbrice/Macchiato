@@ -128,8 +128,8 @@ public class AssignmentController {
             //   System.out.println("User entered text is " + text);
             if (finmessage.equals("")) {
                 out.println(stdout.get(0).trim());
-                if (text.equals(solution)) {
-                    System.out.println("WORKING!");
+                if(stdout.get(0).trim().equals(solution)){
+                    System.out.println("WORKING I THINK");
                 }
             } else {
                 out.println(finmessage);
@@ -188,6 +188,7 @@ public class AssignmentController {
             QuestionBean question = new QuestionBean((String) e.getProperty("problem"), (String) e.getProperty("solution"), (String) e.getProperty("questionId"), (String) e.getProperty("student_answer"));
             question.setAssignmentKey(assignmentKey);
             question.setQuestionKey((String) e.getProperty("questionKey"));
+            question.setTeacherAnswer((String) e.getProperty("teacherAnswer"));
             System.out.println("findQuestions key is" + question.getQuestionKey());
             newList.getProblems().add(question);
         }
