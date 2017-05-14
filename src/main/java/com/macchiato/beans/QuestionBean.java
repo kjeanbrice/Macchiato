@@ -12,8 +12,8 @@ public class QuestionBean {
     private String problem;
     private String solution;
     private String id;
-    private String answer;
     private String assignmentKey;
+    private String questionKey;
 
     public QuestionBean(String problem, String solution, String id){
         this.problem = problem;
@@ -47,6 +47,10 @@ public class QuestionBean {
         this.id = id;
     }
 
+    public String getQuestionKey() {return questionKey;}
+
+    public void setQuestionKey(String questionKey) { this.questionKey = questionKey; }
+
 
     /**
      * Used to allow us to bring our object to the front end through ajax
@@ -77,14 +81,6 @@ public class QuestionBean {
         outputString += "}";
 
         return outputString;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
     }
 
     public String getAssignmentKey() {
