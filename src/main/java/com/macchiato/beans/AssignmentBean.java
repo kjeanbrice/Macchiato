@@ -6,30 +6,30 @@ import java.util.Date;
  * Created by Xiangbin on 5/4/2017.
  */
 public class AssignmentBean {
-    private String crsCode;
+    private String course_code;
     private String assignmentName="";
     private Date duedate=new Date(2017,7,1);;
     private String assignmentKey;
 
     public AssignmentBean(){}
     public AssignmentBean(String crsCode,String assignmentName,String assignmentKey){
-        this.crsCode=crsCode;
+        this.course_code=crsCode;
         this.assignmentKey=assignmentKey;
         this.assignmentName=assignmentName;
     }
     public AssignmentBean(String crsCode,String assignmentNam){
-        this.crsCode=crsCode;
+        this.course_code=crsCode;
         this.assignmentName=assignmentNam;
     }
 
 
     //getter and setter
     public String getCrsCode() {
-        return crsCode;
+        return course_code;
     }
 
     public void setCrsCode(String crsCode) {
-        this.crsCode = crsCode;
+        this.course_code = crsCode;
     }
 
     public String getAissignmentName() {
@@ -61,7 +61,7 @@ public class AssignmentBean {
     // Generates a String in JSON format
     public String generateJSON(){
         return "{\"assignmentName\":\"" + assignmentName + "\","
-                + "\"crsCode\":\"" + crsCode + "\","
+                + "\"course_code\":\"" + course_code + "\","
                 + "\"assignmentKey\":\"" + assignmentKey + "\","
                 + "\"duedate\":\"" + duedate.toString() + "\"}";
     }

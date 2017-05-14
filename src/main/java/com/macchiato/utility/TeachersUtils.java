@@ -18,10 +18,10 @@ public class TeachersUtils {
     //helping to find all the course that created by this teacher,
     // when you inputs a email it will return all the Coursebean list Created by this teacher
     public static ArrayList<CourseBean> isOwned(String email) {
-        System.out.print(123);
         String CrsName;
         String CrsCode;
         String Crsdis;
+        String section;
         ArrayList<CourseBean> classList = new ArrayList<CourseBean>();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -36,14 +36,16 @@ public class TeachersUtils {
         } else {
             for (Entity result : pq.asIterable()) {
                 email = (String) result.getProperty("email");
-                CrsName = (String) result.getProperty("crsName");
-                CrsCode = (String) result.getProperty("crsCode");
+                CrsName = (String) result.getProperty("name");
+                CrsCode = (String) result.getProperty("course_code");
                 Crsdis = (String) result.getProperty("description");
+                section=(String) result.getProperty("section");
                 CourseBean newBean = new CourseBean();
                 newBean.setInstrEmail(email);
                 newBean.setCrsName(CrsName);
                 newBean.setCrsCode(CrsCode);
                 newBean.setDescription(Crsdis);
+                newBean.setSection(section);
                 classList.add(newBean);
             }
         }
@@ -70,13 +72,13 @@ public class TeachersUtils {
     }
 
     //this function will help user to find all the assignment from this course
-    public static ArrayList<AssignmentBean> findAllAssigmentBean(String crsCode) {
+    public static ArrayList<AssignmentBean> findAllAssigmentBean(String course_code) {
         String assignmentName;
         Date dueData;
         String key;
         ArrayList<AssignmentBean> AssignmentList = new ArrayList<AssignmentBean>();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Query.Filter crsCode_filter = new Query.FilterPredicate("crsCode", Query.FilterOperator.EQUAL, crsCode);
+        Query.Filter crsCode_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL, course_code);
         Query q = new Query("Assignment").setFilter(crsCode_filter);
         PreparedQuery pq = datastore.prepare(q);
         int numberOfAssignment = pq.asList(FetchOptions.Builder.withDefaults()).size();
@@ -84,11 +86,11 @@ public class TeachersUtils {
             System.out.println("There is no assignment that you own");
         } else {
             for (Entity result : pq.asIterable()) {
-                crsCode = (String) result.getProperty("crsCode");
+                course_code = (String) result.getProperty("course_code");
                 assignmentName = (String) result.getProperty("assignmentName");
                 key = result.getKey().toString();
                 AssignmentBean newBean = new AssignmentBean();
-                newBean.setCrsCode(crsCode);
+                newBean.setCrsCode(course_code);
                 newBean.setAissignmentKey(key);
                 newBean.setAissignmentName(assignmentName);
                 AssignmentList.add(newBean);
@@ -114,7 +116,7 @@ public class TeachersUtils {
         return outputString;
     }
 
-
+    //this function will function all the question bean from one assignment
     public static ArrayList<QuestionBean> findAllQuestionBean(String assignmentKey) {
         String problem;
         String solution;
@@ -163,9 +165,9 @@ public class TeachersUtils {
         return outputString;
     }
 
-
+    //this function will remove all the non-digit char in the string a
     public static String numberkeeper(String a){
-       String c= a.replaceAll("[^\\d.]", "");
+        String c= a.replaceAll("[^\\d.]", "");
         return c;
     }
 }

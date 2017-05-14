@@ -36,8 +36,8 @@ public class LoadCourse {
         else{
             System.out.println("instructor email: "+instructor_email);
             ArrayList<CourseBean> newList= isOwned(instructor_email);
-           System.out.println(CourseListJson(newList));
-              out.println(CourseListJson(newList));
+            System.out.println(CourseListJson(newList));
+            out.println(CourseListJson(newList));
         }
     }
 }

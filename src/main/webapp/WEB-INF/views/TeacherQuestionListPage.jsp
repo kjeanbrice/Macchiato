@@ -56,17 +56,58 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" id="close_add_question_modal">&times;</button>
                 <h4 class="modal-title">Add Question</h4>
             </div>
-            Problem: <input id="question_problem_text" type="text" name="name"  />&nbsp;&nbsp;
-            Answer: <input id="question_answer_text" type="text" name="name" />&nbsp;&nbsp;
             <br>
+            <div class="form-group">
 
+                <textarea id="question_problem_text" name="classDis" class="form-control" rows="10"
+                          placeholder="Type your question here..."
+                ></textarea>
+            </div>
+            <div class="form-group">
+                <textarea id="question_answer_text" name="classDis" class="form-control" rows="10"
+                          placeholder="Type your answer name here..."
+                ></textarea>
+            </div>
             <span id="val-editCourse" data-comment-crdCode="" style="display:none;"></span>
 
-            <button type="button" class="btn btn-primary pull-right"  id="add_question_submit" data-dismiss="modal" >ADD</button>
-            <button type="button" class="btn btn-primary pull-right" id="close_modal" data-dismiss="modal">CLOSE</button>
+
+            <div id="add_question_submit" class="menu modal-area btn-post-submit" >
+                <span class="modal-btn-full">ADD</span>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit Modal -->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="edit_modal" class="modal fade"
+     style="display: none;">
+    <!-- Modal content-->
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"id="close_Edit_modal">&times;</button>
+                <h4 class="modal-title">Edit Question</h4>
+            </div>
+            <br>
+            <div class="form-group">
+                Question:
+                <textarea id="change_question_name_text" name="classDis" class="form-control" rows="10"
+                ></textarea>
+            </div>
+            <div class="form-group">
+                Answer:
+                <textarea id="change_question_answer_text" name="classDis" class="form-control" rows="10"
+                ></textarea>
+            </div>
+            <div id="question_edit_submit" class="menu modal-area btn-post-submit" >
+                <span class="modal-btn-full">SUBMIT</span>
+            </div>
             <div class="modal-footer">
             </div>
         </div>
@@ -93,7 +134,6 @@
                 <tbody id="item_area" class="tbody-default">
                 </tbody>
             </table>
-
         </div>
 
 

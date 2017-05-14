@@ -56,10 +56,15 @@
                 <h5 class="modal-title">CREATE COURSE</h5>
             </div>
             <input id="course_name_text" type="text" name="name" id="name"
-                                   placeholder="Type your course name here..."/>&nbsp;&nbsp;
+                   placeholder="Type your course name here..."/>&nbsp;&nbsp;
             <br>
             <div class="form-group">
-                <textarea id="course_dis_text" name="classDis" class="form-control" rows="10" id="comment"
+                <textarea id="course_section_text" name="classDis" class="form-control" rows="1"
+                          placeholder="Write your section here..."
+                ></textarea>
+            </div>
+            <div class="form-group">
+                <textarea id="course_dis_text" name="classDis" class="form-control" rows="10"
                           placeholder="Write your description content here..."
                 ></textarea>
             </div>
@@ -78,12 +83,12 @@
 
 <!-- information Modal -->
 <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="info_modal" class="modal fade"
-         style="display: none;">
-        <!-- Modal content-->
+     style="display: none;">
+    <!-- Modal content-->
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" id="close_information_modal">&times;</button>
                 <h4 class="modal-title">Edit Course Information</h4>
             </div>
             <br>
@@ -121,10 +126,11 @@
                             <table>
                                 <thead>
                                 <tr>
-                                    <th>Name of Course</th>
-                                    <th>Course Information</th>
+                                    <th>Course Name</th>
+                                    <th>Section</th>
+                                    <th>description</th>
                                     <th>Assignments</th>
-                                    <th>Course Code</th>
+                                    <th>Enroll Code</th>
                                 </tr>
                                 </thead>
                                 <tbody id="item_area" class="tbody-default">

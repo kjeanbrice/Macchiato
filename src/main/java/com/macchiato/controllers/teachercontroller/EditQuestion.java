@@ -12,16 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by Xiangbin on 5/3/2017.
+ * Created by Xiangbin on 5/12/2017.
  */
 @Controller
-public class EditCourseINFO {
-    //this function will help teacher to change the information about this course
-    @RequestMapping(value="editCourse.htm", method = RequestMethod.POST)
+public class EditQuestion {
+    @RequestMapping(value="/editQuestion.htm", method = RequestMethod.POST)
+    //this methon will take input from edit box to help user edit problem and solution
     public void editCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String ClassCode=request.getParameter("course_code");
-        String ClassDis=request.getParameter("description");
-        System.out.println("Change description from "+ClassCode+" to "+ClassDis);
+        String problem=request.getParameter("problem");
+        String solution=request.getParameter("solution");
+        String questionKey=request.getParameter("questionKey");
+        System.out.println("Change question "+problem+"    "+solution+" from "+questionKey);
         User active_user = GenUtils.getActiveUser();
         String instructor_email =active_user.getEmail();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -29,28 +30,21 @@ public class EditCourseINFO {
             System.out.println("active_user is null");
         }
         else{
-
-            Query.Filter CrsCode_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL,ClassCode );
-            Query q = new Query("Course").setFilter(CrsCode_filter);
+            Query.Filter CrsCode_filter = new Query.FilterPredicate("questionKey", Query.FilterOperator.EQUAL,questionKey );
+            Query q = new Query("Question").setFilter(CrsCode_filter);
             PreparedQuery pq = datastore.prepare(q);
             int numberOfClass = pq.asList(FetchOptions.Builder.withDefaults()).size();
             if(numberOfClass!=1){
-                System.out.println("Course code error");
+                System.out.println("questionkey  error");
             }
             else{
                 for (Entity result : pq.asIterable()) {
-                    result.setProperty("description", ClassDis);
-                    System.out.print(result.getProperty("name")+":"+result.getProperty("description"));
+                    result.setProperty("problem", problem);
+                    result.setProperty("solution", solution);
+                    System.out.print(result.getProperty("problem")+":"+result.getProperty("solution"));
                     datastore.put(result);
                 }
             }
         }
     }
-
-
-
-
-
-
-
 }

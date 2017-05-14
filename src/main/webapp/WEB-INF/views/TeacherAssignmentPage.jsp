@@ -57,22 +57,35 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" id="close_add_assignment">&times;</button>
                 <h4 class="modal-title">CREATE A ASSIGNMENT</h4>
             </div>
-            Name of Assignment: <input id="assignment_name_text" type="text" name="name" id="name" />&nbsp;&nbsp;
-            Due Date: <input id="assignment_due_text" type="text" name="name" id="time" />&nbsp;&nbsp;
             <br>
+            <div class="form-group">
+                <textarea id="assignment_name_text" name="classDis" class="form-control" rows="2"
+                          placeholder="Type your assignment name here..."
+                ></textarea>
+            </div>
+            <div class="form-group">
+                Answer:
+                <textarea id="assignment_due_text" name="classDis" class="form-control" rows="2"
+                          placeholder="Type your due data here..."
+                ></textarea>
+            </div>
 
             <span id="val-editCourse" data-comment-crdCode="" style="display:none;"></span>
-
-            <button type="button" class="btn btn-primary pull-right"  id="add_assignment_submit" data-dismiss="modal" >CREATE</button>
-            <button type="button" class="btn btn-primary pull-right" id="close_modal" data-dismiss="modal">CLOSE</button>
+            <div id="add_assignment_submit" class="menu modal-area btn-post-submit" >
+                <span class="modal-btn-full">SUBMIT</span>
+            </div>
             <div class="modal-footer">
             </div>
         </div>
     </div>
 </div>
+
+
+
+
 
 
 

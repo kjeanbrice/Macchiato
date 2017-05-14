@@ -34,7 +34,6 @@ public class DeleteQuestion {
         else{
             String questionKey=request.getParameter("questionKey");
             System.out.println("Delete the Question :"+questionKey);
-
             Query.Filter questionKey_filter = new Query.FilterPredicate("questionKey", Query.FilterOperator.EQUAL, questionKey);
             Query q = new Query("Question").setFilter(questionKey_filter);
             PreparedQuery pq = datastore.prepare(q);

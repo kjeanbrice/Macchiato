@@ -29,13 +29,13 @@ public class AddAssignment {
             System.out.println("active_user is null");
         }
         else{
-            String crsCode=request.getParameter("crsCode");
+            String course_code=request.getParameter("course_code");
             String assignmentName=request.getParameter("assignmentName");
-            AssignmentBean newAissignment=new  AssignmentBean(crsCode,assignmentName);
+            AssignmentBean newAissignment=new  AssignmentBean(course_code,assignmentName);
             Entity user = new Entity("Assignment");
 
             System.out.println("this is new key for this assignment: "+user.getKey().toString());
-            user.setProperty("crsCode",crsCode);
+            user.setProperty("course_code",course_code);
             user.setProperty("assignmentName", assignmentName);
             System.out.println();
             datastore.put(user);
