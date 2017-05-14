@@ -11,16 +11,16 @@ public class UserBean implements Serializable {
 
     private String email;
     // 0 is Student, 1 is Instructor, 2 is Administrator
-    private int userType;
+    private long userType;
     private String home;
 
-    public UserBean(String email, int userType, String home){
+    public UserBean(String email, long userType, String home){
         this.email = email;
         this.userType = userType;
         this.home = home;
     }
 
-    public UserBean(String email, int userType){
+    public UserBean(String email, long userType){
         this.email = email;
         this.userType = userType;
         this.home = "NOT AVAILABLE";
@@ -28,11 +28,11 @@ public class UserBean implements Serializable {
 
     public String getEmail() {return email;}
 
-    public int getUserType() {return userType;}
+    public long getUserType() {return userType;}
 
     public void setEmail(String email) {this.email=email;}
 
-    public void setUserType(int userType) {this.userType=userType;}
+    public void setUserType(long userType) {this.userType=userType;}
 
 
     public String getHome() {
@@ -47,10 +47,9 @@ public class UserBean implements Serializable {
 
         String outputString = "{\"email\":\"" + this.email + "\","
                 + "\"home\":\"" + this.home + "\","
-                + "\"userType\":\"" + Integer.toString(this.userType) + "\"";
+                + "\"userType\":\"" + Long.toString(this.userType) + "\"";
         outputString += "}";
 
         return outputString;
     }
-
 }

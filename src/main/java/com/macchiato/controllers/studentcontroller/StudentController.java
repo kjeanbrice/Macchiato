@@ -8,6 +8,7 @@ import com.macchiato.beans.CourseBean;
 import com.macchiato.beans.CourseListBean;
 import com.macchiato.beans.StudentBean;
 import com.macchiato.beans.UserBean;
+import com.macchiato.utility.DiscussionBoardUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by li on 4/17/2017.
@@ -37,7 +40,7 @@ public class StudentController {
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
         String email = user.getEmail();
-        int userType = 0;
+        long userType = 0;
         // Check if new login or the same user
         String checkEmail = (String)request.getSession().getAttribute("email");
         if (email.equals(checkEmail)){
@@ -61,18 +64,18 @@ public class StudentController {
                 // Create an Entity to store
                 Entity userEntity = new Entity("User",email);
                 userEntity.setProperty("email", email);
-                userEntity.setProperty("access", Integer.toString(userType));
+                userEntity.setProperty("access", userType);
                 datastore.put(userEntity);
             }else{
                 System.out.println("Found User, loading User in now.");
                 // Extract the information from result
                 email = (String)result.getProperty("email");
-                userType = Integer.parseInt((String)result.getProperty("access"));
+                userType = (Long)result.getProperty("access");
                 System.out.println(email);
                 System.out.println(userType);
             }
             request.getSession().setAttribute("email", email);
-            request.getSession().setAttribute("access", Integer.toString(userType));
+            request.getSession().setAttribute("access", userType);
             currUser = new UserBean(email, userType);
 
             System.out.println(currUser.generateJSON());
@@ -172,9 +175,17 @@ public class StudentController {
                             (String)result.getProperty("description"));
                     crsList.add(enrollCourse);
                     request.getSession().setAttribute("crsList", crsList);
+                    currCourse = enrollCourse;
+                    request.getSession().setAttribute("currCourse",currCourse);
+                    long u_set = 0;
                     Entity enrollmentEntity = new Entity("CourseEnrollment");
                     enrollmentEntity.setProperty("course_code", enrollCode);
                     enrollmentEntity.setProperty("email", email);
+                    //enrollmentEntity.setProperty("username", email);
+                    //enrollmentEntity.setProperty("access", userType);
+                    //enrollmentEntity.setProperty("u_set", u_set);
+                    //enrollmentEntity.setProperty("course_id", (Long)result.getProperty("id") );
+                    //enrollmentEntity.setProperty("forum_key", DiscussionBoardUtils.getForumKey(enrollCourse.getInstrEmail(), enrollCourse.getCrsCode(),enrollCourse.getSection()));
                     datastore.put(enrollmentEntity);
                     System.out.println("Enrolled into new course");
                 }
@@ -197,6 +208,14 @@ public class StudentController {
 
 
         // Sort the crsList alphabetically
+        Collections.sort(crsList, new Comparator<CourseBean>() {
+            @Override
+            public int compare(CourseBean course2, CourseBean course1)
+            {
+
+                return  course2.getCrsName().compareTo(course1.getCrsName());
+            }
+        });
         currList = new CourseListBean(crsList);
         currStudent = new StudentBean(currUser,currList,currCourse);
         String JSONoutput = "{";
@@ -224,6 +243,7 @@ public class StudentController {
 
     public void storeDummyData(){
         // Store 3 dummy courses
+        long id = 1;
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity cse114 = new Entity("Course");
         cse114.setProperty("name", "CSE114");
@@ -231,23 +251,25 @@ public class StudentController {
         cse114.setProperty("description", "This is CSE114");
         cse114.setProperty("section", "01");
         cse114.setProperty("email", "teacher1@gmail.com");
-        cse114.setProperty("id", "1");
+        cse114.setProperty("id", id);
         datastore.put(cse114);
+        id = 2;
         Entity cse307 = new Entity("Course");
         cse307.setProperty("name", "CSE307");
         cse307.setProperty("course_code", "2222");
         cse307.setProperty("description", "This is CSE307");
         cse307.setProperty("section", "01");
         cse307.setProperty("email", "teacher1@gmail.com");
-        cse307.setProperty("id", "2");
+        cse307.setProperty("id", id);
         datastore.put(cse307);
+        id = 3;
         Entity cse308 = new Entity("Course");
         cse308.setProperty("name", "CSE308");
         cse308.setProperty("course_code", "3333");
         cse308.setProperty("description", "This is CSE308");
         cse308.setProperty("section", "01");
         cse308.setProperty("email", "teacher1@gmail.com");
-        cse308.setProperty("id", "3");
+        cse308.setProperty("id", id);
         datastore.put(cse308);
         /*// Store 2 dummy enrollment
         Entity enrollmentEntity = new Entity("CourseEnrollment");

@@ -123,8 +123,8 @@
 <script id= "course-list-template" type="text/x-handle-template">
 
     {{#each Courses}}
-    <li class="list_file" data-crsName ="{{crsName}}" data-crsCode="{{crsCode}}">
-        <a href="javascript:void(0)">{{crsName}}</a>
+    <li class="list_file" data-crsName ="{{name}}" data-crsCode="{{course_code}}">
+        <a href="javascript:void(0)">{{name}}</a>
     </li>
     {{else}}
     {{/each}}
