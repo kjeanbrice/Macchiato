@@ -3,8 +3,6 @@
  */
 $(document).ready(function () {
     load_assignment_item("Load the Assignment");
-
-
     // this function will control the button in the teacher home page to create a new assignment
     $('body').on('click', '#add_assignment_submit', function (e) {
         var assignment_name = $('#assignment_name_text').val().trim();
