@@ -15,6 +15,16 @@
         <property name="id" direction="asc"/>
     </datastore-index>
 
+    <datastore-index kind="Student" ancestor="false" source="manual">
+        <property name="email" direction="asc"/>
+        <property name="userType" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="CourseEnrollment" ancestor="false" source="manual">
+        <property name="course_code" direction="asc"/>
+        <property name="email" direction="asc"/>
+    </datastore-index>
+
     <datastore-index kind="Forum" ancestor="false" source="auto">
         <property name="course_name" direction="asc"/>
         <property name="email" direction="asc"/>

@@ -62,6 +62,7 @@
 <div class="row">
     <div class="medium-12 medium-centered columns" style="background: #FFFFFF; box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);" >
         <h3 id="class_title" style="text-align: center; padding: 25px 0px 0px"></h3>
+        <h3 id="class_section" style="text-align: center; padding: 25px 0px 0px"></h3>
         <hr  style="margin: 0px 10px;">
         <h4 style="padding: 0px 25px;">Course Description</h4>
         <p id ="crs_desc" style="padding: 0px 50px;"></p>
@@ -87,19 +88,33 @@
 
 <!-- MODAL AREA-->
 <div id="enroll_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast" >
-    <a id ="close-enroll" class="close-button" data-close>&#215;</a>
+    <a name ="close-enroll" class="close-button" data-close>&#215;</a>
     <div class = "modal-heading-form">
         <h3 class ="modal-heading-text">Enroll in a Course</h3>
     </div>
-    <label><span class = "label-style-modal">Course Code</span>
-        <input id="txt_stud_crs_code" type="text" placeholder="Type your course code here..." >
+    <label>
+        <div><span class = "label-style-modal">Course Code</span></div>
+        <div><span id="no_crs_code"class = "label-style-modal" style="color:red"></span></div>
+        <input name="enroll_crs_code" id="enroll_crs_code" type="text" placeholder="Type your course code here..." >
     </label>
 
 
     <div id="enroll_submit" class="menu modal-area ">
-        <span class="modal-btn-full">Enroll</span>
+        <span class="modal-btn-full" >Enroll</span>
     </div>
 
+</div>
+
+<div id="notification_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast" >
+    <a id ="close-notification" class="close-button" data-close>&#215;</a>
+    <div class = "modal-heading-form">
+        <h3 id="notification_title" class ="modal-heading-text"></h3>
+    </div>
+    <div style=" text-align: center"><span id="notification_txt"class = "label-style-modal" ></span></div>
+
+    <div class="menu modal-area " data-close>
+        <span class="modal-btn-full">Close</span>
+    </div>
 </div>
 <!-- END MODAL AREA-->
 
@@ -121,10 +136,10 @@
 </script>
 
 <script src="libs/handlebars-v4.0.5.js" type="text/javascript"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
-<script src="js/stud_crs_info_transactions.js"></script>
 <script src="js/vendor/jquery.js"></script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>-->
+<!--<script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>-->
+<script src="js/stud_crs_info_transactions.js"></script>
 <script src="js/vendor/what-input.js"></script>
 <script src="js/vendor/foundation.js"></script>
 <script src="js/app.js"></script>

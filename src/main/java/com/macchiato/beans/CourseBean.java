@@ -12,13 +12,15 @@ import java.security.SecureRandom;
  */
 public class CourseBean implements Serializable {
     //name of the class
-    private String crsName;
+    private String crsName = "";
+    //section of the class
+    private String section = "";
     //random class code for students to enroll
-    private String crsCode;
+    private String crsCode = "";
     //instr's Email
-    private String instrEmail;
+    private String instrEmail = "";
     //description of this class
-    private String description;
+    private String description = "";
     //valuable to help random generator
     private SecureRandom random = new SecureRandom();
 
@@ -39,11 +41,13 @@ public class CourseBean implements Serializable {
     }
     // Get methods
     public String getCrsCode() {return crsCode;}
+    public String getSection() {return section;}
     public String getCrsName() {return crsName;}
     public String getInstrEmail() {return instrEmail;}
     public String getDescription() {return description;}
     // Set methods
     public void setCrsCode(String crsCode) {this.crsCode = crsCode;}
+    public void setSection(String section) {this.section = section;}
     public void setCrsName(String crsName) {this.crsName = crsName;}
     public void setInstrEmail(String instrEmail) {this.instrEmail = instrEmail;}
     public void setDescription(String description) {this.description = description;}
@@ -52,6 +56,7 @@ public class CourseBean implements Serializable {
     public String generateJSON(){
         return "{\"crsCode\":\"" + crsCode + "\","
                 + "\"crsName\":\"" + crsName + "\","
+                + "\"section\":\"" + section + "\","
                 + "\"instrEmail\":\"" + instrEmail + "\","
                 + "\"description\":\"" + description + "\"}";
     }

@@ -17,8 +17,23 @@ $(document).ready(function () {
                 $('#stud_name').text(JSON_crs_info.Student[0].email);
                 $('#class_title').text(JSON_crs_info.Student[2].crsName);
                 $('#crs_desc').text(JSON_crs_info.Student[2].description);
+                $('#class_section').text(JSON_crs_info.Student[2].section);
                 currCrsList = JSON_crs_info.Student[1]
                 load_course_list(currCrsList);
+                var enroll_status = JSON_crs_info.Enroll.status;
+                if(enroll_status == 1){
+                    $('#notification_title').text("Success!");
+                    $('#notification_txt').text("You have successfully enrolled!");
+                    $('#notification_modal').foundation('open');
+                }else if(enroll_status == 2){
+                    $('#notification_title').text("Failure");
+                    $('#notification_txt').text("You have already enrolled in this course.");
+                    $('#notification_modal').foundation('open');
+                }else if(enroll_status == 3){
+                    $('#notification_title').text("Failure");
+                    $('#notification_txt').text("Sorry! This course does not exist.");
+                    $('#notification_modal').foundation('open');
+                }
             },
             error: function () {
                 console.log("Get Info Failure: Aw, It didn't connect to the servlet :(");
@@ -67,6 +82,23 @@ $(document).ready(function () {
         var url = "/LoadStudent.htm?crsName=" + crsCode;
         console.log(url);
         load_info(url);
+
+    });
+
+    $('body').on('click', '#enroll_submit', function () {
+        var crsCode = $('#enroll_crs_code').val().trim();
+        if(crsCode){
+            console.log(crsCode);
+            console.log("Being Clicked");
+            var url = "/LoadStudent.htm?enroll=" + crsCode;
+            console.log("Hiding");
+            $('#enroll_modal').foundation('close');
+            $('#no_crs_code').text("");
+            $('#enroll_crs_code').val("");
+            load_info(url);
+        }else{
+            $('#no_crs_code').text("No Course Code");
+        }
 
     });
 
