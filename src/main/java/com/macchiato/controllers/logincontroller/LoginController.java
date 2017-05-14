@@ -99,11 +99,32 @@ public class LoginController {
             return;
         }
 
-        UserBean temp = new UserBean(user.getEmail(),-1);
-        String output = "{\"User\":"+ temp.generateJSON()+"}";
-        System.out.println("LoginStatus: " + output);
-        out.println(output);
+        ArrayList<Object> credentials = GenUtils.checkCredentials();
+        int access = (int)credentials.get(0);
+        if(access == GenUtils.STUDENT){
+            UserBean temp = new UserBean(user.getEmail(),access,UserBean.STUDENT_HOME);
+            String output = "{\"User\":"+ temp.generateJSON() + "}";
+            System.out.println(output);
+            out.println(output);
+            return;
+        }
 
+        if(access == GenUtils.INSTRUCTOR){
+            UserBean temp = new UserBean(user.getEmail(),access,UserBean.INSTRUCTOR_HOME);
+            String output = "{\"User\":"+ temp.generateJSON() + "}";
+            System.out.println(output);
+            out.println(output);
+            return;
+        }
+
+        if(access == GenUtils.ADMIN){
+            //To do, load admin page
+            //go to admin page
+            return;
+        }
+
+        out.println("{}");
+        return;
     }
 
     @RequestMapping(value="enter.htm", method = RequestMethod.GET)
@@ -111,7 +132,7 @@ public class LoginController {
 
         User user = GenUtils.getActiveUser();
         if(user == null){
-          return URLMapping.loadHomePage(request,response);
+            return URLMapping.loadHomePage(request,response);
         }
 
         ArrayList<Object> credentials = GenUtils.checkCredentials();
@@ -121,7 +142,7 @@ public class LoginController {
         }
 
         if(access == GenUtils.INSTRUCTOR){
-            return URLMapping.loadTeacherPage(request,response);
+            return URLMapping.loadInstructorPage(request,response);
         }
 
         if(access == GenUtils.ADMIN){

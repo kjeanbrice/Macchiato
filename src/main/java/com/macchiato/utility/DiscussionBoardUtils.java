@@ -3,9 +3,8 @@ package com.macchiato.utility;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
 import com.macchiato.controllers.discussioncontroller.DiscussionBoardController;
-import com.macchiato.general.discussiondata.CourseData;
-import com.macchiato.general.discussiondata.CourseDataHelper;
-import com.macchiato.general.discussiondata.EnrollmentData;
+import com.macchiato.general.generaldata.CourseData;
+import com.macchiato.general.generaldata.CourseDataHelper;
 import com.macchiato.general.discussiondata.PostData;
 
 import java.math.BigInteger;
@@ -32,6 +31,7 @@ public class DiscussionBoardUtils {
     public final static int INVALID_ARGS = 10;
     public final static int ALREADY_ACTIVE = 11;
     public final static int INVALID_LENGTH = 12;
+    public final static int FAILURE = 12;
 
 
 
@@ -57,7 +57,7 @@ public class DiscussionBoardUtils {
         return ENROLLED;
     }
 
-    public static CourseDataHelper retrieveCourseList(String email) {
+    public static CourseDataHelper retrieveForumList(String email) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
         Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email);
@@ -69,6 +69,7 @@ public class DiscussionBoardUtils {
         String course = null;
         String username = null;
         String section = null;
+        long course_id;
         ArrayList<CourseData> courseData = new ArrayList<>();
 
         for (Entity result : pq.asIterable()) {
@@ -78,9 +79,12 @@ public class DiscussionBoardUtils {
                 i_email = (String)forum.getProperty("email");
                 course = (String)forum.getProperty("course_name");
                 section = (String)forum.getProperty("section");
+                course_id = (long)forum.getProperty("course_id");
 
                 email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, i_email);
-                q = new Query("Enrollment").setFilter(email_filter);
+                Query.Filter forumkey_filter = new Query.FilterPredicate("forum_key", Query.FilterOperator.EQUAL, key);
+                Query.CompositeFilter email_forumkey_filter = Query.CompositeFilterOperator.and(forumkey_filter,email_filter);
+                q = new Query("Enrollment").setFilter(email_forumkey_filter);
                 pq = datastore.prepare(q);
 
                 int list_size = pq.asList(FetchOptions.Builder.withDefaults()).size();
@@ -91,12 +95,17 @@ public class DiscussionBoardUtils {
                     return null;
                 }
 
-                CourseData newData = new CourseData(i_email,username,course,section);
+                CourseData newData = new CourseData(i_email,username,course,section,course_id);
                 courseData.add(newData);
 
 
             } catch (EntityNotFoundException e) {
                 System.out.println("Can't find group with key:" + key);
+                return null;
+            }
+            catch (NumberFormatException e){
+                System.out.println("Error parsing the course id.");
+                return null;
             }
 
 
@@ -108,42 +117,7 @@ public class DiscussionBoardUtils {
         return data;
     }
 
-    public static int enrollUser(Key forum_key, String email, String nickname, int access){
 
-
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-        Query.Filter forum_id_filter = new Query.FilterPredicate("forum_key", Query.FilterOperator.EQUAL, forum_key);
-        Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email);
-        Query.CompositeFilter email_forumid_filter = Query.CompositeFilterOperator.and(forum_id_filter,email_filter);
-        Query q = new Query("Enrollment").setFilter(email_forumid_filter);
-        PreparedQuery pq = datastore.prepare(q);
-
-        int student_size = pq.asList(FetchOptions.Builder.withDefaults()).size();
-        if(student_size > 1){
-            return DATABASE_ERROR;
-        }
-
-        if(student_size == 1){
-            return DUPLICATE_ENTRY;
-        }
-
-        Entity user = new Entity("Enrollment");
-        user.setProperty("email",email);
-        user.setProperty("forum_key",forum_key);
-        user.setProperty("access",access);
-
-        if(nickname == null || nickname.trim().length() == 0){
-            user.setProperty("username",email);
-        }
-        else{
-            user.setProperty("username",nickname);
-        }
-        datastore.put(user);
-
-        return SUCCESS;
-
-    }
 
 
     public static Key getForumKey(String instructor_email, String course, String section){
@@ -187,15 +161,15 @@ public class DiscussionBoardUtils {
         Entity user;
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-        if(username == null || username.trim().length() == 0 || username.trim().length() < 5){
+        if(username == null || username.trim().length() == 0 || username.trim().length() < 3){
             return DiscussionBoardUtils.INVALID_LENGTH;
         }
 
-        Query.Filter groupkey_filter = new Query.FilterPredicate("forum_key", Query.FilterOperator.EQUAL, forumkey);
+        Query.Filter forumkey_filter = new Query.FilterPredicate("forum_key", Query.FilterOperator.EQUAL, forumkey);
         Query.Filter username_filter = new Query.FilterPredicate("username", Query.FilterOperator.EQUAL, username.trim());
         Query.Filter not_email_filter = new Query.FilterPredicate("email", Query.FilterOperator.NOT_EQUAL, email);
 
-        Query.CompositeFilter new_username_filter = Query.CompositeFilterOperator.and(groupkey_filter,username_filter,not_email_filter);
+        Query.CompositeFilter new_username_filter = Query.CompositeFilterOperator.and(forumkey_filter,username_filter,not_email_filter);
         Query q = new Query("Enrollment").setFilter(new_username_filter);
         PreparedQuery pq = datastore.prepare(q);
 
@@ -205,7 +179,9 @@ public class DiscussionBoardUtils {
         }
 
         Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email);
-        q = new Query("Enrollment").setFilter(email_filter);
+        Query.CompositeFilter composite_filter = Query.CompositeFilterOperator.and(forumkey_filter,email_filter);
+
+        q = new Query("Enrollment").setFilter(composite_filter);
         pq = datastore.prepare(q);
 
         int enroll_email_size = pq.asList(FetchOptions.Builder.withDefaults()).size();
@@ -219,34 +195,12 @@ public class DiscussionBoardUtils {
 
         user = pq.asIterable().iterator().next();
         user.setProperty("username",username);
+        user.setProperty("u_set",1);
         datastore.put(user);
         return DiscussionBoardUtils.SUCCESS;
     }
 
-    public static EnrollmentData getEnrolledUser(String email, String course , Key forumkey){
 
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-        Query.Filter groupkey_filter = new Query.FilterPredicate("forum_key", Query.FilterOperator.EQUAL, forumkey);
-        Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email);
-        Query.CompositeFilter enroll_filter = Query.CompositeFilterOperator.and(groupkey_filter,email_filter);
-        Query q = new Query("Enrollment").setFilter(enroll_filter);
-        PreparedQuery pq = datastore.prepare(q);
-
-        List<Entity> enrollment_list = pq.asList(FetchOptions.Builder.withDefaults());
-        EnrollmentData enrolled_user = null;
-        for (int i = 0; i < enrollment_list.size(); i++) {
-            Entity enrollment_data = enrollment_list.get(i);
-            String enrollment_email = (String) enrollment_data.getProperty("email");
-            if (enrollment_email.equalsIgnoreCase(email)) {
-                enrolled_user = new EnrollmentData(enrollment_data.getKey().getId(), enrollment_email,
-                        (String) enrollment_data.getProperty("username"), course, (long) enrollment_data.getProperty("access"));
-                break;
-            }
-        }
-
-        return enrolled_user;
-    }
 
 
     public static void createDummyDiscussionData() {
@@ -273,7 +227,6 @@ public class DiscussionBoardUtils {
 
         String instructor_email = "teacher1@example.com";
         String course_name = "cse114";
-        String description = "description";
         String section = "L01";
         GenUtils.createInstructor(instructor_email);
 
@@ -287,7 +240,6 @@ public class DiscussionBoardUtils {
         Entity e = new Entity("Course",key);
         e.setProperty("name",course_name);
         e.setProperty("course_code",course_code);
-        e.setProperty("description",description);
         e.setProperty("section",section);
         e.setProperty("email",user.getEmail());
         e.setProperty("id",key.getId());
@@ -298,7 +250,7 @@ public class DiscussionBoardUtils {
             return;
         }
 
-        //Key parentKey = KeyFactory.createKey(key,"Group");
+
 
 
 
@@ -307,12 +259,19 @@ public class DiscussionBoardUtils {
             return;
         }
 
+        ArrayList<Object> obj = GenUtils.getCourseID(instructor_email,course_name,section);
+        if(obj == null){
+            return;
+        }
+
+
+
         createDummyPost(course_name,instructor_email,instructor_email,"Lorem ipsum dolor sit amet. ","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris et sapien eros. Aliquam metus dolor. ",section);
 
         DiscussionBoardUtils.updateUsername(forum_key,instructor_email,"Ted Wilson");
-        DiscussionBoardUtils.enrollUser(forum_key,"student1@example.com","Jake Wilson", 0);
-        DiscussionBoardUtils.enrollUser(forum_key,"student2@example.com","Brian Tanner ", 0);
-        DiscussionBoardUtils.enrollUser(forum_key,"student3@example.com","Emily Roberts", 0);
+        GenUtils.enrollUser(forum_key,"student1@example.com","Jake Wilson", 0,(long)obj.get(0));
+        GenUtils.enrollUser(forum_key,"student2@example.com","Brian Tanner ", 0,(long)obj.get(0));
+        GenUtils.enrollUser(forum_key,"student3@example.com","Emily Roberts", 0,(long)obj.get(0));
         createDummyPost(course_name,instructor_email,instructor_email,"Lorem ipsum dolor sit amet, consectetur. ","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce turpis erat, accumsan nec magna eu. ",section);
         createDummyComment(course_name,instructor_email,"student2@example.com"," Duis non laoreet enim, a dignissim tortor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed non libero non leo pulvinar cursus quis id metus. Donec tristique venenatis eleifend. Vestibulum hendrerit finibus arcu et ornare. Cras ut mi non diam ornare feugiat. In facilisis nulla nec ante hendrerit, eu pharetra dolor malesuada. Donec quis gravida ligula. Duis purus lorem, ornare ac libero quis, congue blandit risus. Ut commodo a turpis id viverra. Curabitur aliquet, purus quis sagittis feugiat, est nisl sollicitudin urna, a fringilla nunc neque eget diam. ",section);
         createDummyComment(course_name,instructor_email,"student1@example.com", "Praesent turpis risus, varius sed enim quis, pulvinar pellentesque magna. Ut fringilla nulla a orci tempor iaculis at non erat. Cras enim quam, ornare sed fermentum vel, iaculis ac tellus. Cras pharetra metus libero, ut varius ligula commodo ac. Aliquam augue sapien, sodales vel sollicitudin nec, porta eu nibh. Curabitur eget porta est, eu semper lectus. Cras et diam quis velit laoreet posuere. Integer ac dolor lorem. Aenean elementum porta velit, et pharetra ante molestie nec. Donec rutrum velit vel lorem semper, pharetra efficitur risus pharetra. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla facilisi. Quisque eu molestie justo. Fusce lacinia magna consectetur lorem faucibus porta. Pellentesque luctus justo in elit consectetur, quis volutpat ligula mattis. ",section);
@@ -347,11 +306,18 @@ public class DiscussionBoardUtils {
                 return DiscussionBoardUtils.DATABASE_ERROR;
             case DiscussionBoardUtils.ENROLLED:
                 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+                ArrayList<Object> obj = GenUtils.getCourseID(instructor_email,course,section);
+                if(obj == null){
+                    return DiscussionBoardUtils.DATABASE_ERROR;
+                }
+
                 Entity user = new Entity("Post");
                 user.setProperty("title", post_title);
                 user.setProperty("content", post_content);
                 user.setProperty("email", post_email);
                 user.setProperty("forum_id", forumkey.getId());
+                user.setProperty("course_id", obj.get(0));
                 user.setProperty("timestamp",new Date().getTime());
                 datastore.put(user);
                 return DiscussionBoardUtils.SUCCESS;
@@ -386,6 +352,11 @@ public class DiscussionBoardUtils {
             case DiscussionBoardUtils.ENROLLED:
                 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
+                ArrayList<Object> obj = GenUtils.getCourseID(instructor_email,course,section);
+                if(obj == null){
+                    return;
+                }
+
                 Query.Filter forumid_filter = new Query.FilterPredicate("forum_id", Query.FilterOperator.EQUAL, forumkey.getId());
 
                 PostData postData;
@@ -401,6 +372,7 @@ public class DiscussionBoardUtils {
                     user.setProperty("content", comment_content);
                     user.setProperty("email", comment_email);
                     user.setProperty("forum_id", forumkey.getId());
+                    user.setProperty("course_id", obj.get(0));
                     user.setProperty("timestamp",new Date().getTime());
                     datastore.put(user);
                 }

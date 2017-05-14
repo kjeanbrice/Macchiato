@@ -14,9 +14,13 @@ $(document).ready(function () {
     $('body').on('click', '#add_course_submit', function (e) {
         var course_name = $('#course_name_text').val().trim();
         var course_dis = $('#course_dis_text').val().trim();
-        var course_section=$('#course_section_text').val().trim();
+        var section = $('#course_section_text').val().trim();
+        var i_email = $('#i_email').attr('data-iemail');
+
+        console.log("123");
         console.log(course_dis);
-        var url = "/addCourse.htm?name=" +course_name + "&description=" + course_dis+"&section="+course_section;
+        var url = "/instructor_addcourse.htm?&i_email=" + i_email + "&course_name=" + course_name + "&section=" + section + "&description=" + course_dis;
+
 
         $.ajax({
             method: 'post',

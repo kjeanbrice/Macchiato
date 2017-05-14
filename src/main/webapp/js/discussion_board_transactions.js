@@ -59,15 +59,32 @@ $(document).ready(function () {
                 navbar_comments.text("Comments: " + JSON_discussion_data.totalComments);
                 navbar_posts.text("Posts: " + JSON_discussion_data.totalPosts);
 
+
+                var u_set = $('#u_set');
+                u_set.attr("data-uset",JSON_discussion_data.uset);
+                console.log("u_set:" + u_set.attr("data-uset"));
+                if(JSON_discussion_data.uset === "0"){
+                    $('#change-user-name').click();
+                }
+
                 var edit_fields = $("[data-edit-permission=edit]");
                 console.log(edit_fields.length);
                 edit_fields.removeAttr('data-edit-permission');
                 edit_fields.removeAttr('style');
 
-                var edit_fields = $("[data-delete-permission=delete]");
-                console.log(edit_fields.length);
-                edit_fields.removeAttr('data-edit-permission');
-                edit_fields.removeAttr('style');
+                var delete_fields = $("[data-delete-permission=delete]");
+                console.log(delete_fields.length);
+                delete_fields.removeAttr('data-delete-permission');
+                delete_fields.removeAttr('style');
+
+                var instructor_color = $("[data-access=INSTRUCTOR]");
+                instructor_color.removeAttr('data-access');
+                instructor_color.addClass('i-color');
+
+                var student_color = $("[data-access=STUDENT]");
+                student_color.removeAttr('data-access');
+
+
 
                 if(JSON_discussion_data.currentUsername){
                     $('#current-user').text("Hi, " + JSON_discussion_data.currentUsername);
@@ -91,6 +108,16 @@ $(document).ready(function () {
         var current_user =  $('#current-user').attr("data-username");
         $('#txt-username').val(current_user);
         err_label.css("opacity","0");
+
+        var u_set = $('#u_set');
+        if(u_set.attr('data-uset') === "1"){
+            $('#close-username-modal').css("visibility","visible");
+        }
+        else{
+            $('#close-username-modal').css("visibility","hidden");
+        }
+
+
 
     });
 
@@ -385,14 +412,14 @@ $(document).ready(function () {
     $('body').on('submit', 'form.comment-submit', function (e) {
 
         /*var SUCCESS = 0;
-        var ENROLLED = 1;
-        var NOT_ENROLLED = 2;
-        var NOT_LOGGED_IN = 3;
-        var DUPLICATE_STUDENT = 4;
-        var EMPTY_PARAMETERS = 5;
-        var BOARD_NOT_FOUND = 6;
-        var DATABASE_ERROR = 7;
-        var POST_NOT_FOUND = 8;*/
+         var ENROLLED = 1;
+         var NOT_ENROLLED = 2;
+         var NOT_LOGGED_IN = 3;
+         var DUPLICATE_STUDENT = 4;
+         var EMPTY_PARAMETERS = 5;
+         var BOARD_NOT_FOUND = 6;
+         var DATABASE_ERROR = 7;
+         var POST_NOT_FOUND = 8;*/
 
         e.preventDefault();
         var comment_form = $(this);

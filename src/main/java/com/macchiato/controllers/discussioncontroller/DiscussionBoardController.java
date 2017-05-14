@@ -3,13 +3,15 @@ package com.macchiato.controllers.discussioncontroller;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
 
+import com.macchiato.general.*;
 import com.macchiato.general.discussiondata.*;
+import com.macchiato.general.generaldata.CourseDataHelper;
+import com.macchiato.general.generaldata.EnrollmentData;
 import com.macchiato.utility.DiscussionBoardUtils;
 import com.macchiato.utility.GenUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -73,6 +75,7 @@ public class DiscussionBoardController {
                     return DiscussionBoardUtils.DATABASE_ERROR;
                 }
 
+
                 KeyRange kr = datastore.allocateIds("Forum",1);
                 key = kr.getEnd();
                 Entity forum = new Entity("Forum",key);
@@ -84,26 +87,28 @@ public class DiscussionBoardController {
                 forum.setProperty("id",key.getId());
                 datastore.put(forum);
 
-                DiscussionBoardUtils.enrollUser(forum.getKey(), email, user.getNickname(), GenUtils.INSTRUCTOR);
-                break;
+                GenUtils.enrollUser(forum.getKey(), email,"", GenUtils.INSTRUCTOR,course_id);
+                return DiscussionBoardUtils.SUCCESS;
         }
-        return DiscussionBoardUtils.SUCCESS;
+
+        return DiscussionBoardUtils.FAILURE;
+
     }
 
-    @RequestMapping(value = "getcourselist.htm", produces = "text/html;charset=UTF-8" ,method = RequestMethod.GET)
-    public void getCourseList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @RequestMapping(value = "getforumlist.htm" ,method = RequestMethod.GET)
+    public void getForumList(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
         User active_user = GenUtils.getActiveUser();
         if(active_user == null){
-             out.println("F:NOT_LOGGED_IN");
-             return;
+            out.println("{}");
+            return;
         }
 
-        CourseDataHelper data = DiscussionBoardUtils.retrieveCourseList(active_user.getEmail());
+        CourseDataHelper data = DiscussionBoardUtils.retrieveForumList(active_user.getEmail());
         if(data == null){
-            out.println("F:DATA_ERROR");
+            out.println("{}");
         }
         else {
             out.println(data.generateJSON());
@@ -118,54 +123,7 @@ public class DiscussionBoardController {
         return "discussionboard";
     }
 
-    @RequestMapping(value = "discussionboard.htm", method = RequestMethod.POST)
-    public ModelAndView loadDiscussionBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
 
-        String instructor_email = request.getParameter("i_email");
-        String course = request.getParameter("course");
-        String section = request.getParameter("section");
-        ModelAndView model;
-
-
-        if (instructor_email == null || course == null || section == null ||course.trim().length() == 0 || section.trim().length() == 0 || instructor_email.trim().length() == 0) {
-            model = new ModelAndView("error");
-            return model;
-        }
-
-        Key forumKey = DiscussionBoardUtils.getForumKey(instructor_email.trim(), course.trim(),section.trim());
-        if (forumKey == null) {
-            model = new ModelAndView("error");
-            return model;
-        }
-
-        User active_user = GenUtils.getActiveUser();
-        if (active_user == null) {
-            model = new ModelAndView("error");
-            return model;
-        }
-
-        String email = active_user.getEmail();
-        int enrollment_status = DiscussionBoardUtils.isEnrolled(forumKey, email);
-        switch (enrollment_status) {
-            case DiscussionBoardUtils.NOT_ENROLLED:
-                model = new ModelAndView("error");
-                return model;
-            case DiscussionBoardUtils.DUPLICATE_ENTRY:
-                model = new ModelAndView("error");
-                return model;
-            case DiscussionBoardUtils.ENROLLED:
-                model = new ModelAndView("Discussionboard");
-                model.addObject("i_email",instructor_email);
-                model.addObject("course",course);
-                model.addObject("section",section);
-                return model;
-            default:
-                model = new ModelAndView("error");
-                return model;
-        }
-    }
 
     @RequestMapping(value = "discussion_addpost.htm", method = RequestMethod.GET)
     public void addPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -213,11 +171,19 @@ public class DiscussionBoardController {
                 return;
             case DiscussionBoardUtils.ENROLLED:
                 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+                ArrayList<Object> obj = GenUtils.getCourseID(instructor_email,course,section);
+                if(obj == null){
+                    out.println(DiscussionBoardUtils.FAILURE);
+                    return;
+                }
+
                 Entity user = new Entity("Post");
                 user.setProperty("title", post_title);
                 user.setProperty("content", post_content);
                 user.setProperty("email", email);
                 user.setProperty("forum_id", forumkey.getId());
+                user.setProperty("course_id", obj.get(0));
                 user.setProperty("timestamp",new Date().getTime());
                 datastore.put(user);
                 out.println(DiscussionBoardUtils.SUCCESS);
@@ -279,11 +245,18 @@ public class DiscussionBoardController {
                     return;
                 }
 
+                ArrayList<Object> obj = GenUtils.getCourseID(instructor_email,course,section);
+                if(obj == null){
+                    out.println(DiscussionBoardUtils.FAILURE);
+                    return;
+                }
+
                 Entity user = new Entity("Comment");
                 user.setProperty("postkey", post_key.getId());
                 user.setProperty("content", comment_content);
                 user.setProperty("email", email);
                 user.setProperty("forum_id", forumkey.getId());
+                user.setProperty("course_id", obj.get(0));
                 user.setProperty("timestamp",new Date().getTime());
                 datastore.put(user);
                 out.println(DiscussionBoardUtils.SUCCESS);
@@ -330,7 +303,7 @@ public class DiscussionBoardController {
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 return;
             case DiscussionBoardUtils.ENROLLED:
-                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
+                EnrollmentData user = GenUtils.getEnrolledUser(email,course,forumkey);
                 if(user.getAccess().equals("INSTRUCTOR")){
                     try {
                         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -401,7 +374,7 @@ public class DiscussionBoardController {
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 return;
             case DiscussionBoardUtils.ENROLLED:
-                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
+                EnrollmentData user = GenUtils.getEnrolledUser(email,course,forumkey);
                 if(user.getAccess().equals("INSTRUCTOR")){
                     try {
                         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -467,27 +440,27 @@ public class DiscussionBoardController {
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 return;
             case DiscussionBoardUtils.ENROLLED:
-                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
-                    try {
-                        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-                        long id = Long.parseLong(post_id);
-                        Key post_key = KeyFactory.createKey("Post", id);
+                EnrollmentData user = GenUtils.getEnrolledUser(email,course,forumkey);
+                try {
+                    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+                    long id = Long.parseLong(post_id);
+                    Key post_key = KeyFactory.createKey("Post", id);
 
-                        Entity valid_post = datastore.get(post_key);
-                        String post_email = (String)valid_post.getProperty("email");
-                        if(user.getAccess().equals("INSTRUCTOR") || post_email.equalsIgnoreCase(email)){
-                            valid_post.setProperty("title",post_title);
-                            valid_post.setProperty("content",post_content);
-                            datastore.put(valid_post);
-                            out.println(DiscussionBoardUtils.SUCCESS);
-                        }
-                        else{
-                            out.println(DiscussionBoardUtils.NO_ACCESS);
-                        }
-                    } catch (EntityNotFoundException | NumberFormatException e) {
-                        out.println(DiscussionBoardUtils.POST_NOT_FOUND);
-                        return;
+                    Entity valid_post = datastore.get(post_key);
+                    String post_email = (String)valid_post.getProperty("email");
+                    if(user.getAccess().equals("INSTRUCTOR") || post_email.equalsIgnoreCase(email)){
+                        valid_post.setProperty("title",post_title);
+                        valid_post.setProperty("content",post_content);
+                        datastore.put(valid_post);
+                        out.println(DiscussionBoardUtils.SUCCESS);
                     }
+                    else{
+                        out.println(DiscussionBoardUtils.NO_ACCESS);
+                    }
+                } catch (EntityNotFoundException | NumberFormatException e) {
+                    out.println(DiscussionBoardUtils.POST_NOT_FOUND);
+                    return;
+                }
                 break;
         }
         return;
@@ -535,7 +508,7 @@ public class DiscussionBoardController {
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 return;
             case DiscussionBoardUtils.ENROLLED:
-                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
+                EnrollmentData user = GenUtils.getEnrolledUser(email,course,forumkey);
                 try {
                     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
                     long id = Long.parseLong(comment_id);
@@ -592,6 +565,12 @@ public class DiscussionBoardController {
             return;
         }
 
+        ArrayList<Object> obj = GenUtils.getCourseID(instructor_email,course,section);
+        if(obj == null){
+            out.println(DiscussionBoardUtils.FAILURE);
+            return;
+        }
+
         String email = active_user.getEmail();
         int enrollment_status = DiscussionBoardUtils.isEnrolled(forumkey, email);
         switch (enrollment_status) {
@@ -602,7 +581,7 @@ public class DiscussionBoardController {
                 out.println(DiscussionBoardUtils.DATABASE_ERROR);
                 return;
             case DiscussionBoardUtils.ENROLLED:
-                EnrollmentData user = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
+                EnrollmentData user = GenUtils.getEnrolledUser(email,course,forumkey);
                 try {
                     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
                     long id = Long.parseLong(request_id);
@@ -636,13 +615,14 @@ public class DiscussionBoardController {
                         Entity temp = new Entity(entity_kind);
                         temp.setProperty("email", email);
                         temp.setProperty(property_name, id);
+                        temp.setProperty("course_id", obj.get(0));
                         datastore.put(temp);
                         out.println(DiscussionBoardUtils.SUCCESS);
                     }
                     else if(likes_list_size == 1 && request_type.trim().equalsIgnoreCase("dislike")){
-                            Entity temp = likes_list.get(0);
-                            datastore.delete(temp.getKey());
-                            out.println(DiscussionBoardUtils.SUCCESS);
+                        Entity temp = likes_list.get(0);
+                        datastore.delete(temp.getKey());
+                        out.println(DiscussionBoardUtils.SUCCESS);
                     }else if(likes_list_size == 1 && request_type.trim().equalsIgnoreCase("like")){
                         out.println(DiscussionBoardUtils.DUPLICATE_ENTRY);
                     }
@@ -681,7 +661,7 @@ public class DiscussionBoardController {
             return;
         }
 
-        if(username.trim().length() < 5){
+        if(username.trim().length() < 3){
             out.println(DiscussionBoardUtils.INVALID_LENGTH);
             return;
         }
@@ -780,10 +760,10 @@ public class DiscussionBoardController {
                     ArrayList<PostData> post_array_list = new ArrayList<>();
 
                     /*Retrieve data about the creator of the discussion group*/
-                    EnrollmentData instructor_data = DiscussionBoardUtils.getEnrolledUser(instructor_email,course,forumkey);
+                    EnrollmentData instructor_data = GenUtils.getEnrolledUser(instructor_email,course,forumkey);
 
                     /*Retrieve data about the user accessing the discussion board*/
-                    EnrollmentData active_user_enrollment_data = DiscussionBoardUtils.getEnrolledUser(email,course,forumkey);
+                    EnrollmentData active_user_enrollment_data = GenUtils.getEnrolledUser(email,course,forumkey);
 
                     /*Retrieve Posts*/
                     PostData postData;
@@ -803,7 +783,7 @@ public class DiscussionBoardController {
                         long post_id =  post.getKey().getId();
 
                         /*Retrieve details about the user that made this post*/
-                        EnrollmentData post_user = DiscussionBoardUtils.getEnrolledUser(post_email,course,forumkey);
+                        EnrollmentData post_user = GenUtils.getEnrolledUser(post_email,course,forumkey);
 
                         /*Retrieve the number of "likes" this post has.*/
                         Query.Filter postid_filter = new Query.FilterPredicate("postid", Query.FilterOperator.EQUAL, post_id);
@@ -827,7 +807,7 @@ public class DiscussionBoardController {
                                 String comment_content = (String) comment_list.get(j).getProperty("content");
 
                                 /*Retrieve details about the user that made this comment*/
-                                EnrollmentData comment_user = DiscussionBoardUtils.getEnrolledUser(comment_email,course,forumkey);
+                                EnrollmentData comment_user = GenUtils.getEnrolledUser(comment_email,course,forumkey);
 
                                 /*Retrieve the number of "likes" this comment has.*/
                                 Query.Filter commentid_filter = new Query.FilterPredicate("commentid", Query.FilterOperator.EQUAL, comment_id);

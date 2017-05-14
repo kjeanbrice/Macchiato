@@ -2,6 +2,7 @@ package com.macchiato.general.discussiondata;
 
 
 import com.google.appengine.api.datastore.Key;
+import com.macchiato.general.generaldata.EnrollmentData;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.Serializable;
@@ -91,8 +92,9 @@ public class DiscussionBoardData implements Serializable {
                 + "\"access\":\"" + StringEscapeUtils.escapeJava(user.getAccess()) + "\","
                 + "\"totalComments\":\"" + totalComments + "\","
                 + "\"totalPosts\":\"" + totalPosts + "\","
-                + "\"totalEnrollment\":\"" + totalEnrollment + "\","
+                + "\"totalEnrollment\":\"" + (totalEnrollment - 1) + "\","
                 + "\"currentUsername\":\"" + StringEscapeUtils.escapeJava(currentUser.getUsername()) + "\","
+                + "\"uset\":\"" + currentUser.getUset() + "\","
                 + "\"username\":\"" + StringEscapeUtils.escapeJava(user.getUsername()) + "\","
                 + "\"Posts\":[";
 
@@ -102,7 +104,9 @@ public class DiscussionBoardData implements Serializable {
                     + "\"access\":\"" + StringEscapeUtils.escapeJava(user.getAccess()) + "\","
                     + "\"totalComments\":\"" + totalComments + "\","
                     + "\"totalPosts\":\"" + totalPosts + "\","
-                    + "\"totalEnrollment\":\"" + totalEnrollment + "\","
+                    + "\"totalEnrollment\":\"" + (totalEnrollment - 1) + "\","
+                    + "\"currentUsername\":\"" + StringEscapeUtils.escapeJava(currentUser.getUsername()) + "\","
+                    + "\"uset\":\"" + currentUser.getUset() + "\","
                     + "\"username\":\"" + StringEscapeUtils.escapeJava(user.getUsername()) + "\"}";
 
             return outputString;

@@ -22,22 +22,25 @@ import java.util.ArrayList;
  */
 @Controller
 public class InstructorController {
-    @RequestMapping(value = "addcourse2.htm", produces = "text/html;charset=UTF-8" ,method = RequestMethod.GET)
+
+    @RequestMapping(value = "instructor_addcourse.htm",method = RequestMethod.POST)
     public void addCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
+        response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
         String course_name = request.getParameter("course_name");
-        String description = request.getParameter("description");
+        String i_email = request.getParameter("i_email");
         String section = request.getParameter("section");
+        String description = request.getParameter("description");
 
-        if(course_name == null || section == null || course_name.trim().isEmpty() || section.trim().isEmpty()){
+        if(course_name == null || section == null || i_email == null || course_name.trim().isEmpty() || i_email.trim().isEmpty() ||  section.trim().isEmpty()){
             out.println(GenUtils.EMPTY_PARAMETERS);
             return;
         }
 
-        if(description == null || description.trim().isEmpty()){
-            description = "";
+        if(course_name.trim().length() < 3){
+            out.println(GenUtils.INVALID_LENGTH);
+            return;
         }
 
 
@@ -47,8 +50,16 @@ public class InstructorController {
             return;
         }
 
-
         int credential_status = (int)obj.get(0);
+        User user = (User)obj.get(1);
+        if(!(user.getEmail().equalsIgnoreCase(i_email.trim()))){
+            if(!(credential_status == GenUtils.ADMIN)){
+                out.println(GenUtils.NO_PERMISSION);
+                return;
+            }
+        }
+
+
         switch(credential_status){
             case GenUtils.STUDENT:
                 out.println(GenUtils.NO_PERMISSION);
@@ -57,11 +68,10 @@ public class InstructorController {
             case GenUtils.ADMIN:
                 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-                User user = (User)obj.get(1);
 
                 Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, user.getEmail());
-                Query.Filter name_filter = new Query.FilterPredicate("name", Query.FilterOperator.EQUAL, course_name);
-                Query.Filter section_filter = new Query.FilterPredicate("section", Query.FilterOperator.EQUAL, section);
+                Query.Filter name_filter = new Query.FilterPredicate("name", Query.FilterOperator.EQUAL, course_name.trim());
+                Query.Filter section_filter = new Query.FilterPredicate("section", Query.FilterOperator.EQUAL, section.trim());
                 Query.CompositeFilter composite_filter = Query.CompositeFilterOperator.and(email_filter,name_filter,section_filter);
 
                 Query q = new Query("Course").setFilter(composite_filter);
@@ -80,12 +90,18 @@ public class InstructorController {
                 String course_code = new BigInteger(30, random).toString(32) + key.getId();
 
                 Entity e = new Entity("Course",key);
-                e.setProperty("name",course_name);
+                e.setProperty("name",course_name.trim());
                 e.setProperty("course_code",course_code);
-                e.setProperty("description",description);
-                e.setProperty("section",section);
+                e.setProperty("section",section.trim());
                 e.setProperty("email",user.getEmail());
+
                 e.setProperty("id",key.getId());
+                if(description == null || description.trim().isEmpty()){
+                    e.setProperty("description","");
+                }
+                else{
+                    e.setProperty("description",description.trim());
+                }
                 datastore.put(e);
 
                 int status = DiscussionBoardController.createDiscussionBoard(key.getId());
