@@ -12,17 +12,17 @@ import java.security.SecureRandom;
  */
 public class CourseBean implements Serializable {
     //name of the class
-    private String name;
+    private String name = "";
     //random class code for students to enroll
-    private String course_code;
+    private String course_code = "";
     //instr's Email
-    private String email;
+    private String email = "";
     //description of this class
-    private String description;
+    private String description = "";
     //valuable to help random generator
     private SecureRandom random = new SecureRandom();
     //this value is for different seciont of class
-    private  String section;
+    private  String section = "";
 
     public CourseBean(String course_code, String crsName, String instrEmail, String description){
         this.course_code = course_code;

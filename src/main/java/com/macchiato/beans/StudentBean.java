@@ -25,7 +25,7 @@ public class StudentBean implements Serializable{
     public void setCurrCourse(CourseBean currCourse){this.currCourse = currCourse;}
 
     public String generateJSON(){
-        String output = "{\"Student\":[";
+        String output = "\"Student\":[";
         output += user.generateJSON() + ",";
         output += crsList.generateJSON() + ",";
         if (currCourse == null){
@@ -33,7 +33,7 @@ public class StudentBean implements Serializable{
         }else{
             output += currCourse.generateJSON();
         }
-        output += "]}";
+        output += "]";
         return output;
     }
 }

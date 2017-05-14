@@ -65,7 +65,6 @@
                 ></textarea>
             </div>
             <div class="form-group">
-                Answer:
                 <textarea id="assignment_due_text" name="classDis" class="form-control" rows="2"
                           placeholder="Type your due data here..."
                 ></textarea>
@@ -134,7 +133,7 @@
         <a href="/login.htm?access=-1" class="scroll-nav link">Logout</a>
     </li>
     <li>
-        <button type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#add_modal">Add An Assignment</button>
+        <button type="button" class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#add_modal"  >Add An Assignment</button>
     </li>
     {{else}}
     <li>

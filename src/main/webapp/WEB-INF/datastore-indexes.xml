@@ -15,6 +15,11 @@
         <property name="id" direction="asc"/> <!-- long  -->
     </datastore-index>
 
+    <datastore-index kind="CourseEnrollment" ancestor="false" source="manual">
+        <property name="course_code" direction="asc"/>
+        <property name="email" direction="asc"/>
+    </datastore-index>
+
     <datastore-index kind="Forum" ancestor="false" source="auto">
         <property name="course_name" direction="asc"/>  <!-- String  -->
         <property name="email" direction="asc"/> <!-- String  -->
@@ -29,6 +34,7 @@
         <property name="email" direction="asc"/> <!-- String  -->
         <property name="username_set" direction="asc"/> <!-- long  -->
         <property name="course_id" direction="asc"/> <!-- long  -->
+        <property name="access" direction="asc"/> <!-- long  -->
     </datastore-index>
 
 

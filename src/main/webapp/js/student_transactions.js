@@ -16,9 +16,24 @@ $(document).ready(function () {
                 console.log("Get Email:Success");
                 var JSON_stud_user = stud_user;
                 $('#stud_name').text(JSON_stud_user.Student[0].email);
-                $('#class_title').text(JSON_stud_user.Student[2].crsName);
+                $('#class_title').text(JSON_stud_user.Student[2].name);
                 currCrsList = JSON_stud_user.Student[1]
                 load_course_list(currCrsList);
+                var enroll_status = JSON_stud_user.Enroll.status;
+                if(enroll_status == 1){
+                    $('#notification_title').text("Success!");
+                    $('#notification_txt').text("You have successfully enrolled!");
+                    $('#notification_modal').foundation('open');
+                }else if(enroll_status == 2){
+                    $('#notification_title').text("Failure");
+                    $('#notification_txt').text("You are already enrolled in this course.");
+                    $('#notification_modal').foundation('open');
+                }else if(enroll_status == 3){
+                    $('#notification_title').text("Failure");
+                    $('#notification_txt').text("Sorry! This course does not exist.");
+                    $('#notification_modal').foundation('open');
+                }
+                console.log(enroll_status);
             },
             error: function () {
                 console.log("Email Failure: Aw, It didn't connect to the servlet :(");
@@ -35,15 +50,11 @@ $(document).ready(function () {
         var assignment_area = $('#load_assignment_area');
         var hostname = window.location.host;
         assignment_area.html("<li><a href='javascript:void(0)'>Searching...</a></li>");
-        console.log(crs_list);
         var source = $('#course-list-template').html();
-        console.log(source);
         var course_list_template = Handlebars.compile(source);
-        console.log(course_list_template);
         var list_data = course_list_template(crs_list);
 
         assignment_area.html(list_data);
-        console.log(list_data);
     }
 
 
@@ -65,15 +76,30 @@ $(document).ready(function () {
         form_crsCode.attr("value",crsCode.trim());
 
         var test = link_form.serializeArray();
-        console.log(crsName);
-        console.log(crsCode);
         var url = "/LoadStudent.htm?crsName=" + crsCode;
-        console.log(url);
+
         load_student(url);
         //var url = location.protocol + "//" + location.host + "/LoadStudent.htm";
         //link_form.attr("action",url);
         //console.log(url);
         //link_form.submit();
+    });
+
+    $('body').on('click', '#enroll_submit', function () {
+        var crsCode = $('#enroll_crs_code').val().trim();
+        if(crsCode){
+            console.log(crsCode);
+            console.log("Being Clicked");
+            var url = "/LoadStudent.htm?enroll=" + crsCode;
+            console.log("Hiding");
+            $('#enroll_modal').foundation('close');
+            $('#no_crs_code').text("");
+            $('#enroll_crs_code').val("");
+            load_student(url);
+        }else{
+            $('#no_crs_code').text("No Course Code");
+        }
+
     });
 
 

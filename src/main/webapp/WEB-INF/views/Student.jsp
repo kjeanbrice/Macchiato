@@ -38,7 +38,7 @@
     <div class="top_bar_container" style="padding:1.5%;" >
         <div class="top_bar">
             <div class="top-bar-left">
-	            <div id="stud_name" ></div>
+                <div id="stud_name" ></div>
             </div>
             <div class="top-bar-right">
                 <ul class="dropdown menu" data-dropdown-menu>
@@ -106,20 +106,36 @@
 
 <!-- MODAL AREA-->
 <div id="enroll_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast" >
-    <a id ="close-enroll" class="close-button" data-close>&#215;</a>
+    <a name ="close-enroll" class="close-button" data-close>&#215;</a>
     <div class = "modal-heading-form">
         <h3 class ="modal-heading-text">Enroll in a Course</h3>
     </div>
-    <label><span class = "label-style-modal">Course Code</span>
-        <input id="txt_stud_crs_code" type="text" placeholder="Type your course code here..." >
+    <label>
+        <div><span class = "label-style-modal">Course Code</span></div>
+        <div><span id="no_crs_code"class = "label-style-modal" style="color:red"></span></div>
+        <input name="enroll_crs_code" id="enroll_crs_code" type="text" placeholder="Type your course code here..." >
     </label>
 
 
     <div id="enroll_submit" class="menu modal-area ">
-        <span class="modal-btn-full">Enroll</span>
+        <span class="modal-btn-full" >Enroll</span>
     </div>
 
 </div>
+
+<div id="notification_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast" >
+    <a id ="close-notification" class="close-button" data-close>&#215;</a>
+    <div class = "modal-heading-form">
+        <h3 id="notification_title" class ="modal-heading-text"></h3>
+    </div>
+    <div style=" text-align: center"><span id="notification_txt"class = "label-style-modal" ></span></div>
+
+    <div class="menu modal-area " data-close>
+        <span class="modal-btn-full">Close</span>
+    </div>
+</div>
+
+
 <!-- END MODAL AREA-->
 
 
@@ -140,10 +156,10 @@
 </script>
 
 <script src="libs/handlebars-v4.0.5.js" type="text/javascript"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
-<script src="js/student_transactions.js"></script>
 <script src="js/vendor/jquery.js"></script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>-->
+<!--<script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>-->
+<script src="js/student_transactions.js"></script>
 <script src="js/vendor/what-input.js"></script>
 <script src="js/vendor/foundation.js"></script>
 <script src="js/app.js"></script>
@@ -157,3 +173,4 @@
 
 
 </html>
+

@@ -51,7 +51,7 @@ public class StudentController {
             // Create the search keyword.
             Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email.trim());
             // Create the query
-            Query q = new Query("user").setFilter(email_filter);
+            Query q = new Query("User").setFilter(email_filter);
             PreparedQuery pq = datastore.prepare(q);
             // Find the UserBean Entity
             Entity result = pq.asSingleEntity();
@@ -59,20 +59,20 @@ public class StudentController {
             if(result == null){
                 System.out.println("No User, creating and saving one now.");
                 // Create an Entity to store
-                Entity userEntity = new Entity("user",email);
+                Entity userEntity = new Entity("User",email);
                 userEntity.setProperty("email", email);
-                userEntity.setProperty("userType", Integer.toString(userType));
+                userEntity.setProperty("access", Integer.toString(userType));
                 datastore.put(userEntity);
             }else{
                 System.out.println("Found User, loading User in now.");
                 // Extract the information from result
                 email = (String)result.getProperty("email");
-                userType = Integer.parseInt((String)result.getProperty("userType"));
+                userType = Integer.parseInt((String)result.getProperty("access"));
                 System.out.println(email);
                 System.out.println(userType);
             }
             request.getSession().setAttribute("email", email);
-            request.getSession().setAttribute("userType", Integer.toString(userType));
+            request.getSession().setAttribute("access", Integer.toString(userType));
             currUser = new UserBean(email, userType);
 
             System.out.println(currUser.generateJSON());
@@ -89,10 +89,10 @@ public class StudentController {
             // Find all the crsCodes the user is enrolled in.
             DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
             Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email.trim());
-            Query q = new Query("enrollment").setFilter(email_filter);
+            Query q = new Query("CourseEnrollment").setFilter(email_filter);
             PreparedQuery pq = datastore.prepare(q);
             for (Entity enrollmentEntity : pq.asIterable()) {
-                crsCodes.add((String)enrollmentEntity.getProperty("crsCode"));
+                crsCodes.add((String)enrollmentEntity.getProperty("course_code"));
             }
             if (crsCodes.size() > 0){
                 System.out.println("Loading courses");
@@ -101,13 +101,13 @@ public class StudentController {
                 Entity course;
                 CourseBean crsBean;
                 for (int i = 0; i<crsCodes.size(); i++){
-                    crsCode_filter = new Query.FilterPredicate("crsCode", Query.FilterOperator.EQUAL, crsCodes.get(i).trim());
-                    q = new Query("course").setFilter(crsCode_filter);
+                    crsCode_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL, crsCodes.get(i).trim());
+                    q = new Query("Course").setFilter(crsCode_filter);
                     pq = datastore.prepare(q);
                     course = pq.asSingleEntity();
-                    crsBean = new CourseBean((String)course.getProperty("crsCode"),
-                            (String)course.getProperty("crsName"),
-                            (String)course.getProperty("instrEmail"),
+                    crsBean = new CourseBean((String)course.getProperty("course_code"),
+                            (String)course.getProperty("name"),
+                            (String)course.getProperty("email"),
                             (String)course.getProperty("description"));
                     crsList.add(crsBean);
                 }
@@ -118,9 +118,15 @@ public class StudentController {
         }else{
             System.out.println("Loading Courses from session");
         }
-        // Sort the crsList alphabetically
+
 
         CourseBean currCourse = null;
+        boolean enrolling = false;
+        /* 0 for not enrolling
+           1 for enroll success
+           2 for already enrolled
+           3 for course does not exist*/
+        int enrollStatus = 0;
         // LOAD THE CURR COURSE
         if(request.getParameter("crsName") != null){
             System.out.println("We're in");
@@ -133,6 +139,47 @@ public class StudentController {
                     System.out.println("Swapping course");
                 }
             }
+        }// Check we're enrolling
+        else if(request.getParameter("enroll") != null){
+            enrolling = true;
+            boolean newCourse = true;
+            System.out.println(request.getParameter("enroll"));
+            String enrollCode = request.getParameter("enroll");
+            for(int i = 0; i<crsList.size(); i++){
+                if(enrollCode.compareTo(crsList.get(i).getCrsCode()) == 0){
+                    newCourse = false;
+                    enrollStatus = 2;
+                    System.out.println("Already enrolled in course");
+                }
+            }
+            if(newCourse){
+                // Look for course in database
+                DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+                // Create the search keyword.
+                Query.Filter enroll_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL, enrollCode.trim());
+                // Create the query
+                Query q = new Query("Course").setFilter(enroll_filter);
+                PreparedQuery pq = datastore.prepare(q);
+                Entity result = pq.asSingleEntity();
+                // If course does not exist, return a 3
+                if(result == null){
+                    enrollStatus = 3;
+                    System.out.println("Course does not exist");
+                }else{
+                    CourseBean enrollCourse = new CourseBean((String)result.getProperty("course_code"),
+                            (String)result.getProperty("name"),
+                            (String)result.getProperty("email"),
+                            (String)result.getProperty("description"));
+                    crsList.add(enrollCourse);
+                    request.getSession().setAttribute("crsList", crsList);
+                    Entity enrollmentEntity = new Entity("CourseEnrollment");
+                    enrollmentEntity.setProperty("course_code", enrollCode);
+                    enrollmentEntity.setProperty("email", email);
+                    datastore.put(enrollmentEntity);
+                    System.out.println("Enrolled into new course");
+                }
+            }
+
         }else{
             currCourse = (CourseBean)request.getSession().getAttribute("currCourse");
         }
@@ -147,10 +194,18 @@ public class StudentController {
                 currCourse = new CourseBean();
             }
         }
+
+
+        // Sort the crsList alphabetically
         currList = new CourseListBean(crsList);
         currStudent = new StudentBean(currUser,currList,currCourse);
-        System.out.println(currStudent.generateJSON());
-        out.println(currStudent.generateJSON());
+        String JSONoutput = "{";
+        JSONoutput += currStudent.generateJSON();
+        JSONoutput += ",\"Enroll\": {\"status\": \"";
+        JSONoutput += Integer.toString(enrollStatus);
+        JSONoutput += "\"}}";
+        System.out.println(JSONoutput);
+        out.println(JSONoutput);
     }
 
 
@@ -170,34 +225,40 @@ public class StudentController {
     public void storeDummyData(){
         // Store 3 dummy courses
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Entity cse114 = new Entity("course");
-        cse114.setProperty("crsCode", "1111");
-        cse114.setProperty("crsName", "CSE114");
-        cse114.setProperty("instrEmail", "teacher1@gmail.com");
+        Entity cse114 = new Entity("Course");
+        cse114.setProperty("name", "CSE114");
+        cse114.setProperty("course_code", "1111");
         cse114.setProperty("description", "This is CSE114");
+        cse114.setProperty("section", "01");
+        cse114.setProperty("email", "teacher1@gmail.com");
+        cse114.setProperty("id", "1");
         datastore.put(cse114);
-        Entity cse307 = new Entity("course");
-        cse307.setProperty("crsCode", "2222");
-        cse307.setProperty("crsName", "CSE307");
-        cse307.setProperty("instrEmail", "teacher1@gmail.com");
+        Entity cse307 = new Entity("Course");
+        cse307.setProperty("name", "CSE307");
+        cse307.setProperty("course_code", "2222");
         cse307.setProperty("description", "This is CSE307");
+        cse307.setProperty("section", "01");
+        cse307.setProperty("email", "teacher1@gmail.com");
+        cse307.setProperty("id", "2");
         datastore.put(cse307);
-        Entity cse308 = new Entity("course");
-        cse308.setProperty("crsCode", "3333");
-        cse308.setProperty("crsName", "CSE308");
-        cse308.setProperty("instrEmail", "teacher1@gmail.com");
+        Entity cse308 = new Entity("Course");
+        cse308.setProperty("name", "CSE308");
+        cse308.setProperty("course_code", "3333");
         cse308.setProperty("description", "This is CSE308");
+        cse308.setProperty("section", "01");
+        cse308.setProperty("email", "teacher1@gmail.com");
+        cse308.setProperty("id", "3");
         datastore.put(cse308);
-        // Store 2 dummy enrollment
-        Entity enrollmentEntity = new Entity("enrollment");
-        enrollmentEntity.setProperty("crsCode", "1111");
+        /*// Store 2 dummy enrollment
+        Entity enrollmentEntity = new Entity("CourseEnrollment");
+        enrollmentEntity.setProperty("course_code", "1111");
         enrollmentEntity.setProperty("email", "test@example.com");
         datastore.put(enrollmentEntity);
         //System.out.println("Enroll in 114");
-        Entity enrollment307 = new Entity("enrollment");
-        enrollment307.setProperty("crsCode", "2222");
+        Entity enrollment307 = new Entity("CourseEnrollment");
+        enrollment307.setProperty("course_code", "2222");
         enrollment307.setProperty("email", "test@example.com");
-        datastore.put(enrollment307);
+        datastore.put(enrollment307);*/
         //System.out.println("Enroll in 307");
 
         // Store 6 dummy assignments
