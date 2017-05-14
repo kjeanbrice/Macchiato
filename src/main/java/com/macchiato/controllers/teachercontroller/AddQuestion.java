@@ -1,8 +1,6 @@
 package com.macchiato.controllers.teachercontroller;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
 import com.macchiato.beans.AssignmentBean;
 import com.macchiato.beans.QuestionBean;
@@ -17,9 +15,11 @@ import java.io.IOException;
 
 /**
  * Created by Xiangbin on 5/5/2017.
+ * Edited by Raymond
  */
 @Controller
 public class AddQuestion {
+    int i = 1;
     //this function add the new course to the database
     @RequestMapping(value="addQuestion.htm", method = RequestMethod.POST)
     public void addQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -36,11 +36,30 @@ public class AddQuestion {
             QuestionBean newQuestion=new QuestionBean();
             newQuestion.setProblem(problem);
             newQuestion.setSolution(solution);
+
+
+            Query q = new Query("Question");
+            PreparedQuery pq = datastore.prepare(q);
+            System.out.println("pq as a list is" + pq.asList(FetchOptions.Builder.withDefaults()));
+            int size = pq.asList(FetchOptions.Builder.withDefaults()).size();
+            if(size != 0){
+                for (Entity e : pq.asList(FetchOptions.Builder.withDefaults())) {
+                    if(Integer.parseInt((String)e.getProperty("questionId")) >= i){
+                        i = Integer.parseInt((String)e.getProperty("questionId"));
+                    }
+                }
+                i = i + 1;
+                System.out.println(i);
+            }
+
+
             Entity user = new Entity("Question");
 
             user.setProperty("problem",problem);
             user.setProperty("solution", solution);
             user.setProperty("assignmentKey",assignmentKey);
+            user.setProperty("questionId",Integer.toString(i));
+            user.setProperty("student_answer","");
             datastore.put(user);
             user.setProperty("questionKey",user.getKey().toString());
             datastore.put(user);

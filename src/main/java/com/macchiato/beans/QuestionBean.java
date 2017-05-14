@@ -16,11 +16,13 @@ public class QuestionBean {
     private String id;
     private String assignmentKey;
     private String questionKey;
+    private String studentanswer = "";
 
-    public QuestionBean(String problem, String solution, String id){
+    public QuestionBean(String problem, String solution, String id, String studentanswer){
         this.problem = problem;
         this.solution = solution;
         this.id = id;
+        this.studentanswer = studentanswer;
     }
 
     public QuestionBean(){}
@@ -63,6 +65,8 @@ public class QuestionBean {
 
         String outputString = "{\"problem\":\"" + StringEscapeUtils.escapeJava(problem) + "\","
                 + "\"solution\":\"" + StringEscapeUtils.escapeJava(solution) + "\","
+                + "\"questionKey\":\"" + questionKey + "\","
+                + "\"studentanswer\":\"" + StringEscapeUtils.escapeJava(studentanswer) + "\","
                 + "\"id\":\"" + "Question " + id + "\"";
         outputString += "}";
 
@@ -91,5 +95,13 @@ public class QuestionBean {
 
     public void setAssignmentKey(String assignmentKey) {
         this.assignmentKey = assignmentKey;
+    }
+
+    public String getStudentanswer() {
+        return studentanswer;
+    }
+
+    public void setStudentanswer(String studentanswer) {
+        this.studentanswer = studentanswer;
     }
 }

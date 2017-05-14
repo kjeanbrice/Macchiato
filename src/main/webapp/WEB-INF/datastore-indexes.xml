@@ -75,4 +75,13 @@
         <property name="id" direction="asc"/> <!-- long  -->
     </datastore-index>
 
+    <datastore-index kind="QuestionInfo" ancestor="false" source="auto">
+        <property name="point" direction="asc"/>  <!-- String  -->
+        <property name="email_address" direction="asc"/> <!-- String  -->
+        <property name="question_key" direction="asc"/>  <!-- String  -->
+        <property name="assignmentKey" direction="asc"/> <!-- String  -->
+        <property name="complete" direction="asc"/>
+        <property name="questionId" direction="asc"/>
+    </datastore-index>
+
 </datastore-indexes>
