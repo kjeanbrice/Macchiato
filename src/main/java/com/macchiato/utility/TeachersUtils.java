@@ -121,6 +121,8 @@ public class TeachersUtils {
         String problem;
         String solution;
         String id;
+        String questionkey;
+        String teacherAns;
         System.out.println("Load all the Question :"+assignmentKey);
         ArrayList<QuestionBean> questionList = new ArrayList<QuestionBean>();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -134,11 +136,15 @@ public class TeachersUtils {
             for (Entity result : pq.asIterable()) {
                 problem = (String) result.getProperty("problem");
                 solution = (String) result.getProperty("solution");
+                questionkey=(String) result.getProperty("questionKey");
+                teacherAns=(String) result.getProperty("teacherAnswer");
                 id = result.getKey().toString();
                 QuestionBean newBean = new QuestionBean();
                 newBean.setProblem(problem);
                 newBean.setSolution(solution);
                 newBean.setAssignmentKey(assignmentKey);
+                newBean.setQuestionKey(questionkey);
+                newBean.setTeacherAnswer(teacherAns);
                 newBean.setId(id);
                 questionList.add(newBean);
             }
@@ -157,9 +163,9 @@ public class TeachersUtils {
         }
         for (int i = 0; i < QuestionList.size(); i++) {
             if (i == QuestionList.size() - 1) {
-                outputString += QuestionList.get(i).generateJSONwithAssignmentKey() + "]";
+                outputString += QuestionList.get(i).generateJSON() + "]";
             } else {
-                outputString += QuestionList.get(i).generateJSONwithAssignmentKey() + ",";
+                outputString += QuestionList.get(i).generateJSON() + ",";
             }
         }
         return outputString;

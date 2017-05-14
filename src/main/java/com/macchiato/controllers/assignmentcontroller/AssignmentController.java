@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,6 +59,7 @@ public class AssignmentController {
 
     /**
      * This method will used to help populate the student responses ot the question page
+     *
      * @param request
      * @param response
      * @throws IOException
@@ -71,15 +73,15 @@ public class AssignmentController {
         if (student_email == null) {
             System.out.println("active_user is null");
         } else {
-            QuestionInfoListBean newList = findQuestionsInfo("Assignment(5946158883012608)",student_email);
+            QuestionInfoListBean newList = findQuestionsInfo("Assignment(5946158883012608)", student_email);
             System.out.println(newList.generateJSON());
             out.println(newList.generateJSON());
-
         }
     }
 
     /**
      * This method will be used to compile student code
+     *
      * @param request
      * @param response
      * @throws IOException
@@ -91,14 +93,13 @@ public class AssignmentController {
         PrintWriter out = response.getWriter();
         String text = request.getParameter("text");
         String num = request.getParameter("num");
+        System.out.println("Num is " + num);
         String solution = "";
-        int parseNum = Integer.parseInt(num);
-        parseNum = parseNum + 1;
         QuestionListBean newList = findQuestions("Assignment(5946158883012608)");
-        QuestionInfoListBean newList2 = findQuestionsInfo("Assignment(5946158883012608)",GenUtils.getActiveUser().getEmail());
         QuestionBean q = null;
         for (QuestionBean question : newList.getProblems()) {
-            if (question.getId().equals(Integer.toString(parseNum))) {
+            System.out.println("Question key right now is" + question.getQuestionKey());
+            if (question.getQuestionKey().equals(num)) {
                 solution = question.getSolution();
                 q = question;
             }
@@ -127,6 +128,9 @@ public class AssignmentController {
             //   System.out.println("User entered text is " + text);
             if (finmessage.equals("")) {
                 out.println(stdout.get(0).trim());
+                if(stdout.get(0).trim().equals(solution)){
+                    System.out.println("WORKING I THINK");
+                }
             } else {
                 out.println(finmessage);
             }
@@ -169,90 +173,97 @@ public class AssignmentController {
 
     /**
      * This method will be used to find Questions in the datastore
+     *
      * @param assignmentKey
      * @return QuestionListBean
      */
     public QuestionListBean findQuestions(String assignmentKey) {
-        int i = 1;
         QuestionListBean newList = new QuestionListBean();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query.Filter assignment_filter = new Query.FilterPredicate("assignmentKey", Query.FilterOperator.EQUAL, assignmentKey);
-        Query q = new Query("Question").setFilter(assignment_filter);
+        Query q = new Query("Question").setFilter(assignment_filter).addSort("questionId", Query.SortDirection.ASCENDING);
         PreparedQuery pq = datastore.prepare(q);
         System.out.println("pq as a list is" + pq.asList(FetchOptions.Builder.withDefaults()));
         for (Entity e : pq.asList(FetchOptions.Builder.withDefaults())) {
-            QuestionBean question = new QuestionBean((String) e.getProperty("problem"), (String) e.getProperty("solution"), Integer.toString(i));
+            QuestionBean question = new QuestionBean((String) e.getProperty("problem"), (String) e.getProperty("solution"), (String) e.getProperty("questionId"), (String) e.getProperty("student_answer"));
             question.setAssignmentKey(assignmentKey);
-            question.setQuestionKey((String)e.getProperty("questionKey"));
+            question.setQuestionKey((String) e.getProperty("questionKey"));
+            question.setTeacherAnswer((String) e.getProperty("teacherAnswer"));
+            System.out.println("findQuestions key is" + question.getQuestionKey());
             newList.getProblems().add(question);
-            i++;
         }
         return newList;
     }
 
     /**
      * This method will be used to find QuestionsInfo in the datastore if we dont have it we need to create it
+     *
      * @param assignmentKey
      * @return QuestionListBean
      */
     public QuestionInfoListBean findQuestionsInfo(String assignmentKey, String email_address) {
+        int i = 1;
         QuestionInfoListBean newList = new QuestionInfoListBean();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query.Filter assignment_filter = new Query.FilterPredicate("assignmentKey", Query.FilterOperator.EQUAL, assignmentKey);
-        Query q = new Query("QuestionInfo").setFilter(assignment_filter);
+        Query q = new Query("QuestionInfo").setFilter(assignment_filter).addSort("questionId", Query.SortDirection.ASCENDING);
         PreparedQuery pq = datastore.prepare(q);
         System.out.println("pq as a list is" + pq.asList(FetchOptions.Builder.withDefaults()));
-        int size = pq.asList(FetchOptions.Builder.withDefaults()).size();
-        if(size == 0){
-            QuestionListBean list = findQuestions(assignmentKey);
-            for (QuestionBean b : list.getProblems()){
-                Entity questionInfo = new Entity("QuestionInfo");
-                questionInfo.setProperty("point","0");
-                questionInfo.setProperty("email_address",email_address);
-                questionInfo.setProperty("question_key", b.getQuestionKey());
-                questionInfo.setProperty("assignmentKey",assignmentKey);
-                questionInfo.setProperty("student_answer","");
-                questionInfo.setProperty("complete","0");
-                datastore.put(questionInfo);
-
-                QuestionInfoBean quesInfo = new QuestionInfoBean("0",email_address,b.getQuestionKey(),assignmentKey,"","0");
-                newList.getQuestionInfo().add(quesInfo);
-
-            }
-        }
-        else{
-            for (Entity e : pq.asList(FetchOptions.Builder.withDefaults())) {
-                QuestionInfoBean questionInfo = new QuestionInfoBean((String)e.getProperty("point"), (String)e.getProperty("email_address"),
-                        (String)e.getProperty("question_key"), (String)e.getProperty("assignmentKey"),
-                        (String)e.getProperty("student_answer"), (String)e.getProperty("complete"));
-                newList.getQuestionInfo().add(questionInfo);
-            }
-
+        QuestionListBean list = findQuestions(assignmentKey);
+            boolean check = false;
+            boolean check1 = false;
+            for(QuestionBean b: list.getProblems()){
+                for(Entity e: pq.asList(FetchOptions.Builder.withDefaults())){
+                    if(b.getQuestionKey().equals(e.getProperty("question_key"))){
+                        QuestionInfoBean quesInfo = new QuestionInfoBean((String)e.getProperty("point"), email_address, b.getQuestionKey(), assignmentKey, (String)e.getProperty("complete"));
+                        quesInfo.setQuestionId((String)e.getProperty("questionId"));
+                        newList.getQuestionInfo().add(quesInfo);
+                       check = true;
+                       break;
+                    }
+                }
+                for(Entity e: pq.asList(FetchOptions.Builder.withDefaults())){
+                    if(Integer.parseInt((String)e.getProperty("questionId")) >= i){
+                        i = Integer.parseInt((String)e.getProperty("questionId"));
+                        check1 = true;
+                    }
+                }
+                if(check1 == true){
+                    i = i + 1;
+                }
+                if(check == false){
+                    Entity questionInfo = new Entity("QuestionInfo");
+                    questionInfo.setProperty("point", "0");
+                    questionInfo.setProperty("email_address", email_address);
+                    questionInfo.setProperty("question_key", b.getQuestionKey());
+                    questionInfo.setProperty("assignmentKey", assignmentKey);
+                    questionInfo.setProperty("complete", "0");
+                    questionInfo.setProperty("questionId",Integer.toString(i));
+                    datastore.put(questionInfo);
+                    QuestionInfoBean quesInfo = new QuestionInfoBean("0", email_address, b.getQuestionKey(), assignmentKey, "0");
+                    quesInfo.setQuestionId(Integer.toString(i));
+                    newList.getQuestionInfo().add(quesInfo);
+                }
         }
         return newList;
     }
 
-    /**
-     * Will use datastore to update student responses
-     * @param questionKey
-     * @param student_ans
-     */
-    public void updateQuestionInfo(String questionKey, String student_ans){
+        /**
+         * Will use datastore to update student responses
+         * @param questionKey
+         * @param student_ans
+         */
+
+    public void updateQuestionInfo(String questionKey, String student_ans) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Query.Filter question_info_filter = new Query.FilterPredicate("question_key", Query.FilterOperator.EQUAL, questionKey);
-        Query q = new Query("QuestionInfo").setFilter(question_info_filter);
+        Query.Filter question_info_filter = new Query.FilterPredicate("questionKey", Query.FilterOperator.EQUAL, questionKey);
+        Query q = new Query("Question").setFilter(question_info_filter);
         PreparedQuery pq = datastore.prepare(q);
         System.out.println("pq as a list is" + pq.asList(FetchOptions.Builder.withDefaults()));
-        int size = pq.asList(FetchOptions.Builder.withDefaults()).size();
-        if(size == 0){
-            System.out.println("Item not found");
-        }
-        else{
-            for (Entity e : pq.asList(FetchOptions.Builder.withDefaults())) {
-                e.setProperty("student_answer",student_ans);
-                datastore.put(e);
-            }
+        for (Entity e : pq.asList(FetchOptions.Builder.withDefaults())) {
+            e.setProperty("student_answer", student_ans);
+            datastore.put(e);
         }
     }
-
 }
+

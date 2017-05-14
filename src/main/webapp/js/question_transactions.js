@@ -26,7 +26,6 @@ $(document).ready(function () {
             JSON_list_items = question_table;
             $('.ques_num').text(JSON_list_items.Questions[i].id);
             $('.the_ques').text(JSON_list_items.Questions[i].problem);
-            localStorage.setItem("questionNum",i);
 
             $.ajax({
                 method: 'get',
@@ -35,7 +34,8 @@ $(document).ready(function () {
                 success: function (questionInfo_table) {
                     console.log("Get QuestionsInfo :Success");
                     JSON_list_items1 = questionInfo_table;
-                    $('#myText').val(JSON_list_items1.QuestionsInfo[i].studentanswer);
+                    $('#myText').val(JSON_list_items.Questions[i].studentanswer);
+                    localStorage.setItem("questionNum",JSON_list_items.Questions[i].questionKey);
                 },
                 error: function () {
                     console.log("Get QuestionsInfo Failure: Aw, It didn't connect to the servlet :(");
@@ -71,8 +71,8 @@ $(document).ready(function () {
         }
         $('.ques_num').text(JSON_list_items.Questions[i].id);
         $('.the_ques').text(JSON_list_items.Questions[i].problem);
-        $('#myText').val(JSON_list_items1.QuestionsInfo[i].studentanswer);
-        localStorage.setItem("questionNum",i);
+        $('#myText').val(JSON_list_items.Questions[i].studentanswer);
+        localStorage.setItem("questionNum",JSON_list_items.Questions[i].questionKey);
     });
 
     /**
@@ -80,7 +80,7 @@ $(document).ready(function () {
      */
     $('body').on('click','.sol_box', function(e){
 
-        $('#solution').text(JSON_list_items.Questions[i].solution);
+        $('#solution').text(JSON_list_items.Questions[i].teacherAnswer);
         $('#dialog').dialog();
     });
 
@@ -161,8 +161,8 @@ $(document).ready(function () {
         }
         $('.ques_num').text(JSON_list_items.Questions[i].id);
         $('.the_ques').text(JSON_list_items.Questions[i].problem);
-        $('#myText').val(JSON_list_items1.QuestionsInfo[i].studentanswer);
-        localStorage.setItem("questionNum",i);
+        $('#myText').val(JSON_list_items.Questions[i].studentanswer);
+        localStorage.setItem("questionNum",JSON_list_items.Questions[i].questionKey);
     }
 
     /**

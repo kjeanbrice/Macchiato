@@ -15,15 +15,15 @@ public class QuestionInfoBean {
     private String email_address;
     private String question_key;
     private String assignment_key;
-    private String studentanswer;
+    private String studentanswer = "";
     private String complete;
+    private String questionId;
 
-    public QuestionInfoBean(String point, String email_address, String question_key, String assignment_key, String studentanswer, String complete){
+    public QuestionInfoBean(String point, String email_address, String question_key, String assignment_key, String complete){
         this.point = point;
         this.email_address = email_address;
         this.question_key = question_key;
         this.assignment_key = assignment_key;
-        this.studentanswer = studentanswer;
         this.complete = complete;
     }
 
@@ -69,8 +69,8 @@ public class QuestionInfoBean {
         String outputString = "{\"point\":\"" + point + "\","
                 + "\"email_address\":\"" + email_address + "\","
                 + "\"questionKey\":\"" + question_key + "\","
-                + "\"studentanswer\":\"" + StringEscapeUtils.escapeJava(studentanswer) + "\","
                 + "\"complete\":\"" + complete + "\","
+                + "\"questionId\":\"" + questionId + "\","
                 + "\"assignmentKey\":\"" + assignment_key + "\"";
         outputString += "}";
 
@@ -91,5 +91,13 @@ public class QuestionInfoBean {
 
     public void setComplete(String complete) {
         this.complete = complete;
+    }
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
 }
