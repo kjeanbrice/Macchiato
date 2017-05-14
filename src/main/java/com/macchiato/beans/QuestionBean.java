@@ -91,7 +91,7 @@ public class QuestionBean {
                 + "\"solution\":\"" + StringEscapeUtils.escapeJava(solution) + "\","
                 + "\"questionKey\":\"" + questionKey + "\","
                 + "\"studentanswer\":\"" + StringEscapeUtils.escapeJava(studentanswer) + "\","
-                + "\"teacherAnswer\":\"" + teacherAnswer + "\","
+                + "\"teacherAnswer\":\"" + StringEscapeUtils.escapeJava(teacherAnswer) + "\","
                 + "\"assignmentKey\":\"" + assignmentKey + "\","
                 + "\"id\":\"" + "Question " + id + "\"";
         outputString += "}";
