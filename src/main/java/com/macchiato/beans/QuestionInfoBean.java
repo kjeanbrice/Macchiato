@@ -1,5 +1,7 @@
 package com.macchiato.beans;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 /**
  * Created by raymondx on 5/13/17.
  */
@@ -67,7 +69,7 @@ public class QuestionInfoBean {
         String outputString = "{\"point\":\"" + point + "\","
                 + "\"email_address\":\"" + email_address + "\","
                 + "\"questionKey\":\"" + question_key + "\","
-                + "\"studentanswer\":\"" + studentanswer + "\","
+                + "\"studentanswer\":\"" + StringEscapeUtils.escapeJava(studentanswer) + "\","
                 + "\"complete\":\"" + complete + "\","
                 + "\"assignmentKey\":\"" + assignment_key + "\"";
         outputString += "}";

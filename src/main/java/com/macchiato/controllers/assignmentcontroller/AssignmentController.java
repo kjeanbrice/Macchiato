@@ -14,6 +14,7 @@ import com.macchiato.utility.GenUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +49,7 @@ public class AssignmentController {
         if (student_email == null) {
             System.out.println("active_user is null");
         } else {
-            QuestionListBean newList = findQuestions("Assignment(4644337115725824)");
+            QuestionListBean newList = findQuestions("Assignment(5946158883012608)");
             System.out.println(newList.generateJSON());
             out.println(newList.generateJSON());
 
@@ -70,7 +71,7 @@ public class AssignmentController {
         if (student_email == null) {
             System.out.println("active_user is null");
         } else {
-            QuestionInfoListBean newList = findQuestionsInfo("Assignment(4644337115725824)",student_email);
+            QuestionInfoListBean newList = findQuestionsInfo("Assignment(5946158883012608)",student_email);
             System.out.println(newList.generateJSON());
             out.println(newList.generateJSON());
 
@@ -93,8 +94,8 @@ public class AssignmentController {
         String solution = "";
         int parseNum = Integer.parseInt(num);
         parseNum = parseNum + 1;
-        QuestionListBean newList = findQuestions("Assignment(4644337115725824)");
-        QuestionInfoListBean newList2 = findQuestionsInfo("Assignment(4644337115725824)",GenUtils.getActiveUser().getEmail());
+        QuestionListBean newList = findQuestions("Assignment(5946158883012608)");
+        QuestionInfoListBean newList2 = findQuestionsInfo("Assignment(5946158883012608)",GenUtils.getActiveUser().getEmail());
         QuestionBean q = null;
         for (QuestionBean question : newList.getProblems()) {
             if (question.getId().equals(Integer.toString(parseNum))) {
@@ -108,7 +109,7 @@ public class AssignmentController {
         String apiKey = "hackerrank|2458825-1355|a7001ed51bce45bd9f6cc1e4bf499ef05d8d4495";
         String source = text;
         Integer lang = new Integer(3);
-        String testcases = "[\"" + solution + "\"]";
+        String testcases = "[\"" + StringEscapeUtils.escapeJava(solution) + "\"]";
         String format = "JSON";
         String callbackUrl = "";
         String wait = "true";
@@ -117,6 +118,7 @@ public class AssignmentController {
             CheckerApi checkerApi = new CheckerApi();
             Submission response1 = checkerApi.submission(apiKey, source, lang, testcases, format, callbackUrl, wait);
             Result answer = response1.getResult();
+            System.out.println(answer);
 
             List<String> stdout = response1.getResult().getStdout();
             //   System.out.println(answer.getCompilemessage());
