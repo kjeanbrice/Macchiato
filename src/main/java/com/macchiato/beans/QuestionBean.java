@@ -1,5 +1,7 @@
 package com.macchiato.beans;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 /**
  * Created by Raymond on 4/7/2017.
  * Edited by XiangbinZeng
@@ -59,8 +61,8 @@ public class QuestionBean {
      */
     public String generateJSON() {
 
-        String outputString = "{\"problem\":\"" + problem + "\","
-                + "\"solution\":\"" + solution + "\","
+        String outputString = "{\"problem\":\"" + StringEscapeUtils.escapeJava(problem) + "\","
+                + "\"solution\":\"" + StringEscapeUtils.escapeJava(solution) + "\","
                 + "\"id\":\"" + "Question " + id + "\"";
         outputString += "}";
 

@@ -162,7 +162,7 @@
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="libs/handlebars-v4.0.5.js" type="text/javascript"></script>
 <script src="js/nav_bar_transactions.js" type="text/javascript"></script>
 <script src="js/vendor/jquery.js"></script>
