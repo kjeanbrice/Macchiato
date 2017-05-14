@@ -62,7 +62,7 @@
                 ></textarea>
             </div>
             <div class="form-group">
-                <textarea id="course_dis_text" name="classDis" class="form-control" rows="10" id="comment"
+                <textarea id="course_dis_text" name="classDis" class="form-control" rows="10"
                           placeholder="Write your description content here..."
                 ></textarea>
             </div>
