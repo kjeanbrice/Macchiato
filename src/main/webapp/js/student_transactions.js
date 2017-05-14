@@ -16,7 +16,7 @@ $(document).ready(function () {
                 console.log("Get Email:Success");
                 var JSON_stud_user = stud_user;
                 $('#stud_name').text(JSON_stud_user.Student[0].email);
-                $('#class_title').text(JSON_stud_user.Student[2].crsName);
+                $('#class_title').text(JSON_stud_user.Student[2].name);
                 currCrsList = JSON_stud_user.Student[1]
                 load_course_list(currCrsList);
                 var enroll_status = JSON_stud_user.Enroll.status;

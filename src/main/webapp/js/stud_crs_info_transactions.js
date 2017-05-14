@@ -15,7 +15,7 @@ $(document).ready(function () {
                 console.log("Get Info:Success");
                 var JSON_crs_info = crs_info;
                 $('#stud_name').text(JSON_crs_info.Student[0].email);
-                $('#class_title').text(JSON_crs_info.Student[2].crsName);
+                $('#class_title').text(JSON_crs_info.Student[2].name);
                 $('#crs_desc').text(JSON_crs_info.Student[2].description);
                 $('#class_section').text(JSON_crs_info.Student[2].section);
                 currCrsList = JSON_crs_info.Student[1]
