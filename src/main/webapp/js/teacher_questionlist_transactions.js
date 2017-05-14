@@ -3,8 +3,6 @@
  */
 $(document).ready(function () {
     load_question_item("Load the Question");
-
-
     // this function will control the button in the teacher home page to create a new assignment
     $('body').on('click', '#add_question_submit', function (e) {
         var problem = $('#question_problem_text').val().trim();
@@ -24,6 +22,7 @@ $(document).ready(function () {
                 else{
                     clear_form_data();
                     load_question_item('ADD_QUESTION');
+                    $('#close_add_question_modal').click();
                     console.log("ADD QUESTION: SUCCESS");
                 }
             },
@@ -33,6 +32,34 @@ $(document).ready(function () {
         });
     });
 
+
+    $('body').on('click', '#question_edit_submit', function (e) {
+        var problem = $('#change_question_name_text').val().trim();
+        var solution = $('#change_question_answer_text').val().trim();
+        console.log("Edit Question");
+        var url = "/editQuestion.htm?problem=" +problem + "&solution=" + solution+"&questionKey=" + localStorage.getItem("questionKey");
+
+        $.ajax({
+            method: 'post',
+            url: url,
+            dataType: 'text',
+            success: function (h) {
+                if(problem.length==0||solution.length==0){
+                    alert("Can not create question with problem and solution empty")
+                    console.log("Edit QUESTION ERROR");
+                }
+                else{
+                    clear_form_data();
+                    load_question_item('ADD_QUESTION');
+                    $('#close_Edit_modal').click();
+                    console.log("Edit QUESTION: SUCCESS");
+                }
+            },
+            error: function () {
+                console.log("Add Item Failure: Aw, It didn't connect to the servlet :(");
+            }
+        });
+    });
 });
 function clear_form_data(){
     $('#question_problem_text').val("");
@@ -50,13 +77,15 @@ function load_question_item(type){
         dataType: 'json',
 
         success: function (question_table) {
+            var a;
             var item_area=$('#item_area');
             console.log("Get Question :Success");
             JSON_list_items = question_table;
             var list_data="";
             $.each(JSON_list_items, function (i, item) {
-                list_data += '<tr><td>' + i + '</td><td>'+ '<button onclick="delete_helper('+'\''+item.id+'\''+')" type="button" class="btn btn-link" >delete</button>'+'</td><td>' +
-                    '<button onclick="Question_helper('+'\''+item.id+'\''+')" type="button" class="btn btn-link" >Edit</button>'+'</td><td>'+item.problem+ '</td></tr>';
+                a=1+i;
+                list_data += '<tr><td>' +a + '</td><td>'+ '<button onclick="delete_helper('+'\''+item.id+'\''+')" type="button" class="btn btn-link" >delete</button>'+'</td><td>' +
+                    '<button onclick="Question_helper('+'\''+item.id+'\''+')" type="button" class="btn btn-link" data-toggle="modal" data-target="#edit_modal">Edit</button>'+'</td><td>'+item.problem+ '</td></tr>';
             });
             item_area.html(list_data);
         },
@@ -67,18 +96,17 @@ function load_question_item(type){
 }
 
 
-function delete_helper(questionkey){
-    localStorage.setItem("questionkey",questionkey);
-    console.log("Set new value to local Storage "+questionkey);
-    var url="/deleteQuestion.htm?questionKey="+questionkey;
+function delete_helper(questionKey){
+    localStorage.setItem("questionKey",questionKey);
+    console.log("Set new value to local Storage "+questionKey);
+    var url="/deleteQuestion.htm?questionKey="+questionKey;
     console.log(url);
-
     $.ajax({
         method: 'post',
         url: url,
         dataType: 'text',
         success: function (h) {
-            if(localStorage.getItem("questionkey")==0){
+            if(localStorage.getItem("questionKey")==0){
                 console.log("ADD QUESTION ERROR");
             }
             else{
@@ -93,12 +121,26 @@ function delete_helper(questionkey){
     });
 }
 
-function Question_helper(questionkey){
-    localStorage.setItem("assignmentKey",questionkey);
-    console.log("Set new value to local Storage "+questionkey+" ,And junmp to grading page");
-     //var url="TeacherGradingPage.htm"
-    // location.href =url;
-    console.log(localStorage.getItem(questionkey));
+function Question_helper(questionKey){
+    localStorage.setItem("questionKey",questionKey);
+    console.log("Set new value to local Storage "+questionKey+" ,And junmp to grading page");
+    var url = "/findQuestion.htm?questionKey=" +questionKey;
+    $.ajax({
+        method: 'get',
+        url: url,
+        dataType: 'json',
+        success: function (question) {
+            $('#change_question_name_text').val(question.problem);
+            $('#change_question_answer_text').val(question.solution);
+            console.log("Load question success");
+        },
+        error: function () {
+            console.log("Loading the desertion: Aw, It didn't connect to the servlet :(");
+        }
+    });
+    console.log(localStorage.getItem(questionKey));
 }
+
+
 
 

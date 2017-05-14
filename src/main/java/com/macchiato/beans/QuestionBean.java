@@ -1,5 +1,7 @@
 package com.macchiato.beans;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 /**
  * Created by Raymond on 4/7/2017.
  * Edited by XiangbinZeng
@@ -12,8 +14,8 @@ public class QuestionBean {
     private String problem;
     private String solution;
     private String id;
-    private String answer;
     private String assignmentKey;
+    private String questionKey;
 
     public QuestionBean(String problem, String solution, String id){
         this.problem = problem;
@@ -47,6 +49,10 @@ public class QuestionBean {
         this.id = id;
     }
 
+    public String getQuestionKey() {return questionKey;}
+
+    public void setQuestionKey(String questionKey) { this.questionKey = questionKey; }
+
 
     /**
      * Used to allow us to bring our object to the front end through ajax
@@ -55,8 +61,8 @@ public class QuestionBean {
      */
     public String generateJSON() {
 
-        String outputString = "{\"problem\":\"" + problem + "\","
-                + "\"solution\":\"" + solution + "\","
+        String outputString = "{\"problem\":\"" + StringEscapeUtils.escapeJava(problem) + "\","
+                + "\"solution\":\"" + StringEscapeUtils.escapeJava(solution) + "\","
                 + "\"id\":\"" + "Question " + id + "\"";
         outputString += "}";
 
@@ -77,14 +83,6 @@ public class QuestionBean {
         outputString += "}";
 
         return outputString;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
     }
 
     public String getAssignmentKey() {

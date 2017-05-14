@@ -1,4 +1,4 @@
-package com.macchiato.general.discussiondata;
+package com.macchiato.general.generaldata;
 
 import com.macchiato.utility.GenUtils;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -15,6 +15,7 @@ public class EnrollmentData implements Serializable {
     private long enrollmentID;
     private String email;
     private String username;
+    private long u_set;
     private String course;
     private long access;
 
@@ -24,12 +25,13 @@ public class EnrollmentData implements Serializable {
 
     }
 
-    public EnrollmentData(long enrollmentID, String email, String username, String course, long access) {
+    public EnrollmentData(long enrollmentID, String email, String username, String course, long access, long u_set) {
         this.enrollmentID = enrollmentID;
         this.username = username;
         this.email = email;
         this.course = course;
         this.access = access;
+        this.u_set=u_set;
     }
 
     public long getEnrollmentID() {
@@ -84,6 +86,14 @@ public class EnrollmentData implements Serializable {
         this.access = access;
     }
 
+    public long getUset() {
+        return u_set;
+    }
+
+    public void setUset(long u_set) {
+        this.u_set = u_set;
+    }
+
     @Override
     public String toString() {
         return "EnrollmentData{" +
@@ -96,11 +106,13 @@ public class EnrollmentData implements Serializable {
     }
 
 
+
     public String generateJSON(){
         String outputString = "{\"enrollmentID\":\"" + enrollmentID
                 +"\", \"email\":\"" + StringEscapeUtils.escapeJava(email)
                 + "\"," + "\"username\":\"" + StringEscapeUtils.escapeJava(username)
                 + "\"," + "\"course\":\"" + StringEscapeUtils.escapeJava(course)
+                + "\"," + "\"u_set\":\"" + u_set
                 +"\",\"access\":\"" + access +"\"}";
         return outputString;
     }

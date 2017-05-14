@@ -12,57 +12,63 @@ import java.security.SecureRandom;
  */
 public class CourseBean implements Serializable {
     //name of the class
-    private String crsName = "";
-    //section of the class
-    private String section = "";
+    private String name;
     //random class code for students to enroll
-    private String crsCode = "";
+    private String course_code;
     //instr's Email
-    private String instrEmail = "";
+    private String email;
     //description of this class
-    private String description = "";
+    private String description;
     //valuable to help random generator
     private SecureRandom random = new SecureRandom();
+    //this value is for different seciont of class
+    private  String section;
 
-    public CourseBean(String crsCode, String crsName, String instrEmail, String description){
-        this.crsCode = crsCode;
-        this.crsName = crsName;
-        this.instrEmail = instrEmail;
+    public CourseBean(String course_code, String crsName, String instrEmail, String description){
+        this.course_code = course_code;
+        this. name = crsName;
+        this.email = instrEmail;
         this.description = description;
     }
 
     public CourseBean(){}
 
     public CourseBean( String crsName, String instrEmail, String description){
-        this.crsCode =  nextSessionId();
-        this.crsName = crsName;
-        this.instrEmail = instrEmail;
+        this.course_code =  nextSessionId();
+        this. name = crsName;
+        this.email = instrEmail;
         this.description = description;
     }
     // Get methods
-    public String getCrsCode() {return crsCode;}
-    public String getSection() {return section;}
-    public String getCrsName() {return crsName;}
-    public String getInstrEmail() {return instrEmail;}
+    public String getCrsCode() {return course_code;}
+    public String getCrsName() {return  name;}
+    public String getInstrEmail() {return email;}
     public String getDescription() {return description;}
     // Set methods
-    public void setCrsCode(String crsCode) {this.crsCode = crsCode;}
-    public void setSection(String section) {this.section = section;}
-    public void setCrsName(String crsName) {this.crsName = crsName;}
-    public void setInstrEmail(String instrEmail) {this.instrEmail = instrEmail;}
+    public void setCrsCode(String crsCode) {this.course_code = crsCode;}
+    public void setCrsName(String crsName) {this. name = crsName;}
+    public void setInstrEmail(String instrEmail) {this.email = instrEmail;}
     public void setDescription(String description) {this.description = description;}
 
     // Generates a String in JSON format
     public String generateJSON(){
-        return "{\"crsCode\":\"" + crsCode + "\","
-                + "\"crsName\":\"" + crsName + "\","
+        return "{\"course_code\":\"" + course_code + "\","
+                + "\"name\":\"" +  name + "\","
+                + "\"email\":\"" + email + "\","
                 + "\"section\":\"" + section + "\","
-                + "\"instrEmail\":\"" + instrEmail + "\","
                 + "\"description\":\"" + description + "\"}";
     }
 
     //random generator for crsCode
     public String nextSessionId() {
         return new BigInteger(25, random).toString(32);
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
     }
 }

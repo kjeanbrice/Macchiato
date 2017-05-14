@@ -1,4 +1,4 @@
-package com.macchiato.general.discussiondata;
+package com.macchiato.general.generaldata;
 
 import java.io.Serializable;
 
@@ -10,16 +10,49 @@ public class CourseData implements Serializable {
     private String instructor_nickname;
     private String course;
     private String section;
+    private String course_code;
+    private long course_id;
 
-    public CourseData(String instructor_email, String instructor_nickname, String course, String section) {
+
+
+    public CourseData(String instructor_email, String instructor_nickname, String course, String section, long course_id) {
         this.instructor_email = instructor_email;
         this.instructor_nickname = instructor_nickname;
         this.course = course;
         this.section = section;
+        this.course_id = course_id;
+        this.course_code="";
     }
 
+
     public CourseData() {
-        this("default", "default", "default","default");
+        this("default", "default", "default","default",-1);
+    }
+
+
+    public String getCourseCode() {
+        return course_code;
+    }
+
+    public void setCourseCode(String course_code) {
+        this.course_code = course_code;
+    }
+
+    public long getCourseID() {
+        return course_id;
+    }
+
+    public void setCourseID(long course_id) {
+        this.course_id = course_id;
+    }
+
+    public String getSection() {
+
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
     }
 
     public String getInstructor_email() {
@@ -52,6 +85,9 @@ public class CourseData implements Serializable {
                 "instructor_email='" + instructor_email + '\'' +
                 ", instructor_nickname='" + instructor_nickname + '\'' +
                 ", course='" + course + '\'' +
+                ", section='" + section + '\'' +
+                ", course_code='" + course_code + '\'' +
+                ", course_id=" + course_id +
                 '}';
     }
 
@@ -60,6 +96,8 @@ public class CourseData implements Serializable {
         String outputString = "{\"instructorEmail\":\"" + this.instructor_email + "\","
                 + "\"instructorNickname\":\"" + this.instructor_nickname + "\","
                 + "\"section\":\"" + this.section + "\","
+                + "\"courseID\":\"" + this.course_id + "\","
+                + "\"courseCode\":\"" + this.course_code + "\","
                 + "\"course\":\"" + this.course + "\"";
 
         outputString += "}";

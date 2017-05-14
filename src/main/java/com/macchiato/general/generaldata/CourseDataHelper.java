@@ -1,4 +1,4 @@
-package com.macchiato.general.discussiondata;
+package com.macchiato.general.generaldata;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,12 +39,7 @@ public class CourseDataHelper implements Serializable {
         this.current_user = current_user;
     }
 
-    @Override
-    public String toString() {
-        return "FileBeanHelper{" +
-                "current_user='" + current_user + '\'' +
-                '}';
-    }
+
 
     public String generateJSON(){
         String outputString = "{\"currentUser\":\"" + this.current_user + "\","

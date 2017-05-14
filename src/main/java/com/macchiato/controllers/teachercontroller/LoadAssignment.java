@@ -25,7 +25,7 @@ public class LoadAssignment {
     //Load course function will load all the course owned by this teacher, and it will listed on teacher home page
     @RequestMapping(value = "/LoadAssignment.htm", method = RequestMethod.GET)
     public void LoadCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String ClassCrs=request.getParameter("crsCode");
+        String ClassCrs=request.getParameter("course_code");
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         User active_user = GenUtils.getActiveUser();

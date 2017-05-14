@@ -15,9 +15,9 @@ $(document).ready(function () {
     function load_forum_list() {
         var forum_area = $('#load_forum_area');
         var hostname = window.location.host;
-        forum_area.html("<li><a href='javascript:void(0)'>Searching...</a></li>");
+        forum_area.html("<li ><a class='list-size' href='javascript:void(0)'>Searching...</a></li>");
 
-        var $url = "/getcourselist.htm";
+        var $url = "/getforumlist.htm";
         $.ajax({
             method: 'get',
             url: $url,
@@ -36,6 +36,7 @@ $(document).ready(function () {
                 console.log(list_data);
             },
             error: function () {
+                forum_area.html("<li><a  class='list-size' href='javascript:void(0)'>None Available</a></li>");
                 console.log("Loading Course list: Aw, It didn't connect to the servlet :(");
             }
 
@@ -56,7 +57,7 @@ $(document).ready(function () {
     });
 
 
-    $('body').on('click', 'li[data-list-email][data-course]', function () {
+    $('body').on('click', 'li[data-list-email][data-course][data-section]', function () {
         //data-list_name="{{instructorEmail}}" data-course
         var i_email = $(this).attr('data-list-email');
         var course = $(this).attr('data-course');
@@ -76,7 +77,7 @@ $(document).ready(function () {
         form_iemail.attr("value",i_email.trim());
         form_course.attr("value",course.trim());
         form_section.attr("value",section.trim());
-        var url = location.protocol + "//" + location.host + "/discussionboard.htm";
+        var url = location.protocol + "//" + location.host + "/Discussionboard.htm";
         link_form.attr("action",url);
         link_form.submit();
     });
@@ -104,6 +105,13 @@ $(document).ready(function () {
 
                 home_area.html(login_status_data);
                 console.log(login_status_data);
+                var forum_area = $('#load_forum_area');
+                var defaultClosingTime = 500;
+                var options = {
+                    'data-alignment': 'right'
+                };
+                var elem = new Foundation.DropdownMenu($('#home-area'),{disableHover:false, closeOnClick:true, alignment:"right"});
+
             },
             error: function () {
                 console.log("Loading Login Data: Aw, It didn't connect to the servlet :(");

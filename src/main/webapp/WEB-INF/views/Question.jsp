@@ -25,27 +25,25 @@
 
 <body>
 <!-- TOP BAR -->
-<div class="top-bar-container" data-sticky-container>
-    <div class="sticky" data-sticky data-options="anchor: page; marginTop: 0; stickyOn: small;">
+<div class="top-bar-container " data-sticky-container>
+    <div class="sticky" data-sticky data-options="stickTo:top; marginTop:0; stickyOn:small;" data-check-every="0">
         <div class="top-bar">
             <div class="top-bar-left">
                 <ul class="menu">
-                    <li><img src="images/mklogo.png" alt="JTE Image" height="32" width="32"></li>
-                    <li><a href="#" class="logo-name">Macchiato</a></li>
+                    <li><img src="images/Macchiato.png" alt="Mock Image" height="32" width="32"></li>
+                    <li><a href="javascript:void(0);" class="scroll-nav logo-name">Macchiato</a></li>
 
                 </ul>
             </div>
             <div class="top-bar-right">
-                <ul class="menu">
-                    <li><a href="/Student.htm" class="link">Home</a></li>
-                    <li><a href="/Discussionboard.htm" class="link">Forum</a></li>
-                    <li><a href="/Student.htm" class="link">Assignments</a></li>
-                    <li><a href="/logout.htm" class="link">Logout</a></li>
+                <ul id = "home-area" class="dropdown menu">
+                    <li style="visibility: hidden;"><a href="javascript:void(0)" class="project-btn-styles scroll-nav">Invalid</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
+<!-- END TOP BAR -->
 
 
 <!-- MODAL AREA -->
@@ -113,10 +111,63 @@
 
 </section>
 
+<script id= "home-page-template" type="text/x-handle-template">
+    {{#if User}}
+    <li style="visibility: hidden;"><a href="javascript:void(0)" class="project-btn-styles scroll-nav">Invalid</a></li>
+    <li>
+        <a id="current-user" href="javascript:void(0)" data-username="{{User.email}}" class="scroll-nav welcome-name ">Hi, {{User.email}}</a>
+    </li>
+    <li><a href="/{{User.home}}" class="scroll-nav link-highlight">Home</a></li>
+    <li >
+        <a id = "nav_forum"  href="javascript:void(0)" class="scroll-nav link">Forum</a>
+        <ul id = "load_forum_area" class="menu forum-links submenu-test">
+
+        </ul>
+        <form id="link-form" action=" " method="post" style="display: none;">
+            <input name = "i_email" id = "form-iemail" type = "text" style="display:none;">
+            <input name = "course" id = "form-course" type = "text" style="display:none;">
+            <input name = "section" id = "form-section" type = "text" style="display:none;">
+        </form>
+    </li>
+    <li>
+        <a href="/CourseInfo.htm" class="scroll-nav link">Course Information</a>
+    </li>
+    <li>
+        <a href="/login.htm?access=-1" class="scroll-nav link">Logout</a>
+    </li>
+
+    {{else}}
+    <li>
+        <a href="javascript:void(0)" data-username="{{User.email}}" class="scroll-nav welcome-name ">You're not logged in!</a>
+    </li>
+    <li>
+        <a href="/Home.htm" class="scroll-nav link">Go to login portal</a>
+    </li>
+    {{/if}}
+</script>
+
+
+<script id="discussion-list-template" type="text/x-handle-template">
+
+    {{#each Courses}}
+    <li style="white-space: nowrap;" class="list_file" data-list-email="{{instructorEmail}}" data-course="{{course}}" data-section="{{section}}">
+        <a class ="list-size" href="javascript:void(0)">{{course}}: {{section}}</a>
+    </li>
+    {{else}}
+    <li><a class ="list-size" href="javascript:void(0)">None Available</a></li>
+    {{/each}}
+
+</script>
+
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="libs/handlebars-v4.0.5.js" type="text/javascript"></script>
+<script src="js/nav_bar_transactions.js" type="text/javascript"></script>
+<script src="js/vendor/jquery.js"></script>
+<script src="js/vendor/what-input.js"></script>
+<script src="js/vendor/foundation.js"></script>
 <script src="js/app.js"></script>
 <script src="js/question_transactions.js"></script>
 </body>

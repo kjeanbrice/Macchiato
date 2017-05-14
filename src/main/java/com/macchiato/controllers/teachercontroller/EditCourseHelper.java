@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import static com.macchiato.utility.TeachersUtils.AssignmentListJson;
-
 /**
  * Created by Xiangbin on 5/9/2017.
  */
@@ -30,8 +28,8 @@ public class EditCourseHelper {
             System.out.println("active_user is null");
         }
         else{
-            String ClassCode=request.getParameter("crsCode");
-            Query.Filter CrsCode_filter = new Query.FilterPredicate("crsCode", Query.FilterOperator.EQUAL,ClassCode );
+            String ClassCode=request.getParameter("course_code");
+            Query.Filter CrsCode_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL,ClassCode );
             Query q = new Query("Course").setFilter(CrsCode_filter);
             PreparedQuery pq = datastore.prepare(q);
             int numberOfClass = pq.asList(FetchOptions.Builder.withDefaults()).size();
@@ -41,14 +39,16 @@ public class EditCourseHelper {
             else{
                 for (Entity result : pq.asIterable()) {
                     String email = (String) result.getProperty("email");
-                    String CrsName = (String) result.getProperty("crsName");
-                    String CrsCode = (String) result.getProperty("crsCode");
+                    String CrsName = (String) result.getProperty("name");
+                    String CrsCode = (String) result.getProperty("course_code");
                     String Crsdis = (String) result.getProperty("description");
+                    String Section = (String) result.getProperty("section");
                     CourseBean newBean = new CourseBean();
                     newBean.setInstrEmail(email);
                     newBean.setCrsName(CrsName);
                     newBean.setCrsCode(CrsCode);
                     newBean.setDescription(Crsdis);
+                    newBean.setSection(Section);
                     out.println(newBean.generateJSON());
                     System.out.print("Load description success");
                 }

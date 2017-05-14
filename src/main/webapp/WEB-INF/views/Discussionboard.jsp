@@ -28,27 +28,7 @@
                 </ul>
             </div>
             <div class="top-bar-right">
-                <ul class="dropdown menu" data-dropdown-menu>
-                    <li><a id="current-user" href="javascript:void(0)" data-username="" class="scroll-nav welcome-name "></a></li>
-                    <li><a href="/Student.htm" class="scroll-nav link">Home</a></li>
-                    <li>
-                        <a id = "nav_forum"  href="javascript:void(0)" class="scroll-nav link-highlight">Forum</a>
-                        <ul id = "load_forum_area" class="menu forum-links submenu-test">
-
-                        </ul>
-                        <form id="link-form" action=" " method="post" style="display: none;">
-                            <input name = "i_email" id = "form-iemail" type = "text" style="display:none;">
-                            <input name = "course" id = "form-course" type = "text" style="display:none;">
-                            <input name = "section" id = "form-section" type = "text" style="display:none;">
-                        </form>
-                    </li>
-                    <li><a href="/CourseInfo.htm" class="scroll-nav link">Course Info</a></li>
-
-                    <li><a href="javascript:void(0)"  class="project-btn-styles scroll-nav" id="create-new-post" data-open="create_post_modal">Create New
-                        Post</a></li>
-                    <li class="extra-padding-left"><a href="javascript:void(0)" class="project-btn-styles scroll-nav"
-                                                      id="change-user-name" data-open="change_username_modal">Change User Name</a></li>
-
+                <ul id ="home-area" class="dropdown menu">
 
                 </ul>
             </div>
@@ -60,12 +40,12 @@
 
 
 <!-- MODAL AREA -->
-<div id="change_username_modal" class="reveal" data-reveal data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
+<div id="change_username_modal" class="reveal"  data-reveal data-close-on-esc="false" data-close-on-click = "false" data-animation-in="slide-in-down fast" data-animation-out="slide-out-up fast">
     <a id="close-username-modal" class="close-button" data-close>&#215;</a>
     <div class = "modal-heading-form">
         <h3 class ="modal-heading-text">Change Your Username</h3>
     </div>
-    <label><span class = "label-style-modal">Username (5 characters minimum)</span>
+    <label><span class = "label-style-modal">Username (3 characters minimum)</span>
         <input id="txt-username" type="text" maxlength="30" placeholder="Type your username here...">
     </label>
 
@@ -237,6 +217,7 @@
         <span id ="i_email" data-iemail="${i_email}" style="display:none;"></span>
         <span id ="course" data-course="${course}" style="display:none;" ></span>
         <span id ="section" data-section="${section}" style="display:none;" ></span>
+        <span id ="u_set" data-uset="" style="display:none;" ></span>
     </div>
 
     <div id="discussion-section" class="small-10 medium-10 large-10 columns">
@@ -259,15 +240,52 @@
 
 </section>
 
+<script id= "home-page-template" type="text/x-handle-template">
+    {{#if User}}
+    <li style="visibility: hidden;"><a href="javascript:void(0)" class="project-btn-styles scroll-nav">Invalid</a></li>
+    <li>
+        <a id="current-user" href="javascript:void(0)" data-username="{{User.email}}" class="scroll-nav welcome-name ">Hi, {{User.email}}</a>
+    </li>
+    <li><a href="/{{User.home}}" class="scroll-nav link">Home</a></li>
+    <li >
+        <a id = "nav_forum"  href="javascript:void(0)" class="scroll-nav link-highlight">Forum</a>
+        <ul id = "load_forum_area" class="menu forum-links submenu-test">
+
+        </ul>
+        <form id="link-form" action=" " method="post" style="display: none;">
+            <input name = "i_email" id = "form-iemail" type = "text" style="display:none;">
+            <input name = "course" id = "form-course" type = "text" style="display:none;">
+            <input name = "section" id = "form-section" type = "text" style="display:none;">
+        </form>
+    </li>
+    <li>
+        <a href="/login.htm?access=-1" class="scroll-nav link">Logout</a>
+    </li>
+    <li>
+        <a href="javascript:void(0)"  class="project-btn-styles scroll-nav" id="create-new-post" data-open="create_post_modal">Create New Post</a>
+    </li>
+    <li class="extra-padding-left">
+        <a href="javascript:void(0)" class="project-btn-styles scroll-nav" id="change-user-name" data-open="change_username_modal">Change User Name</a>
+    </li>
+    {{else}}
+    <li>
+        <a href="javascript:void(0)" data-username="{{User.email}}" class="scroll-nav welcome-name ">You're not logged in!</a>
+    </li>
+    <li>
+        <a href="/Home.htm" class="scroll-nav link">Go to login portal</a>
+    </li>
+    {{/if}}
+</script>
+
 
 <script id= "discussion-list-template" type="text/x-handle-template">
 
     {{#each Courses}}
-    <li class="list_file" data-list-email="{{instructorEmail}}" data-course ="{{course}}"  data-section ="{{section}}">
-        <a href="javascript:void(0)">{{course}}:{{section}}</a>
+    <li style="white-space: nowrap;" class="list_file" data-list-email="{{instructorEmail}}" data-course="{{course}}" data-section="{{section}}">
+        <a class ="list-size" href="javascript:void(0)">{{course}}: {{section}}</a>
     </li>
     {{else}}
-    <li><a href="javascript:void(0)" >None Available</a></li>
+    <li><a class ="list-size" href="javascript:void(0)" >None Available</a></li>
     {{/each}}
 
 </script>
@@ -295,7 +313,7 @@
                     class="darker-gray">·</span>
                 <a class="link_btn like_post_btn" data-post-userid="{{pEnrollmentID}}" data-postid="{{postID}}" href="javascript:void(0)">Like</a>&nbsp;<span
                         class="darker-gray" >·</span>
-                <a class="link_btn dislike_post_btn" data-post-userid="{{pEnrollmentID}}" data-postid="{{postID}}" href="javascript:void(0)" >Dislike</a>&nbsp;
+                <a class="link_btn dislike_post_btn" data-post-userid="{{pEnrollmentID}}" data-postid="{{postID}}" href="javascript:void(0)" >Unlike</a>&nbsp;
 
                 <span class="darker-gray" style="visibility: hidden;"  data-edit-permission="{{pEditPermission}}">·</span>
 
@@ -322,7 +340,7 @@
                                data-comment-userid="{{cEnrollmentID}}" data-commentid="{{commentID}}" href="javascript:void(0)">Like</a>&nbsp;
                             <span class="darker-gray">·</span>
                             <a class="link_btn dislike_comment_btn"
-                               data-comment-userid="{{cEnrollmentID}}" data-commentid="{{commentID}}" href="javascript:void(0)">Dislike</a>&nbsp;
+                               data-comment-userid="{{cEnrollmentID}}" data-commentid="{{commentID}}" href="javascript:void(0)">Unlike</a>&nbsp;
 
                             <span class="darker-gray" style="visibility: hidden;" data-edit-permission="{{cEditPermission}}" >·</span>
 
