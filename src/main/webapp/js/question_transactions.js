@@ -5,6 +5,8 @@
 /**
  * This javascript will handle all the actions a user will perform on the question webpage
  */
+
+$.noConflict();
 $(document).ready(function () {
 
     $(".sub_box").hide();
