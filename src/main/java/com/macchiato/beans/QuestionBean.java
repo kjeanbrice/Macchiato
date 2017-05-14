@@ -17,6 +17,7 @@ public class QuestionBean {
     private String assignmentKey;
     private String questionKey;
     private String studentanswer = "";
+    private String teacherAnswer="";
 
     public QuestionBean(String problem, String solution, String id, String studentanswer){
         this.problem = problem;
@@ -55,40 +56,6 @@ public class QuestionBean {
 
     public void setQuestionKey(String questionKey) { this.questionKey = questionKey; }
 
-
-    /**
-     * Used to allow us to bring our object to the front end through ajax
-     * It would generate a json object of a question
-     * @return String
-     */
-    public String generateJSON() {
-
-        String outputString = "{\"problem\":\"" + StringEscapeUtils.escapeJava(problem) + "\","
-                + "\"solution\":\"" + StringEscapeUtils.escapeJava(solution) + "\","
-                + "\"questionKey\":\"" + questionKey + "\","
-                + "\"studentanswer\":\"" + StringEscapeUtils.escapeJava(studentanswer) + "\","
-                + "\"id\":\"" + "Question " + id + "\"";
-        outputString += "}";
-
-        return outputString;
-    }
-
-    /**
-     * Used to allow us to bring our object to the front end through ajax
-     * It would generate a json object of a question
-     * @return String
-     */
-    public String generateJSONwithAssignmentKey() {
-
-        String outputString = "{\"problem\":\"" + problem + "\","
-                + "\"solution\":\"" + solution + "\","
-                + "\"assignmentKey\":\"" + assignmentKey + "\","
-                + "\"id\":\"" + id + "\"";
-        outputString += "}";
-
-        return outputString;
-    }
-
     public String getAssignmentKey() {
         return assignmentKey;
     }
@@ -104,4 +71,37 @@ public class QuestionBean {
     public void setStudentanswer(String studentanswer) {
         this.studentanswer = studentanswer;
     }
+
+    public String getTeacherAnswer() {
+        return teacherAnswer;
+    }
+
+    public void setTeacherAnswer(String teacherAnswer) {
+        this.teacherAnswer = teacherAnswer;
+    }
+
+    /**
+     * Used to allow us to bring our object to the front end through ajax
+     * It would generate a json object of a question
+     * @return String
+     */
+    public String generateJSON() {
+
+        String outputString = "{\"problem\":\"" + StringEscapeUtils.escapeJava(problem) + "\","
+                + "\"solution\":\"" + StringEscapeUtils.escapeJava(solution) + "\","
+                + "\"questionKey\":\"" + questionKey + "\","
+                + "\"studentanswer\":\"" + StringEscapeUtils.escapeJava(studentanswer) + "\","
+                + "\"teacherAnswer\":\"" + teacherAnswer + "\","
+                + "\"assignmentKey\":\"" + assignmentKey + "\","
+                + "\"id\":\"" + "Question " + id + "\"";
+        outputString += "}";
+
+        return outputString;
+    }
+
+
+
+
+
+
 }

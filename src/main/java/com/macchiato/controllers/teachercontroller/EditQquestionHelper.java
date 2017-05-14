@@ -29,17 +29,16 @@ public class EditQquestionHelper {
         }
         else{
             String QuestionId=request.getParameter("questionKey");
-            //System.out.println("---------"+QuestionId);
             Query.Filter questionkey_filter = new Query.FilterPredicate("questionKey", Query.FilterOperator.EQUAL,QuestionId );
             Query q = new Query("Question").setFilter(questionkey_filter);
             PreparedQuery pq = datastore.prepare(q);
             int numberOfClass = pq.asList(FetchOptions.Builder.withDefaults()).size();
-            //System.out.println("This is the number  of question that i found"+numberOfClass);
             if(numberOfClass!=1){
                 System.out.println("Question code error");
             }
             else{
                 for (Entity result : pq.asIterable()) {
+                    String teacherAnswer=(String)result.getProperty("teacherAnswer");
                     String problem = (String) result.getProperty("problem");
                     String solution = (String) result.getProperty("solution");
                     String assignmentKey = (String) result.getProperty("assignmentKey");
@@ -49,6 +48,7 @@ public class EditQquestionHelper {
                     newBean.setSolution(solution);
                     newBean.setAssignmentKey(assignmentKey);
                     newBean.setId(id);
+                    newBean.setTeacherAnswer(teacherAnswer);
                     out.println(newBean.generateJSON());
                     System.out.print("Load question success");
                 }

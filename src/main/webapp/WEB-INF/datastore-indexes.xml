@@ -78,6 +78,7 @@
         <property name="questionKey" direction="asc"/> <!-- String  -->
         <property name="problem" direction="asc"/>  <!-- String  -->
         <property name="solution" direction="asc"/> <!-- String  -->
+        <property name="teacherAnswer" direction="asc"/> <!-- String  -->
         <property name="id" direction="asc"/> <!-- long  -->
     </datastore-index>
 

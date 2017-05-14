@@ -2,7 +2,6 @@ package com.macchiato.controllers.teachercontroller;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
-import com.macchiato.beans.AssignmentBean;
 import com.macchiato.beans.QuestionBean;
 import com.macchiato.utility.GenUtils;
 import org.springframework.stereotype.Controller;
@@ -33,9 +32,11 @@ public class AddQuestion {
             String assignmentKey=request.getParameter("assignmentKey");
             String problem=request.getParameter("problem");
             String solution=request.getParameter("solution");
+            String teacherAnswer=request.getParameter("teacherAnswer");
             QuestionBean newQuestion=new QuestionBean();
             newQuestion.setProblem(problem);
             newQuestion.setSolution(solution);
+            newQuestion.setTeacherAnswer(teacherAnswer);
 
 
             Query q = new Query("Question");
@@ -58,6 +59,7 @@ public class AddQuestion {
             user.setProperty("problem",problem);
             user.setProperty("solution", solution);
             user.setProperty("assignmentKey",assignmentKey);
+            user.setProperty("teacherAnswer",teacherAnswer);
             user.setProperty("questionId",Integer.toString(i));
             user.setProperty("student_answer","");
             datastore.put(user);

@@ -63,6 +63,8 @@ function load_assignment_item(type){
             console.log("Loading the course table: Aw, It didn't connect to the servlet :(");
         }
     });
+
+
 }
 
 function assignment_helper(assignmentkey){
@@ -80,3 +82,8 @@ function assignment_Grade_helper(assignmentkey){
     location.href =url;
     console.log(localStorage.getItem("assignmentKey"));
 }
+
+
+$(function () {
+    $('#datetimepicker1').datetimepicker();
+});

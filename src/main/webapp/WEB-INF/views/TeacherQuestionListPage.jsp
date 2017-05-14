@@ -66,7 +66,13 @@
             </div>
             <div class="form-group">
                 <textarea id="question_answer_text" name="classDis" class="form-control" rows="10"
-                          placeholder="Type your answer name here..."
+                          placeholder="Type your text case here..."
+                ></textarea>
+            </div>
+
+            <div class="form-group">
+                <textarea id="teacher_answer_text" name="classDis" class="form-control" rows="10"
+                          placeholder="Type your answer here..."
                 ></textarea>
             </div>
             <span id="val-editCourse" data-comment-crdCode="" style="display:none;"></span>
@@ -99,10 +105,16 @@
                 ></textarea>
             </div>
             <div class="form-group">
-                Answer:
+                Test Case:
                 <textarea id="change_question_answer_text" name="classDis" class="form-control" rows="10"
                 ></textarea>
             </div>
+            <div class="form-group">
+                Teacher Answer:
+                <textarea id="change_teacher_answer_text" name="classDis" class="form-control" rows="10"
+                ></textarea>
+            </div>
+
             <div id="question_edit_submit" class="menu modal-area btn-post-submit" >
                 <span class="modal-btn-full">SUBMIT</span>
             </div>

@@ -7,8 +7,9 @@ $(document).ready(function () {
     $('body').on('click', '#add_question_submit', function (e) {
         var problem = $('#question_problem_text').val().trim();
         var solution = $('#question_answer_text').val().trim();
+        var teacherAnswer=$('#teacher_answer_text').val().trim();
         console.log("ADD ASSIGNEMTN");
-        var url = "/addQuestion.htm?problem=" +problem + "&solution=" + solution+"&assignmentKey=" + localStorage.getItem("assignmentKey");
+        var url = "/addQuestion.htm?problem=" +problem + "&solution=" + solution+"&assignmentKey=" + localStorage.getItem("assignmentKey")+"&teacherAnswer="+teacherAnswer;
 
         $.ajax({
             method: 'post',
@@ -36,8 +37,10 @@ $(document).ready(function () {
     $('body').on('click', '#question_edit_submit', function (e) {
         var problem = $('#change_question_name_text').val().trim();
         var solution = $('#change_question_answer_text').val().trim();
+        var teacher_ans=$('#change_teacher_answer_text').val().trim();
         console.log("Edit Question");
-        var url = "/editQuestion.htm?problem=" +problem + "&solution=" + solution+"&questionKey=" + localStorage.getItem("questionKey");
+        console.log(teacher_ans);
+        var url = "/editQuestion.htm?problem=" +problem + "&solution=" + solution+"&questionKey=" + localStorage.getItem("questionKey")+"&teacherAnswer="+teacher_ans;
 
         $.ajax({
             method: 'post',
@@ -84,8 +87,8 @@ function load_question_item(type){
             var list_data="";
             $.each(JSON_list_items, function (i, item) {
                 a=1+i;
-                list_data += '<tr><td>' +a + '</td><td>'+ '<button onclick="delete_helper('+'\''+item.id+'\''+')" type="button" class="btn btn-link" >delete</button>'+'</td><td>' +
-                    '<button onclick="Question_helper('+'\''+item.id+'\''+')" type="button" class="btn btn-link" data-toggle="modal" data-target="#edit_modal">Edit</button>'+'</td><td>'+item.problem+ '</td></tr>';
+                list_data += '<tr><td>' +a + '</td><td>'+ '<button onclick="delete_helper('+'\''+item.questionKey+'\''+')" type="button" class="btn btn-link" >delete</button>'+'</td><td>' +
+                    '<button onclick="Question_helper('+'\''+item.questionKey+'\''+')" type="button" class="btn btn-link" data-toggle="modal" data-target="#edit_modal">Edit</button>'+'</td><td>'+item.problem+ '</td></tr>';
             });
             item_area.html(list_data);
         },
@@ -132,6 +135,8 @@ function Question_helper(questionKey){
         success: function (question) {
             $('#change_question_name_text').val(question.problem);
             $('#change_question_answer_text').val(question.solution);
+            $("#change_teacher_answer_text").val(question.teacherAnswer);
+            console.log(question.teacherAnswer);
             console.log("Load question success");
         },
         error: function () {

@@ -22,6 +22,7 @@ public class EditQuestion {
         String problem=request.getParameter("problem");
         String solution=request.getParameter("solution");
         String questionKey=request.getParameter("questionKey");
+        String teacherAnswer=request.getParameter("teacherAnswer");
         System.out.println("Change question "+problem+"    "+solution+" from "+questionKey);
         User active_user = GenUtils.getActiveUser();
         String instructor_email =active_user.getEmail();
@@ -41,7 +42,8 @@ public class EditQuestion {
                 for (Entity result : pq.asIterable()) {
                     result.setProperty("problem", problem);
                     result.setProperty("solution", solution);
-                    System.out.print(result.getProperty("problem")+":"+result.getProperty("solution"));
+                    result.setProperty("teacherAnswer",teacherAnswer);
+                    System.out.print(result.getProperty("problem")+":"+result.getProperty("solution")+":"+result.getProperty("teacherAnswer"));
                     datastore.put(result);
                 }
             }
