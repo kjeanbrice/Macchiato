@@ -51,7 +51,7 @@ public class StudentController {
             // Create the search keyword.
             Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email.trim());
             // Create the query
-            Query q = new Query("Student").setFilter(email_filter);
+            Query q = new Query("User").setFilter(email_filter);
             PreparedQuery pq = datastore.prepare(q);
             // Find the UserBean Entity
             Entity result = pq.asSingleEntity();
@@ -59,20 +59,20 @@ public class StudentController {
             if(result == null){
                 System.out.println("No User, creating and saving one now.");
                 // Create an Entity to store
-                Entity userEntity = new Entity("Student",email);
+                Entity userEntity = new Entity("User",email);
                 userEntity.setProperty("email", email);
-                userEntity.setProperty("userType", Integer.toString(userType));
+                userEntity.setProperty("access", Integer.toString(userType));
                 datastore.put(userEntity);
             }else{
                 System.out.println("Found User, loading User in now.");
                 // Extract the information from result
                 email = (String)result.getProperty("email");
-                userType = Integer.parseInt((String)result.getProperty("userType"));
+                userType = Integer.parseInt((String)result.getProperty("access"));
                 System.out.println(email);
                 System.out.println(userType);
             }
             request.getSession().setAttribute("email", email);
-            request.getSession().setAttribute("userType", Integer.toString(userType));
+            request.getSession().setAttribute("access", Integer.toString(userType));
             currUser = new UserBean(email, userType);
 
             System.out.println(currUser.generateJSON());
