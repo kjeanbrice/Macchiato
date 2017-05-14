@@ -65,7 +65,6 @@
                 ></textarea>
             </div>
             <div class="form-group">
-                Answer:
                 <textarea id="assignment_due_text" name="classDis" class="form-control" rows="2"
                           placeholder="Type your due data here..."
                 ></textarea>
