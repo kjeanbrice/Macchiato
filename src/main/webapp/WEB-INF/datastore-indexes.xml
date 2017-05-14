@@ -39,6 +39,7 @@
         <property name="email" direction="asc"/> <!-- String  -->
         <property name="username_set" direction="asc"/> <!-- long  -->
         <property name="course_id" direction="asc"/> <!-- long  -->
+        <property name="access" direction="asc"/> <!-- long  -->
     </datastore-index>
 
 
