@@ -9,8 +9,6 @@
 $.noConflict();
 $(document).ready(function () {
 
-    $(".sub_box").hide();
-
     var JSON_list_items;
     var JSON_list_items1;
     var $url = "/PopulateQues.htm";
@@ -18,36 +16,8 @@ $(document).ready(function () {
     var $url1 = "/PopulateQuesInfo.htm";
     var submitted = "no";
 
-    $.ajax({
-        method: 'get',
-        url: $url,
-        dataType: 'json',
-        success: function (question_table) {
-            console.log("Get Questions :Success");
-            JSON_list_items = question_table;
-            $('.ques_num').text(JSON_list_items.Questions[i].id);
-            $('.the_ques').text(JSON_list_items.Questions[i].problem);
+    generateQuestionList($url, $url1);
 
-            $.ajax({
-                method: 'get',
-                url: $url1,
-                dataType: 'json',
-                success: function (questionInfo_table) {
-                    console.log("Get QuestionsInfo :Success");
-                    JSON_list_items1 = questionInfo_table;
-                    $('#myText').val(JSON_list_items.Questions[i].studentanswer);
-                    localStorage.setItem("questionNum",JSON_list_items.Questions[i].questionKey);
-                },
-                error: function () {
-                    console.log("Get QuestionsInfo Failure: Aw, It didn't connect to the servlet :(");
-                }
-            });
-
-        },
-        error: function () {
-            console.log("Get Questions Failure: Aw, It didn't connect to the servlet :(");
-        }
-    });
 
     /**
      * Allows the user to move onto the next question
@@ -260,4 +230,71 @@ $(document).ready(function () {
         $('#myText').val('');
     }
 
+    /**
+     * Function used to load questions on the dropdown
+     * @param question_list
+     */
+    function load_question_list(question_list){
+        var question_area = $('#load_question_area');
+        var hostname = window.location.host;
+        question_area.html("<li><a href='javascript:void(0)'>Searching...</a></li>");
+        var source = $('#question-list-template').html();
+        var question_list_template = Handlebars.compile(source);
+        var list_data = question_list_template(question_list);
+
+        question_area.html(list_data);
+    }
+
+    $('body').on('click mouseover', '#nav_questions', function () {
+        console.log("HOVERING");
+        load_question_list(JSON_list_items);
+    });
+
+    $('body').on('click', 'li[data-id]', function () {
+        var questionId = $(this).attr('data-id');
+        var updated_questionId = questionId.replace('Question', '');
+        var updated_numI = Number(updated_questionId) - 1;
+        i = updated_numI;
+
+       generateQuestionList($url, $url1);
+
+    });
+
+    function generateQuestionList($url, $url1){
+        $(".sub_box").hide();
+
+        $.ajax({
+            method: 'get',
+            url: $url,
+            dataType: 'json',
+            success: function (question_table) {
+                console.log("Get Questions :Success");
+                JSON_list_items = question_table;
+                $('.ques_num').text(JSON_list_items.Questions[i].id);
+                $('.the_ques').text(JSON_list_items.Questions[i].problem);
+
+                $.ajax({
+                    method: 'get',
+                    url: $url1,
+                    dataType: 'json',
+                    success: function (questionInfo_table) {
+                        console.log("Get QuestionsInfo :Success");
+                        JSON_list_items1 = questionInfo_table;
+                        $('#myText').val(JSON_list_items.Questions[i].studentanswer);
+                        localStorage.setItem("questionNum",JSON_list_items.Questions[i].questionKey);
+                    },
+                    error: function () {
+                        console.log("Get QuestionsInfo Failure: Aw, It didn't connect to the servlet :(");
+                    }
+                });
+
+            },
+            error: function () {
+                console.log("Get Questions Failure: Aw, It didn't connect to the servlet :(");
+            }
+        });
+
+    }
+
 });
+
