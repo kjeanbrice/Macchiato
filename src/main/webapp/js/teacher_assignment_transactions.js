@@ -58,7 +58,7 @@ function load_assignment_item(type){
             var list_data="";
             $.each(JSON_list_items, function (i, item) {
                 list_data += '<tr><td>' + item.assignmentName + '</td><td>'+ '<button onclick="assignment_helper('+'\''+item.assignmentKey+'\''+')" type="button" class="btn btn-link" >Questions</button>'+'</td><td>' +
-                    '<button onclick="assignment_Grade_helper('+'\''+item.assignmentKey+'\''+')" type="button" class="btn btn-link" >Grades</button>'+'</td><td>'+item.duedate+ '</td></tr>';
+                    '<button onclick="assignment_Grade_helper('+'\''+item.assignmentKey+'\''+')" type="button" class="btn btn-link" >Grades</button>'+'</td><td>'+item.duedate+'</td><td>'+item.endString+ '</td></tr>';
             });
             item_area.html(list_data);
         },
@@ -86,4 +86,3 @@ function assignment_Grade_helper(assignmentkey){
     location.href =url;
     console.log(localStorage.getItem("assignmentKey"));
 }
-

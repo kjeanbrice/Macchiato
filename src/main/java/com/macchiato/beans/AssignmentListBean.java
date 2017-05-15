@@ -1,8 +1,6 @@
 package com.macchiato.beans;
 
 
-import org.springframework.expression.spel.ast.Assign;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -24,10 +22,10 @@ public class AssignmentListBean implements  Serializable{
         String outputString = "{\"Assignments\":[";
 
         for(int i = 0; i < assignments.size() - 1; i++){
-            outputString += assignments.get(i).generateEndJSON() + ",";
+            outputString += assignments.get(i).generateJSON() + ",";
         }
         if (assignments.size() >0){
-            outputString += assignments.get(assignments.size()-1).generateEndJSON();
+            outputString += assignments.get(assignments.size()-1).generateJSON();
         }
         outputString += "]}";
         return outputString;

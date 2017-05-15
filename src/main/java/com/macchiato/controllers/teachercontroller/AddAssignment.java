@@ -24,7 +24,7 @@ import static com.macchiato.utility.TeachersUtils.dataGenerate;
 @Controller
 public class AddAssignment {
     //this function add the new course to the database
-    @RequestMapping(value="addAssignment.htm", method = RequestMethod.POST)
+    @RequestMapping(value="/addAssignment.htm", method = RequestMethod.POST)
     public void addCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         User active_user = GenUtils.getActiveUser();
         String instructor_email =active_user.getEmail();
@@ -44,6 +44,7 @@ public class AddAssignment {
             user.setProperty("course_code",course_code);
             user.setProperty("assignmentName", assignmentName);
             user.setProperty("duedate",duedate);
+            user.setProperty("end","0");
             System.out.println();
             datastore.put(user);
             System.out.println(user.getKey().toString());

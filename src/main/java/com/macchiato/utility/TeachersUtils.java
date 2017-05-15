@@ -5,6 +5,8 @@ import com.macchiato.beans.AssignmentBean;
 import com.macchiato.beans.CourseBean;
 import com.macchiato.beans.QuestionBean;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -90,8 +92,22 @@ public class TeachersUtils {
                 assignmentName = (String) result.getProperty("assignmentName");
                 dueData=(String) result.getProperty("duedate");
                 newDate=dataGenerate(dueData);
+                Date rightnow=new Date();
+                //System.out.println(rightnow+" vs "+newDate);
                 key = result.getKey().toString();
                 AssignmentBean newBean = new AssignmentBean();
+
+                if (Passed(newDate)) {
+                        newBean.setEnd("1");
+                        result.setProperty("end","1");
+                        datastore.put(result);
+                        System.out.print("yes");
+                    }else{
+                        result.setProperty("end","0");
+                        newBean.setEnd("0");
+                        datastore.put(result);
+                    }
+
                 newBean.setCrsCode(course_code);
                 newBean.setAissignmentKey(key);
                 newBean.setAissignmentName(assignmentName);
@@ -183,17 +199,38 @@ public class TeachersUtils {
 
     //this function will change a string formed date to a int array with year,month,day in side
     public static Date dataGenerate(String b){
-        Date newDate=new Date();
-        int date[]=new int[3];
-        int year=Integer.parseInt(b.substring(0,4));
-        int month= Integer.parseInt(b.substring(5,7));
-        int day= Integer.parseInt(b.substring(8,10));
-        date[0]=year;
-        date[1]=month;
-        date[2]=day;
-        newDate.setYear(date[0]);
-        newDate.setMonth(date[1]);
-        newDate.setDate(date[2]);
+        Date newDate = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            newDate= sdf.parse(b);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return newDate;
     }
+
+    public static  boolean  Passed(Date due){
+        Date now=new Date();
+        if(due.getYear()>now.getYear()){
+            return false;
+        }
+        else if(due.getYear()<now.getYear()){
+            return true;
+        }else {
+        if (due.getMonth() > now.getMonth()) {
+                return false;
+            }
+            else if(due.getMonth() < now.getMonth()){
+            return true;
+            }
+            else {
+                if (due.getDate() > now.getDate()) {
+                      return false;
+                  }  else {
+            return true;
+        }
+        }
+        }
+    }
+
 }
