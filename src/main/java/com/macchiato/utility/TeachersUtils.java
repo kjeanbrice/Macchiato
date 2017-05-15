@@ -92,10 +92,8 @@ public class TeachersUtils {
                 assignmentName = (String) result.getProperty("assignmentName");
                 dueData=(String) result.getProperty("duedate");
                 newDate=dataGenerate(dueData);
-
                 Date rightnow=new Date();
-
-                System.out.println(rightnow+" vs "+newDate);
+                //System.out.println(rightnow+" vs "+newDate);
                 key = result.getKey().toString();
                 AssignmentBean newBean = new AssignmentBean();
 
