@@ -44,6 +44,7 @@ public class AssignmentController {
     @RequestMapping(value = "PopulateQues.htm", method = RequestMethod.GET)
     public void populateQuesRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
+        System.out.println(request.getSession().getAttribute("assignmentKey"));
         PrintWriter out = response.getWriter();
         User active_user = GenUtils.getActiveUser();
         String student_email = active_user.getEmail();

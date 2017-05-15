@@ -125,7 +125,11 @@ public class URLMapping {
     @RequestMapping(value = "Question.htm", method = RequestMethod.GET)
     public static ModelAndView loadQuestionPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        if(request.getParameter("key") != null){
+            System.out.println(request.getParameter("key"));
+            request.getSession().setAttribute("assignmentKey",request.getParameter("key") );
+            response.sendRedirect("Question.htm");
+        }
         ModelAndView model = new ModelAndView("Question");
         return model;
     }
