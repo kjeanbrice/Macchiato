@@ -253,7 +253,7 @@ public class StudentController {
             assignment = new AssignmentBean((String)assignmentEntity.getProperty("course_code"),
                     (String)assignmentEntity.getProperty("assignmentName"),
                     assignmentEntity.getKey().toString());
-
+            assignment.setEnd((String)assignmentEntity.getProperty("duedate"));
             Query.Filter assignment_filter = new Query.FilterPredicate("assignmentKey", Query.FilterOperator.EQUAL, assignmentEntity.getKey().toString().trim());
             q = new Query("Question").setFilter(assignment_filter);
             pq = datastore.prepare(q);

@@ -24,10 +24,10 @@ public class AssignmentListBean implements  Serializable{
         String outputString = "{\"Assignments\":[";
 
         for(int i = 0; i < assignments.size() - 1; i++){
-            outputString += assignments.get(i).generateJSON() + ",";
+            outputString += assignments.get(i).generateEndJSON() + ",";
         }
         if (assignments.size() >0){
-            outputString += assignments.get(assignments.size()-1).generateJSON();
+            outputString += assignments.get(assignments.size()-1).generateEndJSON();
         }
         outputString += "]}";
         return outputString;
