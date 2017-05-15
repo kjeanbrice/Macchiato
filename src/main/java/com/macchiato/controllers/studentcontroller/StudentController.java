@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by li on 4/17/2017.
@@ -93,7 +94,21 @@ public class StudentController {
             Query q = new Query("Enrollment").setFilter(email_filter);
             PreparedQuery pq = datastore.prepare(q);
             for (Entity enrollmentEntity : pq.asIterable()) {
-                crsCodes.add((String)enrollmentEntity.getProperty("course_code"));
+                long course_id = (long)enrollmentEntity.getProperty("course_id");
+                Query.Filter courseid_filter = new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, course_id);
+                q = new Query("Course").setFilter(courseid_filter);
+                pq = datastore.prepare(q);
+
+                List<Entity> course_list = pq.asList(FetchOptions.Builder.withDefaults());
+                int course_list_size = course_list.size();
+                if(course_list_size != 1){
+                    //Error, there should only be one course for this course id
+                    //return value should go here
+                    return;
+                }
+
+                String course_code = (String)course_list.get(0).getProperty("course_code");
+                crsCodes.add(course_code);
             }
             if (crsCodes.size() > 0){
                 System.out.println("Loading courses");
@@ -102,10 +117,14 @@ public class StudentController {
                 Entity course;
                 CourseBean crsBean;
                 for (int i = 0; i<crsCodes.size(); i++){
+                    System.out.println(crsCodes.get(i));
                     crsCode_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL, crsCodes.get(i).trim());
                     q = new Query("Course").setFilter(crsCode_filter);
                     pq = datastore.prepare(q);
                     course = pq.asSingleEntity();
+                    if(course == null){
+                        System.out.println("WHY");
+                    }
                     crsBean = new CourseBean((String)course.getProperty("course_code"),
                             (String)course.getProperty("name"),
                             (String)course.getProperty("email"),
@@ -179,7 +198,6 @@ public class StudentController {
                     request.getSession().setAttribute("currCourse",currCourse);
                     long u_set = 0;
                     Entity enrollmentEntity = new Entity("Enrollment");
-                    enrollmentEntity.setProperty("course_code", enrollCode);
                     enrollmentEntity.setProperty("email", email);
                     enrollmentEntity.setProperty("username", email);
                     enrollmentEntity.setProperty("access", userType);
