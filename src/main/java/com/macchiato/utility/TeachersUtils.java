@@ -92,7 +92,7 @@ public class TeachersUtils {
                 assignmentName = (String) result.getProperty("assignmentName");
                 dueData=(String) result.getProperty("duedate");
                 newDate=dataGenerate(dueData);
-                Date rightnow=new Date();
+                //Date rightnow=new Date();
                 //System.out.println(rightnow+" vs "+newDate);
                 key = result.getKey().toString();
                 AssignmentBean newBean = new AssignmentBean();
@@ -208,7 +208,7 @@ public class TeachersUtils {
         }
         return newDate;
     }
-
+    //this function will help the check this date is passed or not
     public static  boolean  Passed(Date due){
         Date now=new Date();
         if(due.getYear()>now.getYear()){
