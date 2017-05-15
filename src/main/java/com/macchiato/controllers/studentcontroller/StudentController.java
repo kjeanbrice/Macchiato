@@ -253,7 +253,7 @@ public class StudentController {
             assignment = new AssignmentBean((String)assignmentEntity.getProperty("course_code"),
                     (String)assignmentEntity.getProperty("assignmentName"),
                     assignmentEntity.getKey().toString());
-
+            assignment.setEnd((String)assignmentEntity.getProperty("duedate"));
             Query.Filter assignment_filter = new Query.FilterPredicate("assignmentKey", Query.FilterOperator.EQUAL, assignmentEntity.getKey().toString().trim());
             q = new Query("Question").setFilter(assignment_filter);
             pq = datastore.prepare(q);
@@ -262,14 +262,15 @@ public class StudentController {
             points = 0;
             for(Entity questionEntity : pq.asIterable()){
                 total++;
-                Query.Filter question_filter = new Query.FilterPredicate("questionKey", Query.FilterOperator.EQUAL, questionEntity.getKey().toString().trim());
-                Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL,email.trim());
+                Query.Filter question_filter = new Query.FilterPredicate("question_key", Query.FilterOperator.EQUAL, questionEntity.getKey().toString().trim());
+                Query.Filter email_filter = new Query.FilterPredicate("email_address", Query.FilterOperator.EQUAL,email.trim());
                 Query.CompositeFilter question_info_filter = Query.CompositeFilterOperator.and(email_filter, question_filter);
-                q = new Query("QuestionInfo").setFilter(code_filter);
+                q = new Query("QuestionInfo").setFilter(question_info_filter);
                 pq = datastore.prepare(q);
                 // For each QuestionInfo
                 for(Entity QIEntity : pq.asIterable()){
-                    if(((String)QIEntity.getProperty("point")).compareTo("1") == 0){
+                    System.out.println("GOING THROUGH THIS DATATBASE");
+                    if((QIEntity.getProperty("point")).equals("1")){
                         points++;
                     }
                 }

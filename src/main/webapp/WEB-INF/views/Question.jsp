@@ -43,23 +43,39 @@
         </div>
     </div>
 </div>
+
+<div class="top_bar_container" style="padding:1.5%;" >
+    <div class="top_bar">
+        <div class="top-bar-right">
+            <ul class="dropdown menu" data-dropdown-menu>
+                <li>
+                    <a id = "nav_questions"  href="javascript:void(0)" class="scroll-nav link-highlight">Questions</a>
+                    <ul id = "load_question_area" class="menu forum-links submenu-test">
+
+                    </ul>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 <!-- END TOP BAR -->
 
 
 <!-- MODAL AREA -->
-<div class="student_bar">
-    <span class="ques_list">
-        <img src="images/barline.png" width="50" height="50" class="quesbtn">
-	<div class="question-content">
-    <a href="#">Question 1</a>
-    <a href="#">Question 2</a>
-    <a href="#">Question 3</a>
-  </div>
-    </span>
-</div>
+<%--<div class="student_bar">--%>
+    <%--<span class="ques_list">--%>
+        <%--<img src="images/barline.png" width="50" height="50" class="quesbtn">--%>
+	<%--<div class="question-content">--%>
+    <%--<a href="#">Question 1</a>--%>
+    <%--<a href="#">Question 2</a>--%>
+    <%--<a href="#">Question 3</a>--%>
+  <%--</div>--%>
+    <%--</span>--%>
+<%--</div>--%>
 <div class="ques_box">
-    <div class="ques_num">Question 1</div>
-    <div class="the_ques">Initialize the variable i as an integer with a value of 1.</div>
+    <div class="ques_num">QUESTION ERROR</div>
+    <div class="the_ques">QUESTION ERROR.</div>
     <button class="sol_box">VIEW SOLUTION</button>
     <div id="dialog" style="display: none"; title="Solution">
         <p id = "solution" >This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
@@ -102,6 +118,17 @@
     </div>
 
 </section>
+
+<script id= "question-list-template" type="text/x-handle-template">
+
+    {{#each Questions}}
+    <li class="list_file" data-id="{{id}}">
+        <a href="javascript:void(0)">{{id}}</a>
+    </li>
+    {{else}}
+    {{/each}}
+
+</script>
 
 <script id= "home-page-template" type="text/x-handle-template">
     {{#if User}}
