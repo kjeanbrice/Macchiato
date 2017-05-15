@@ -11,7 +11,7 @@ public class AssignmentBean implements Comparable<AssignmentBean>  {
     private Date duedate;
     private String assignmentKey = "";
     private String grade ="";
-    private String end="0";
+    private String end="";
 
     public AssignmentBean(){}
     public AssignmentBean(String crsCode,String assignmentName,String assignmentKey){
@@ -100,5 +100,14 @@ public class AssignmentBean implements Comparable<AssignmentBean>  {
 
     public void setEnd(String end) {
         this.end = end;
+    }
+    // Generates a String in JSON format
+    public String generateEndJSON(){
+        String output = "{\"assignmentName\":\"" + assignmentName + "\","
+                + "\"course_code\":\"" + course_code + "\","
+                + "\"assignmentKey\":\"" + assignmentKey + "\","
+                + "\"grade\":\"" + grade + "\","
+                + "\"duedate\":\"" + end+"\"}";
+        return output;
     }
 }
