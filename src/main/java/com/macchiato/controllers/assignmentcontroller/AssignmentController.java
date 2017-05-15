@@ -51,10 +51,9 @@ public class AssignmentController {
         if (student_email == null) {
             System.out.println("active_user is null");
         } else {
-            QuestionListBean newList = findQuestions("Assignment(5946158883012608)");
+            QuestionListBean newList = findQuestions(request.getSession().getAttribute("assignmentKey").toString());
             System.out.println(newList.generateJSON());
             out.println(newList.generateJSON());
-
         }
     }
 
@@ -74,7 +73,7 @@ public class AssignmentController {
         if (student_email == null) {
             System.out.println("active_user is null");
         } else {
-            QuestionInfoListBean newList = findQuestionsInfo("Assignment(5946158883012608)", student_email);
+            QuestionInfoListBean newList = findQuestionsInfo(request.getSession().getAttribute("assignmentKey").toString(), student_email);
             System.out.println(newList.generateJSON());
             out.println(newList.generateJSON());
         }
@@ -98,7 +97,7 @@ public class AssignmentController {
         System.out.println("submitted is" + submitted);
         System.out.println("Num is " + num);
         String solution = "";
-        QuestionListBean newList = findQuestions("Assignment(5946158883012608)");
+        QuestionListBean newList = findQuestions(request.getSession().getAttribute("assignmentKey").toString());
         QuestionBean q = null;
         for (QuestionBean question : newList.getProblems()) {
             System.out.println("Question key right now is" + question.getQuestionKey());
@@ -165,7 +164,7 @@ public class AssignmentController {
         String questionKey = request.getParameter("questionKey");
         System.out.println(questionKey);
         updateComplete(questionKey);
-        QuestionInfoListBean newList = findQuestionsInfo("Assignment(5946158883012608)", GenUtils.getActiveUser().getEmail());
+        QuestionInfoListBean newList = findQuestionsInfo(request.getSession().getAttribute("assignmentKey").toString(), GenUtils.getActiveUser().getEmail());
         out.println(newList.generateJSON());
     }
 
