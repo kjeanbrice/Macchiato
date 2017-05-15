@@ -4,10 +4,7 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.macchiato.beans.CourseBean;
-import com.macchiato.beans.CourseListBean;
-import com.macchiato.beans.StudentBean;
-import com.macchiato.beans.UserBean;
+import com.macchiato.beans.*;
 import com.macchiato.utility.DiscussionBoardUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +31,7 @@ public class StudentController {
         PrintWriter out = response.getWriter();
         UserBean currUser;
         CourseListBean currList;
+        AssignmentListBean assignList;
         StudentBean currStudent;
         // LOAD USER
         // Get the current user email and create userType
@@ -112,6 +110,7 @@ public class StudentController {
                             (String)course.getProperty("name"),
                             (String)course.getProperty("email"),
                             (String)course.getProperty("description"));
+                    crsBean.setSection((String)course.getProperty("section"));
                     crsList.add(crsBean);
                 }
                 request.getSession().setAttribute("crsList", crsList);
@@ -173,6 +172,7 @@ public class StudentController {
                             (String)result.getProperty("name"),
                             (String)result.getProperty("email"),
                             (String)result.getProperty("description"));
+                    enrollCourse.setSection((String)result.getProperty("section"));
                     crsList.add(enrollCourse);
                     request.getSession().setAttribute("crsList", crsList);
                     currCourse = enrollCourse;
@@ -187,6 +187,9 @@ public class StudentController {
                     //enrollmentEntity.setProperty("course_id", (Long)result.getProperty("id") );
                     //enrollmentEntity.setProperty("forum_key", DiscussionBoardUtils.getForumKey(enrollCourse.getInstrEmail(), enrollCourse.getCrsCode(),enrollCourse.getSection()));
                     datastore.put(enrollmentEntity);
+                    // Create a question to student point tracker
+
+                    enrollStatus = 1;
                     System.out.println("Enrolled into new course");
                 }
             }
@@ -207,6 +210,8 @@ public class StudentController {
         }
 
 
+
+
         // Sort the crsList alphabetically
         Collections.sort(crsList, new Comparator<CourseBean>() {
             @Override
@@ -216,8 +221,10 @@ public class StudentController {
                 return  course2.getCrsName().compareTo(course1.getCrsName());
             }
         });
+
+        assignList = new AssignmentListBean(loadAssignmentList(request, currCourse,email));
         currList = new CourseListBean(crsList);
-        currStudent = new StudentBean(currUser,currList,currCourse);
+        currStudent = new StudentBean(currUser,currList,currCourse,assignList);
         String JSONoutput = "{";
         JSONoutput += currStudent.generateJSON();
         JSONoutput += ",\"Enroll\": {\"status\": \"";
@@ -227,19 +234,58 @@ public class StudentController {
         out.println(JSONoutput);
     }
 
+    public ArrayList<AssignmentBean> loadAssignmentList(HttpServletRequest request, CourseBean currCourse, String email){
+        // LOAD ASSIGNMENT LIST
+        ArrayList<AssignmentBean> assignList = new ArrayList<AssignmentBean>();
+        AssignmentBean assignment;
+        // Find all the assignments for the current course the user is enrolled in.
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter code_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL, currCourse.getCrsCode().trim());
+        Query q = new Query("Assignment").setFilter(code_filter);
+        PreparedQuery pq = datastore.prepare(q);
+        q = new Query("Assignment").setFilter(code_filter);
+        pq = datastore.prepare(q);
+        int total = 0;
+        String grade;
+        int points = 0;
+        // For each Assignment
+        for (Entity assignmentEntity : pq.asIterable()) {
+            assignment = new AssignmentBean((String)assignmentEntity.getProperty("course_code"),
+                    (String)assignmentEntity.getProperty("assignmentName"),
+                    assignmentEntity.getKey().toString());
+
+            Query.Filter assignment_filter = new Query.FilterPredicate("assignmentKey", Query.FilterOperator.EQUAL, assignmentEntity.getKey().toString().trim());
+            q = new Query("Question").setFilter(assignment_filter);
+            pq = datastore.prepare(q);
+            // For each Question
+            for(Entity questionEntity : pq.asIterable()){
+                total++;
+                Query.Filter question_filter = new Query.FilterPredicate("questionKey", Query.FilterOperator.EQUAL, questionEntity.getKey().toString().trim());
+                Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL,email.trim());
+                Query.CompositeFilter question_info_filter = Query.CompositeFilterOperator.and(email_filter, question_filter);
+                q = new Query("QuestionInfo").setFilter(code_filter);
+                pq = datastore.prepare(q);
+                // For each QuestionInfo
+                for(Entity QIEntity : pq.asIterable()){
+                    if(((String)QIEntity.getProperty("point")).compareTo("1") == 0){
+                        points++;
+                    }
+                }
+            }
+            grade = Integer.toString(points) + "/" + Integer.toString(total);
+            assignment.setGrade(grade);
+            assignList.add(assignment);
+        }
 
 
 
 
-    @RequestMapping(value = "LoadStudentAssignments.htm", method = RequestMethod.GET)
-    public void loadStudentAssignments(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Email should be set in session
-        // crsList of courses should be set in session
-        // currCourse should be set in session
-        // Find the list of assignments
-        // Sort them alphabetically
-        // Return them
+
+
+        return assignList;
     }
+
+
 
     public void storeDummyData(){
         // Store 3 dummy courses

@@ -6,10 +6,11 @@ import java.util.Date;
  * Created by Xiangbin on 5/4/2017.
  */
 public class AssignmentBean {
-    private String course_code;
+    private String course_code = "";
     private String assignmentName="";
     private Date duedate=new Date(2017,7,1);;
-    private String assignmentKey;
+    private String assignmentKey = "";
+    private String grade ="";
 
     public AssignmentBean(){}
     public AssignmentBean(String crsCode,String assignmentName,String assignmentKey){
@@ -56,6 +57,10 @@ public class AssignmentBean {
         this.duedate = duedata;
     }
 
+    public String getGrade(){return grade;}
+
+    public void setGrade(String grade){this.grade = grade;}
+
 
 
     // Generates a String in JSON format
@@ -63,6 +68,7 @@ public class AssignmentBean {
         return "{\"assignmentName\":\"" + assignmentName + "\","
                 + "\"course_code\":\"" + course_code + "\","
                 + "\"assignmentKey\":\"" + assignmentKey + "\","
+                + "\"grade\":\"" + grade + "\","
                 + "\"duedate\":\"" + duedate.toString() + "\"}";
     }
 

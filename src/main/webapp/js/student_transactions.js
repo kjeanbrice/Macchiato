@@ -17,8 +17,11 @@ $(document).ready(function () {
                 var JSON_stud_user = stud_user;
                 $('#stud_name').text(JSON_stud_user.Student[0].email);
                 $('#class_title').text(JSON_stud_user.Student[2].name);
+                $('#class_section').text(JSON_stud_user.Student[2].section);
                 currCrsList = JSON_stud_user.Student[1]
                 load_course_list(currCrsList);
+                var assignList = JSON_stud_user.Student[3];
+                load_assignment_list(assignList);
                 var enroll_status = JSON_stud_user.Enroll.status;
                 if(enroll_status == 1){
                     $('#notification_title').text("Success!");
@@ -57,6 +60,13 @@ $(document).ready(function () {
         assignment_area.html(list_data);
     }
 
+    function load_assignment_list(assignment_list){
+        var assignment_area = $('#assignment_area');
+        var source = $('#assignment-list-template').html();
+        var assignment_list_template = Handlebars.compile(source);
+        var list_data = assignment_list_template(assignment_list);
+        assignment_area.html(list_data);
+    }
 
 
     $('body').on('click mouseover', '#nav_assignments', function () {
@@ -77,13 +87,10 @@ $(document).ready(function () {
 
         var test = link_form.serializeArray();
         var url = "/LoadStudent.htm?crsName=" + crsCode;
-
         load_student(url);
-        //var url = location.protocol + "//" + location.host + "/LoadStudent.htm";
-        //link_form.attr("action",url);
-        //console.log(url);
-        //link_form.submit();
     });
+
+
 
     $('body').on('click', '#enroll_submit', function () {
         var crsCode = $('#enroll_crs_code').val().trim();
@@ -101,6 +108,7 @@ $(document).ready(function () {
         }
 
     });
+
 
 
 });

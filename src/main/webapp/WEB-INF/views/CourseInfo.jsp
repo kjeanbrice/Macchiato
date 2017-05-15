@@ -62,7 +62,7 @@
 <div class="row">
     <div class="medium-12 medium-centered columns" style="background: #FFFFFF; box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);" >
         <h3 id="class_title" style="text-align: center; padding: 25px 0px 0px"></h3>
-        <h3 id="class_section" style="text-align: center; padding: 25px 0px 0px"></h3>
+        <h4 id="class_section" style="text-align: center; padding: 25px 0px 0px"></h4>
         <hr  style="margin: 0px 10px;">
         <h4 style="padding: 0px 25px;">Course Description</h4>
         <p id ="crs_desc" style="padding: 0px 50px;"></p>
