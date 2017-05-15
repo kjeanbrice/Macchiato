@@ -25,13 +25,6 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <script src="teacher.js"></script>
 
-    <!-- data picker -->
-    <script type="text/javascript" src="/bower_components/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
-    <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 </head>
 
 <body>
@@ -72,26 +65,8 @@
                           placeholder="Type your assignment name here..."
                 ></textarea>
             </div>
-            <div class="form-group">
-                <textarea id="assignment_due_text" name="classDis" class="form-control" rows="2"
-                          placeholder="Type your due data here..."
-                ></textarea>
-            </div>
 
-            <div class="container">
-                <div class="row">
-                    <div class='col-sm-6'>
-                        <div class="form-group">
-                            <div class='input-group date' id='datetimepicker1'>
-                                <input type='text' class="form-control" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <input type="date" name="bday" id="assignment_due" rows="3">
 
             <span id="val-editCourse" data-comment-crdCode="" style="display:none;"></span>
             <div id="add_assignment_submit" class="menu modal-area btn-post-submit" >
@@ -102,11 +77,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
 
 
 <!-- Page -->
@@ -144,7 +114,6 @@
     <li >
         <a id = "nav_forum"  href="javascript:void(0)" class="scroll-nav link">Forum</a>
         <ul id = "load_forum_area" class="menu forum-links submenu-test">
-
         </ul>
         <form id="link-form" action=" " method="post" style="display: none;">
             <input name = "i_email" id = "form-iemail" type = "text" style="display:none;">
@@ -170,7 +139,6 @@
 
 
 <script id="discussion-list-template" type="text/x-handle-template">
-
     {{#each Courses}}
     <li style="white-space: nowrap;" class="list_file" data-list-email="{{instructorEmail}}" data-course="{{course}}" data-section="{{section}}">
         <a class ="list-size" href="javascript:void(0)">{{course}}: {{section}}</a>
@@ -178,7 +146,6 @@
     {{else}}
     <li><a class ="list-size" href="javascript:void(0)">None Available</a></li>
     {{/each}}
-
 </script>
 
 <!-- Latest compiled and minified JavaScript -->
@@ -192,12 +159,13 @@
 <script src="js/vendor/foundation.js"></script>
 <script src="js/app.js"></script>
 <script src="js/teacher_assignment_transactions.js"></script>
+<link rel="stylesheet" href="js/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+
 
 
 </body>
 
 
 </html>
-
 
 

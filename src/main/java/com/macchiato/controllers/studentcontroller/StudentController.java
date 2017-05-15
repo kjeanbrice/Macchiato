@@ -258,6 +258,8 @@ public class StudentController {
             q = new Query("Question").setFilter(assignment_filter);
             pq = datastore.prepare(q);
             // For each Question
+            total = 0;
+            points = 0;
             for(Entity questionEntity : pq.asIterable()){
                 total++;
                 Query.Filter question_filter = new Query.FilterPredicate("questionKey", Query.FilterOperator.EQUAL, questionEntity.getKey().toString().trim());

@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="icons/foundation-icons/foundation-icons/foundation-icons.css"/>
     <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <script src="teacher.js"></script>
+
 </head>
 
 <body>
@@ -128,7 +128,7 @@
 
 <!-- Page -->
 <<div class="container">
-    <h2>ASSIGNMENTS</h2>
+    <h2>QUESTIONS</h2>
     <table class="table table-striped">
         <tbody>
         <div class="container">
@@ -204,6 +204,7 @@
         <script src="js/vendor/foundation.js"></script>
         <script src="js/app.js"></script>
         <script src="js/teacher_questionlist_transactions.js"></script>
+        <link rel="stylesheet" href="js/bower_components/bootstrap/dist/css/bootstrap.min.css" />
 </body>
 
 

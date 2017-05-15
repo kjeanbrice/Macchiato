@@ -5,10 +5,9 @@ import com.macchiato.beans.AssignmentBean;
 import com.macchiato.beans.CourseBean;
 import com.macchiato.beans.QuestionBean;
 
-import java.util.Date;
-
-
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 /**
  * Created by Xiangbin on 4/26/2017.
@@ -74,8 +73,9 @@ public class TeachersUtils {
     //this function will help user to find all the assignment from this course
     public static ArrayList<AssignmentBean> findAllAssigmentBean(String course_code) {
         String assignmentName;
-        Date dueData;
+        String dueData;
         String key;
+        Date newDate;
         ArrayList<AssignmentBean> AssignmentList = new ArrayList<AssignmentBean>();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query.Filter crsCode_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL, course_code);
@@ -88,15 +88,19 @@ public class TeachersUtils {
             for (Entity result : pq.asIterable()) {
                 course_code = (String) result.getProperty("course_code");
                 assignmentName = (String) result.getProperty("assignmentName");
+                dueData=(String) result.getProperty("duedate");
+                newDate=dataGenerate(dueData);
                 key = result.getKey().toString();
                 AssignmentBean newBean = new AssignmentBean();
                 newBean.setCrsCode(course_code);
                 newBean.setAissignmentKey(key);
                 newBean.setAissignmentName(assignmentName);
+                newBean.setDuedata(newDate);
                 AssignmentList.add(newBean);
             }
         }
         System.out.println("number of  assignment in the list:" + AssignmentList.size());
+        Collections.sort(AssignmentList);
         return AssignmentList;
     }
 
@@ -175,5 +179,21 @@ public class TeachersUtils {
     public static String numberkeeper(String a){
         String c= a.replaceAll("[^\\d.]", "");
         return c;
+    }
+
+    //this function will change a string formed date to a int array with year,month,day in side
+    public static Date dataGenerate(String b){
+        Date newDate=new Date();
+        int date[]=new int[3];
+        int year=Integer.parseInt(b.substring(0,4));
+        int month= Integer.parseInt(b.substring(5,7));
+        int day= Integer.parseInt(b.substring(8,10));
+        date[0]=year;
+        date[1]=month;
+        date[2]=day;
+        newDate.setYear(date[0]);
+        newDate.setMonth(date[1]);
+        newDate.setDate(date[2]);
+        return newDate;
     }
 }
