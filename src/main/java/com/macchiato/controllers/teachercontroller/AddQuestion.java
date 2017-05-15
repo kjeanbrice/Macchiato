@@ -18,10 +18,10 @@ import java.io.IOException;
  */
 @Controller
 public class AddQuestion {
-    int i = 1;
     //this function add the new course to the database
     @RequestMapping(value="addQuestion.htm", method = RequestMethod.POST)
     public void addQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int i = 1;
         User active_user = GenUtils.getActiveUser();
         String instructor_email =active_user.getEmail();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -30,6 +30,7 @@ public class AddQuestion {
         }
         else{
             String assignmentKey=request.getParameter("assignmentKey");
+            System.out.println("Is this working " + assignmentKey);
             String problem=request.getParameter("problem");
             String solution=request.getParameter("solution");
             String teacherAnswer=request.getParameter("teacherAnswer");
@@ -44,9 +45,11 @@ public class AddQuestion {
             System.out.println("pq as a list is" + pq.asList(FetchOptions.Builder.withDefaults()));
             int size = pq.asList(FetchOptions.Builder.withDefaults()).size();
             if(size != 0){
+                i = 0;
                 for (Entity e : pq.asList(FetchOptions.Builder.withDefaults())) {
-                    if(Integer.parseInt((String)e.getProperty("questionId")) >= i){
+                    if(Integer.parseInt((String)e.getProperty("questionId")) >= i && e.getProperty("assignmentKey").equals(assignmentKey)){
                         i = Integer.parseInt((String)e.getProperty("questionId"));
+                        System.out.println("I is " + i);
                     }
                 }
                 i = i + 1;
