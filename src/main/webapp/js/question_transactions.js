@@ -16,6 +16,7 @@ $(document).ready(function () {
     var $url = "/PopulateQues.htm";
     var i = 0;
     var $url1 = "/PopulateQuesInfo.htm";
+    var submitted = "no";
 
     $.ajax({
         method: 'get',
@@ -95,17 +96,52 @@ $(document).ready(function () {
         var text = $('#myText').val();
         var num = localStorage.getItem("questionNum");
         //text = text.replace(/\r?\n/g, '<br />');
-        var $url = "/Compile.htm?" + "&text=" + text + "&num=" + num;
+        submitted = "no";
+        var $url3 = "/Compile.htm?" + "&text=" + text + "&num=" + num + "&submitted=" + submitted;
 
         $.ajax({
             method: 'post',
-            url: $url,
+            url: $url3,
             dataType: 'text',
             success: function (text_field){
                 if(text_field != ""){
                     var new_text = text_field.replace(/<br\s?\/?>/g,"\n");
                     $('#output').html(new_text);
                     $('#dialog2').dialog({height:'auto',width:'auto'});
+
+
+                    $.ajax({
+                        method: 'get',
+                        url: $url,
+                        dataType: 'json',
+                        success: function (question_table) {
+                            console.log("Get Questions :Success");
+                            JSON_list_items = question_table;
+                            $('.ques_num').text(JSON_list_items.Questions[i].id);
+                            $('.the_ques').text(JSON_list_items.Questions[i].problem);
+
+                            $.ajax({
+                                method: 'get',
+                                url: $url1,
+                                dataType: 'json',
+                                success: function (questionInfo_table) {
+                                    console.log("Get QuestionsInfo :Success");
+                                    JSON_list_items1 = questionInfo_table;
+                                    $('#myText').val(JSON_list_items.Questions[i].studentanswer);
+                                    localStorage.setItem("questionNum",JSON_list_items.Questions[i].questionKey);
+                                },
+                                error: function () {
+                                    console.log("Get QuestionsInfo Failure: Aw, It didn't connect to the servlet :(");
+                                }
+                            });
+
+                        },
+                        error: function () {
+                            console.log("Get Questions Failure: Aw, It didn't connect to the servlet :(");
+                        }
+                    });
+
+
                 }
                 else{
                     $('#output').html("Could Not Compile Your Code!");
@@ -137,8 +173,36 @@ $(document).ready(function () {
                     $( this ).dialog( "close" );
                     var text = $('#myText').val();
                     var num = localStorage.getItem("questionNum");
+                    submitted = "yes";
                     //text = text.replace(/\r?\n/g, '<br />');
-                    var $url = "/Compile.htm?" + "&text=" + text + "&num=" + num;
+                    var $url4 = "/Compile.htm?" + "&text=" + text + "&num=" + num + "&submitted=" + submitted;
+                    $.ajax({
+                        method: 'post',
+                        url: $url4,
+                        dataType: 'text',
+                        success: function (text_field){
+                            if(text_field != ""){
+                                if(text_field == "correct"){
+                                    $('#output1').html("Congratulations You Got It Correct!");
+                                    $('#dialog3').dialog({height:'auto',width:'auto'});
+                                }
+                                else if(text_field == "wrong"){
+                                    $('#output1').html("Sorry Try Again.");
+                                    $('#dialog3').dialog({height:'auto',width:'auto'});
+                                }
+
+                            }
+                            else{
+                                $('#output1').html("Could Not Submit Your Code!");
+                                $('#dialog3').dialog({height:'auto',width:'auto'});
+                            }
+
+                        },
+                        error: function () {
+                            console.log("Compile Failure: Aw, It didn't connect to the servlet :(");
+                        }
+                    });
+
                     clearText();
                     nextQues();
                 },

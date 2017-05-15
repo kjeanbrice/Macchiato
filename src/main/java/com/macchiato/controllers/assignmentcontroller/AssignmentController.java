@@ -93,6 +93,8 @@ public class AssignmentController {
         PrintWriter out = response.getWriter();
         String text = request.getParameter("text");
         String num = request.getParameter("num");
+        String submitted = request.getParameter("submitted");
+        System.out.println("submitted is" + submitted);
         System.out.println("Num is " + num);
         String solution = "";
         QuestionListBean newList = findQuestions("Assignment(5946158883012608)");
@@ -104,7 +106,9 @@ public class AssignmentController {
                 q = question;
             }
         }
-        updateQuestionInfo(q.getQuestionKey(),text);
+        if(submitted.equals("no")){
+            updateQuestionInfo(q.getQuestionKey(),text);
+        }
 
         // System.out.println(text);
         String apiKey = "hackerrank|2458825-1355|a7001ed51bce45bd9f6cc1e4bf499ef05d8d4495";
@@ -127,10 +131,23 @@ public class AssignmentController {
             //   System.out.println("Compiler message is " + finmessage);
             //   System.out.println("User entered text is " + text);
             if (finmessage.equals("")) {
-                out.println(stdout.get(0).trim());
-                if(stdout.get(0).trim().equals(solution)){
-                    System.out.println("WORKING I THINK");
+                if(submitted.equals("no")){
+                    out.println(stdout.get(0).trim());
                 }
+                else{
+                    System.out.println(stdout.get(0).trim());
+                    System.out.println(solution);
+                    if(stdout.get(0).trim().equals(solution)){
+                        if(submitted.equals("yes")){
+                            updatePoint(q.getQuestionKey());
+                            out.print("correct");
+                        }
+                    }
+                    else{
+                        out.print("wrong");
+                    }
+                }
+
             } else {
                 out.println(finmessage);
             }
@@ -256,14 +273,30 @@ public class AssignmentController {
 
     public void updateQuestionInfo(String questionKey, String student_ans) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Query.Filter question_info_filter = new Query.FilterPredicate("questionKey", Query.FilterOperator.EQUAL, questionKey);
-        Query q = new Query("Question").setFilter(question_info_filter);
+        Query.Filter question_filter = new Query.FilterPredicate("questionKey", Query.FilterOperator.EQUAL, questionKey);
+        Query q = new Query("Question").setFilter(question_filter);
         PreparedQuery pq = datastore.prepare(q);
         System.out.println("pq as a list is" + pq.asList(FetchOptions.Builder.withDefaults()));
         for (Entity e : pq.asList(FetchOptions.Builder.withDefaults())) {
             e.setProperty("student_answer", student_ans);
             datastore.put(e);
         }
+    }
+
+    /**
+     * Will use datastore to update student point to that question
+     * @param questionKey
+     */
+    public void updatePoint(String questionKey){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter question_info_filter = new Query.FilterPredicate("question_key",Query.FilterOperator.EQUAL, questionKey);
+        Query q = new Query("QuestionInfo").setFilter(question_info_filter);
+        PreparedQuery pq = datastore.prepare(q);
+        for(Entity e: pq.asList(FetchOptions.Builder.withDefaults())){
+            e.setProperty("point","1");
+            datastore.put(e);
+        }
+
     }
 }
 
