@@ -11,6 +11,7 @@ public class AssignmentBean implements Comparable<AssignmentBean>  {
     private Date duedate;
     private String assignmentKey = "";
     private String grade ="";
+    private String end="0";
 
     public AssignmentBean(){}
     public AssignmentBean(String crsCode,String assignmentName,String assignmentKey){
@@ -65,10 +66,18 @@ public class AssignmentBean implements Comparable<AssignmentBean>  {
     // Generates a String in JSON format
     public String generateJSON(){
         String stringdata=(duedate.toString()).substring(0,11) +changeYear(duedate.toString().substring(24,28));
-        return "{\"assignmentName\":\"" + assignmentName + "\","
+        String endString;
+        System.out.print(end);
+        if(end.equals("1")){
+            endString="Ended";
+        }else{
+            endString="Available";
+        }
+         return"{\"assignmentName\":\"" + assignmentName + "\","
                 + "\"course_code\":\"" + course_code + "\","
                 + "\"assignmentKey\":\"" + assignmentKey + "\","
                 + "\"grade\":\"" + grade + "\","
+                + "\"endString\":\"" + endString + "\","
                 + "\"duedate\":\"" + stringdata+"\"}";
     }
 
@@ -82,8 +91,14 @@ public class AssignmentBean implements Comparable<AssignmentBean>  {
     //this function will help
     public String changeYear(String year){
         int a= Integer.parseInt(year);
-        a=a-1900;
         return Integer.toString(a);
     }
 
+    public String getEnd() {
+        return end;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
 }

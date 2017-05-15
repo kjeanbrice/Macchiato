@@ -70,6 +70,8 @@
     <datastore-index kind="Assignment" ancestor="false" source="auto">
         <property name="assignmentName" direction="asc"/>  <!-- String  -->
         <property name="course_code" direction="asc"/> <!-- String  -->
+        <property name="end" direction="asc"/> <!-- String  -->
+        <property name="duedate" direction="asc"/> <!-- String  -->
         <property name="id" direction="asc"/> <!-- long  -->
     </datastore-index>
 
