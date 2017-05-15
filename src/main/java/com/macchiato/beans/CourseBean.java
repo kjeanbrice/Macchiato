@@ -50,7 +50,10 @@ public class CourseBean implements Serializable {
     public void setInstrEmail(String instrEmail) {this.email = instrEmail;}
     public void setDescription(String description) {this.description = description;}
 
-    // Generates a String in JSON format
+    /**
+     *  Generates a String in JSON format
+     * @return JSON string
+     */
     public String generateJSON(){
         return "{\"course_code\":\"" + course_code + "\","
                 + "\"name\":\"" +  name + "\","

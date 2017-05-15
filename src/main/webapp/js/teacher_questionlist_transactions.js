@@ -67,6 +67,7 @@ $(document).ready(function () {
 function clear_form_data(){
     $('#question_problem_text').val("");
     $('#question_answer_text').val("");
+    $('#teacher_answer_text').val("");
     console.log("Clear all data");
 }
 

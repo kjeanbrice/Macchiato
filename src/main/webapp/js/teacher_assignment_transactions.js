@@ -1,12 +1,15 @@
 /**
  * Created by Xiangbin on 5/4/2017.
  */
+$.noConflict();
 $(document).ready(function () {
+
     load_assignment_item("Load the Assignment");
     // this function will control the button in the teacher home page to create a new assignment
     $('body').on('click', '#add_assignment_submit', function (e) {
         var assignment_name = $('#assignment_name_text').val().trim();
-        var assignment_due = $('#assignment_due_text').val().trim();
+        var assignment_due = $('#assignment_due').val().trim();
+        console.log(assignment_due);
         console.log("ADD ASSIGNEMTN");
         var url = "/addAssignment.htm?assignmentName=" +assignment_name + "&duedate=" + assignment_due+"&course_code=" + localStorage.getItem("course_code");
 
@@ -35,7 +38,7 @@ $(document).ready(function () {
 });
 function clear_form_data(){
     $('#assignment_name_text').val("");
-    $('#assignment_due_text').val("");
+    $('#assignment_due').val("");
     console.log("Clear all data");
 }
 
@@ -65,6 +68,7 @@ function load_assignment_item(type){
     });
 
 
+
 }
 
 function assignment_helper(assignmentkey){
@@ -83,7 +87,3 @@ function assignment_Grade_helper(assignmentkey){
     console.log(localStorage.getItem("assignmentKey"));
 }
 
-
-$(function () {
-    $('#datetimepicker1').datetimepicker();
-});
