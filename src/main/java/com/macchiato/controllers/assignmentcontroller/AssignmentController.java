@@ -107,7 +107,7 @@ public class AssignmentController {
             }
         }
         if(submitted.equals("no")){
-            updateQuestionInfo(q.getQuestionKey(),text);
+            updateQuestion(q.getQuestionKey(),text);
         }
 
         // System.out.println(text);
@@ -159,9 +159,15 @@ public class AssignmentController {
 
     @RequestMapping(value = "SubmitSol.htm", method = RequestMethod.GET)
     public void submitSolution(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        String questionKey = request.getParameter("questionKey");
+        System.out.println(questionKey);
+        updateComplete(questionKey);
+        QuestionInfoListBean newList = findQuestionsInfo("Assignment(5946158883012608)", GenUtils.getActiveUser().getEmail());
+        out.println(newList.generateJSON());
     }
+
 
     /**
      * Helper method to store dummy data for testing purposes
@@ -271,7 +277,7 @@ public class AssignmentController {
          * @param student_ans
          */
 
-    public void updateQuestionInfo(String questionKey, String student_ans) {
+    public void updateQuestion(String questionKey, String student_ans) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query.Filter question_filter = new Query.FilterPredicate("questionKey", Query.FilterOperator.EQUAL, questionKey);
         Query q = new Query("Question").setFilter(question_filter);
@@ -297,6 +303,17 @@ public class AssignmentController {
             datastore.put(e);
         }
 
+    }
+
+    public void updateComplete(String questionKey){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter question_info_filter = new Query.FilterPredicate("question_key",Query.FilterOperator.EQUAL, questionKey);
+        Query q = new Query("QuestionInfo").setFilter(question_info_filter);
+        PreparedQuery pq = datastore.prepare(q);
+        for(Entity e: pq.asList(FetchOptions.Builder.withDefaults())){
+            e.setProperty("complete","1");
+            datastore.put(e);
+        }
     }
 }
 

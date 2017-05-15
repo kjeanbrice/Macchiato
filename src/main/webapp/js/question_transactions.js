@@ -9,8 +9,6 @@
 $.noConflict();
 $(document).ready(function () {
 
-    $(".sub_box").hide();
-
     var JSON_list_items;
     var JSON_list_items1;
     var $url = "/PopulateQues.htm";
@@ -83,14 +81,32 @@ $(document).ready(function () {
 
         $('#solution').text(JSON_list_items.Questions[i].teacherAnswer);
         $('#dialog').dialog();
+        var $url5 = "/SubmitSol.htm?" + "&questionKey=" + JSON_list_items.Questions[i].questionKey;
+        $.ajax({
+            method: 'get',
+            url: $url5,
+            dataType: 'json',
+            success: function (question_info_table){
+                for (var questionInfo in question_info_table) {
+                    if (questionInfo.questionKey == JSON_list_items.Questions[i].questionKey && questionInfo.complete == "1") {
+                        alert("WORKING");
+                       $(".sol_box").hide();
+                    }
+                }
+
+
+            },
+            error: function () {
+                console.log("Solution Failure: Aw, It didn't connect to the servlet :(");
+            }
+        });
+
     });
 
     /**
      * Allows the user to check their code that they wrote to see if it has errors or it is fine
      */
     $('body').on('click','.compile_box', function(e){
-
-        $(".sub_box").show();
 
         $('#output').val('');
         var text = $('#myText').val();

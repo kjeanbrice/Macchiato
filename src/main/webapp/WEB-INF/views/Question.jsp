@@ -75,7 +75,7 @@
     </div>
 
     <textarea name="Text1" id="myText" cols="40" rows="5"></textarea>
-    <button class="compile_box">COMPILE</button>
+    <button class="compile_box">COMPILE AND SAVE</button>
     <button class="sub_box">SUBMIT</button>
     <div class = "prev_next_box">
     <span class = "prev_space"><button class="prev_box">PREV</button>
