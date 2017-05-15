@@ -48,18 +48,6 @@
 
 <!-- MODAL AREA -->
 <div class="student_bar">
-	<span id="stu_name">
-        STUDENT: Raymond Xue
-	</span>
-    <span class="class_dropdown">
-     <button class="dropbtn">Class</button>
-  <div class="dropdown-content">
-    <a href="#">CSE114</a>
-    <a href="#">CSE214</a>
-    <a href="#">CSE219</a>
-  </div>
-	</span>
-
     <span class="ques_list">
         <img src="images/barline.png" width="50" height="50" class="quesbtn">
 	<div class="question-content">

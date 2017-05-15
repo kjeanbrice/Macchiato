@@ -135,14 +135,16 @@ public class AssignmentController {
                     out.println(stdout.get(0).trim());
                 }
                 else{
+                    System.out.println(stdout.get(0).trim());
+                    System.out.println(solution);
                     if(stdout.get(0).trim().equals(solution)){
                         if(submitted.equals("yes")){
                             updatePoint(q.getQuestionKey());
-                            out.println("correct");
+                            out.print("correct");
                         }
                     }
                     else{
-                        out.println("wrong");
+                        out.print("wrong");
                     }
                 }
 
