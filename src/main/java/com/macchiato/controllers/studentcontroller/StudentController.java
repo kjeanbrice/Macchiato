@@ -90,7 +90,7 @@ public class StudentController {
             // Find all the crsCodes the user is enrolled in.
             DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
             Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email.trim());
-            Query q = new Query("CourseEnrollment").setFilter(email_filter);
+            Query q = new Query("Enrollment").setFilter(email_filter);
             PreparedQuery pq = datastore.prepare(q);
             for (Entity enrollmentEntity : pq.asIterable()) {
                 crsCodes.add((String)enrollmentEntity.getProperty("course_code"));
@@ -178,14 +178,14 @@ public class StudentController {
                     currCourse = enrollCourse;
                     request.getSession().setAttribute("currCourse",currCourse);
                     long u_set = 0;
-                    Entity enrollmentEntity = new Entity("CourseEnrollment");
+                    Entity enrollmentEntity = new Entity("Enrollment");
                     enrollmentEntity.setProperty("course_code", enrollCode);
                     enrollmentEntity.setProperty("email", email);
-                    //enrollmentEntity.setProperty("username", email);
-                    //enrollmentEntity.setProperty("access", userType);
-                    //enrollmentEntity.setProperty("u_set", u_set);
-                    //enrollmentEntity.setProperty("course_id", (Long)result.getProperty("id") );
-                    //enrollmentEntity.setProperty("forum_key", DiscussionBoardUtils.getForumKey(enrollCourse.getInstrEmail(), enrollCourse.getCrsCode(),enrollCourse.getSection()));
+                    enrollmentEntity.setProperty("username", email);
+                    enrollmentEntity.setProperty("access", userType);
+                    enrollmentEntity.setProperty("u_set", u_set);
+                    enrollmentEntity.setProperty("course_id", result.getProperty("id"));
+                    enrollmentEntity.setProperty("forum_key", DiscussionBoardUtils.getForumKey(enrollCourse.getInstrEmail(), enrollCourse.getCrsName(),enrollCourse.getSection()));
                     datastore.put(enrollmentEntity);
                     // Create a question to student point tracker
 

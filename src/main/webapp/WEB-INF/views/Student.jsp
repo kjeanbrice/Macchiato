@@ -35,22 +35,23 @@
             </ul>
         </div>
     </div>
-    <div class="top_bar_container" style="padding:1.5%;" >
-        <div class="top_bar">
-            <div class="top-bar-left">
-                <div id="stud_name" ></div>
-            </div>
-            <div class="top-bar-right">
-                <ul class="dropdown menu" data-dropdown-menu>
-                    <li>
-                        <a id = "nav_assignments"  href="javascript:void(0)" class="scroll-nav link-highlight">Courses</a>
-                        <ul id = "load_assignment_area" class="menu forum-links submenu-test">
+</div>
 
-                        </ul>
+<div class="top_bar_container" style="padding:1.5%;" >
+    <div class="top_bar">
+        <div class="top-bar-left">
+            <div id="stud_name" ></div>
+        </div>
+        <div class="top-bar-right">
+            <ul class="dropdown menu" data-dropdown-menu>
+                <li>
+                    <a id = "nav_assignments"  href="javascript:void(0)" class="scroll-nav link-highlight">Courses</a>
+                    <ul id = "load_assignment_area" class="menu forum-links submenu-test">
 
-                    </li>
-                </ul>
-            </div>
+                    </ul>
+
+                </li>
+            </ul>
         </div>
     </div>
 </div>
