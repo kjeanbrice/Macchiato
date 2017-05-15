@@ -94,8 +94,9 @@ $(document).ready(function () {
         $('#output').val('');
         var text = $('#myText').val();
         var num = localStorage.getItem("questionNum");
+        var submitted = "no";
         //text = text.replace(/\r?\n/g, '<br />');
-        var $url = "/Compile.htm?" + "&text=" + text + "&num=" + num;
+        var $url = "/Compile.htm?" + "&text=" + text + "&num=" + num + "&submitted=" + submitted;
 
         $.ajax({
             method: 'post',
@@ -137,8 +138,36 @@ $(document).ready(function () {
                     $( this ).dialog( "close" );
                     var text = $('#myText').val();
                     var num = localStorage.getItem("questionNum");
+                    var submitted = "yes";
                     //text = text.replace(/\r?\n/g, '<br />');
-                    var $url = "/Compile.htm?" + "&text=" + text + "&num=" + num;
+                    var $url = "/Compile.htm?" + "&text=" + text + "&num=" + num + "&submitted=" + submitted;
+                    $.ajax({
+                        method: 'post',
+                        url: $url,
+                        dataType: 'text',
+                        success: function (text_field){
+                            if(text_field != ""){
+                                if(text_field == "correct"){
+                                    $('#output1').html("Congratulations You Got It Correct!");
+                                    $('#dialog3').dialog({height:'auto',width:'auto'});
+                                }
+                                else{
+                                    $('#output1').html("Sorry Try Again Next Time.");
+                                    $('#dialog3').dialog({height:'auto',width:'auto'});
+                                }
+
+                            }
+                            else{
+                                $('#output').html("Could Not Submit Your Code!");
+                                $('#dialog2').dialog({height:'auto',width:'auto'});
+                            }
+
+                        },
+                        error: function () {
+                            console.log("Compile Failure: Aw, It didn't connect to the servlet :(");
+                        }
+                    });
+
                     clearText();
                     nextQues();
                 },
