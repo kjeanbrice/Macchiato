@@ -47,10 +47,7 @@
                         <ul id = "load_assignment_area" class="menu forum-links submenu-test">
 
                         </ul>
-                        <form id="link-form" action=" " method="get" style="display: none;">
-                            <input name = "crsName" id = "form-crsName" type = "text" style="display:none;">
-                            <input name = "crsCode" id = "form-crsCode" type = "text" style="display:none;">
-                        </form>
+
                     </li>
                 </ul>
             </div>
@@ -62,6 +59,7 @@
 <div class="row">
     <div class="medium-12 medium-centered columns" style="background: #FFFFFF; box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);" >
         <h3 id="class_title" style="text-align: center; padding: 25px 0px 0px"></h3>
+        <h4 id="class_section" style="text-align: center; padding: 25px 0px 0px"></h4>
         <div class="row" style="padding: 0px 25px" >
             <div class="small-4 medium-6 large-6 columns">
                 <h4 style="text-align:center">Assignments</h4>
@@ -74,17 +72,10 @@
             </div>
         </div>
         <hr  style="margin: 0px 10px;">
-        <div class="row" style="padding: 0px 25px " >
-            <div class="small-4 medium-6 large-6 columns">
-                <p style="text-align:center"><a href="/Question.htm" class="link" >Assignment 1</a></p>
-
-            </div>
-            <div class="small-4 medium-3 large-3 columns">
-                <p style="text-align:center">4/6/2017</p>
-            </div>
-            <div class="small-4 medium-3 large-3 columns">
-                <p style="text-align:center">Grade</p>
-            </div>
+        <div id="assignment_area">
+            <form id="link-form" action=" " method="get" style="display: none;">
+                <input name = "key" id = "assign-key" type = "text" style="display:none;">
+            </form>
         </div>
     </div>
 </div>
@@ -151,6 +142,31 @@
     <li>
         <a id="new_enroll" href="#" data-open="enroll_modal">Enroll</a>
     </li>
+
+
+</script>
+
+<!-- SCRIPTS TO POPULATE ASSIGNMENTS-->
+<script id= "assignment-list-template" type="text/x-handle-template">
+
+    {{#each Assignments}}
+    <div class="row" style="padding: 0px 25px " >
+        <div class="small-4 medium-6 large-6 columns">
+            <p  style="text-align:center"><a href="/Question.htm?key={{assignmentKey}}" class="link" >{{assignmentName}}</a></p>
+        </div>
+        <div class="small-4 medium-3 large-3 columns">
+            <p style="text-align:center">{{duedate}}</p>
+        </div>
+        <div class="small-4 medium-3 large-3 columns">
+            <p style="text-align:center">{{grade}}</p>
+        </div>
+    </div>
+    <!--<li class="list_file" data-crsName ="{{name}}" data-crsCode="{{course_code}}">
+        <a href="javascript:void(0)">{{name}}</a>
+    </li>-->
+    {{else}}
+    {{/each}}
+
 
 
 </script>
