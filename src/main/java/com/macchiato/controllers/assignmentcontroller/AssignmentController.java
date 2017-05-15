@@ -139,8 +139,14 @@ public class AssignmentController {
                     System.out.println(solution);
                     if(stdout.get(0).trim().equals(solution)){
                         if(submitted.equals("yes")){
-                            updatePoint(q.getQuestionKey());
-                            out.print("correct");
+                            boolean checkPoint = updatePoint(q.getQuestionKey());
+                            System.out.println("CheckPoint is " + checkPoint);
+                            if(checkPoint == true){
+                                out.print("correct");
+                            }
+                            else{
+                                out.print("cheated");
+                            }
                         }
                     }
                     else{
@@ -159,13 +165,12 @@ public class AssignmentController {
 
     @RequestMapping(value = "SubmitSol.htm", method = RequestMethod.GET)
     public void submitSolution(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
+        response.setContentType("text");
         PrintWriter out = response.getWriter();
         String questionKey = request.getParameter("questionKey");
-        System.out.println(questionKey);
         updateComplete(questionKey);
-        QuestionInfoListBean newList = findQuestionsInfo(request.getSession().getAttribute("assignmentKey").toString(), GenUtils.getActiveUser().getEmail());
-        out.println(newList.generateJSON());
+        out.print("cheated");
+
     }
 
 
@@ -293,16 +298,21 @@ public class AssignmentController {
      * Will use datastore to update student point to that question
      * @param questionKey
      */
-    public void updatePoint(String questionKey){
+    public boolean updatePoint(String questionKey){
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query.Filter question_info_filter = new Query.FilterPredicate("question_key",Query.FilterOperator.EQUAL, questionKey);
         Query q = new Query("QuestionInfo").setFilter(question_info_filter);
         PreparedQuery pq = datastore.prepare(q);
         for(Entity e: pq.asList(FetchOptions.Builder.withDefaults())){
-            e.setProperty("point","1");
-            datastore.put(e);
-        }
+            if(e.getProperty("complete").equals("0")){
+                e.setProperty("point","1");
+                e.setProperty("complete","1");
+                datastore.put(e);
+                return true;
+            }
 
+        }
+        return false;
     }
 
     public void updateComplete(String questionKey){

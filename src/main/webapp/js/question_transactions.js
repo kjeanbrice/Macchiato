@@ -9,6 +9,8 @@
 $.noConflict();
 $(document).ready(function () {
 
+    $(".sub_box").hide();
+
     var JSON_list_items;
     var JSON_list_items1;
     var $url = "/PopulateQues.htm";
@@ -85,15 +87,14 @@ $(document).ready(function () {
         $.ajax({
             method: 'get',
             url: $url5,
-            dataType: 'json',
-            success: function (question_info_table){
-                for (var questionInfo in question_info_table) {
-                    if (questionInfo.questionKey == JSON_list_items.Questions[i].questionKey && questionInfo.complete == "1") {
-                        alert("WORKING");
-                       $(".sol_box").hide();
+            dataType: 'text',
+            success: function (text_field){
+                if(text_field != ""){
+                    if(text_field == "cheated"){
+                        $('#output1').html("Since, You Viewed The Solution, No Credit Will Be Assigned.");
+                        $('#dialog3').dialog({height:'auto',width:'auto'});
                     }
                 }
-
 
             },
             error: function () {
@@ -107,6 +108,8 @@ $(document).ready(function () {
      * Allows the user to check their code that they wrote to see if it has errors or it is fine
      */
     $('body').on('click','.compile_box', function(e){
+
+        $(".sub_box").show();
 
         $('#output').val('');
         var text = $('#myText').val();
@@ -206,6 +209,10 @@ $(document).ready(function () {
                                     $('#output1').html("Sorry Try Again.");
                                     $('#dialog3').dialog({height:'auto',width:'auto'});
                                 }
+                                else if(text_field == "cheated"){
+                                    $('#output1').html("Since, You Viewed The Solution Or Got It Correct, No Credit Will Be Assigned.");
+                                    $('#dialog3').dialog({height:'auto',width:'auto'});
+                                }
 
                             }
                             else{
@@ -219,7 +226,7 @@ $(document).ready(function () {
                         }
                     });
 
-                    clearText();
+                  //  clearText();
                     nextQues();
                 },
                 No: function() {
