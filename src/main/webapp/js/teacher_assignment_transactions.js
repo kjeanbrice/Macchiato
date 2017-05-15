@@ -13,26 +13,25 @@ $(document).ready(function () {
         console.log("ADD ASSIGNEMTN");
         var url = "/addAssignment.htm?assignmentName=" +assignment_name + "&duedate=" + assignment_due+"&course_code=" + localStorage.getItem("course_code");
 
-        $.ajax({
-            method: 'post',
-            url: url,
-            dataType: 'text',
-            success: function (h) {
-                if(assignment_name.length==0){
-                    alert("Can not create course with course name or course description is empty")
-                    console.log("ADD COURSE ERROR");
+        if(assignment_name.length==0){
+            alert("Can not create course with course name or course description is empty")
+            console.log("ADD COURSE ERROR");
+        }else {
+            $.ajax({
+                method: 'post',
+                url: url,
+                dataType: 'text',
+                success: function (h) {
+                        clear_form_data();
+                        load_assignment_item('ADD_ASSIGNMENT');
+                        $('#close_add_assignment').click();
+                        console.log("ADD ITEM: SUCCESS");
+                },
+                error: function () {
+                    console.log("Add Item Failure: Aw, It didn't connect to the servlet :(");
                 }
-                else{
-                    clear_form_data();
-                    load_assignment_item('ADD_ASSIGNMENT');
-                    $('#close_add_assignment').click();
-                    console.log("ADD ITEM: SUCCESS");
-                }
-            },
-            error: function () {
-                console.log("Add Item Failure: Aw, It didn't connect to the servlet :(");
-            }
-        });
+            });
+        }
     });
 
 });
