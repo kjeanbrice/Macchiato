@@ -40,105 +40,89 @@ public class StudentController {
         User user = userService.getCurrentUser();
         String email = user.getEmail();
         long userType = 0;
-        // Check if new login or the same user
-        String checkEmail = (String)request.getSession().getAttribute("email");
-        if (email.equals(checkEmail)){
-            System.out.println("Loading User from session.");
-            // If email has been set, no need to get anything just return user JSON
-            currUser = new UserBean(email, userType);
+        // Load the user from the datastore
+        // Get the datastore.
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        // Create the search keyword.
+        Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email.trim());
+        // Create the query
+        Query q = new Query("User").setFilter(email_filter);
+        PreparedQuery pq = datastore.prepare(q);
+        // Find the UserBean Entity
+        Entity result = pq.asSingleEntity();
+        // If no student was found on the database create a new one.
+        if(result == null){
+            System.out.println("No User, creating and saving one now.");
+            // Create an Entity to store
+            Entity userEntity = new Entity("User",email);
+            userEntity.setProperty("email", email);
+            userEntity.setProperty("access", userType);
+            datastore.put(userEntity);
         }else{
-            // Else check in database if user is in there.
-            // Get the datastore.
-            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-            // Create the search keyword.
-            Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email.trim());
-            // Create the query
-            Query q = new Query("User").setFilter(email_filter);
-            PreparedQuery pq = datastore.prepare(q);
-            // Find the UserBean Entity
-            Entity result = pq.asSingleEntity();
-            // If no student was found on the database create a new one.
-            if(result == null){
-                System.out.println("No User, creating and saving one now.");
-                // Create an Entity to store
-                Entity userEntity = new Entity("User",email);
-                userEntity.setProperty("email", email);
-                userEntity.setProperty("access", userType);
-                datastore.put(userEntity);
-            }else{
-                System.out.println("Found User, loading User in now.");
-                // Extract the information from result
-                email = (String)result.getProperty("email");
-                userType = (Long)result.getProperty("access");
-                System.out.println(email);
-                System.out.println(userType);
-            }
-            request.getSession().setAttribute("email", email);
-            request.getSession().setAttribute("access", userType);
-            currUser = new UserBean(email, userType);
-
-            System.out.println(currUser.generateJSON());
+            System.out.println("Found User, loading User in now.");
+            // Extract the information from result
+            email = (String)result.getProperty("email");
+            userType = (Long)result.getProperty("access");
+            System.out.println(email);
+            System.out.println(userType);
         }
+        currUser = new UserBean(email, userType);
+
+        System.out.println(currUser.generateJSON());
+
 
         // LOAD COURSE LIST
         ArrayList<String> crsCodes = new ArrayList<String>();
-        ArrayList<CourseBean> crsList = (ArrayList<CourseBean>) request.getSession().getAttribute("crsList");
-        // Check the course list
-        if(crsList == null){
-            System.out.println("No course list in session");
-            // If no course, load it up
-            crsList = new ArrayList<CourseBean>();
-            // Find all the crsCodes the user is enrolled in.
-            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-            Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email.trim());
-            Query q = new Query("Enrollment").setFilter(email_filter);
-            PreparedQuery pq = datastore.prepare(q);
-            for (Entity enrollmentEntity : pq.asIterable()) {
-                long course_id = (long)enrollmentEntity.getProperty("course_id");
-                Query.Filter courseid_filter = new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, course_id);
-                q = new Query("Course").setFilter(courseid_filter);
-                pq = datastore.prepare(q);
+        ArrayList<CourseBean> crsList =new ArrayList<CourseBean>();
+        // Load the course list from the datastore
+        System.out.println("No course list in session");
+        // If no course, load it up
+        // Find all the crsCodes the user is enrolled in.
+        datastore = DatastoreServiceFactory.getDatastoreService();
+        email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email.trim());
+        q = new Query("Enrollment").setFilter(email_filter);
+        pq = datastore.prepare(q);
+        for (Entity enrollmentEntity : pq.asIterable()) {
+            long course_id = (long)enrollmentEntity.getProperty("course_id");
+            Query.Filter courseid_filter = new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, course_id);
+            q = new Query("Course").setFilter(courseid_filter);
+            pq = datastore.prepare(q);
 
-                List<Entity> course_list = pq.asList(FetchOptions.Builder.withDefaults());
-                int course_list_size = course_list.size();
-                if(course_list_size != 1){
-                    //Error, there should only be one course for this course id
-                    //return value should go here
-                    return;
-                }
-
-                String course_code = (String)course_list.get(0).getProperty("course_code");
-                crsCodes.add(course_code);
+            List<Entity> course_list = pq.asList(FetchOptions.Builder.withDefaults());
+            int course_list_size = course_list.size();
+            if(course_list_size != 1){
+                //Error, there should only be one course for this course id
+                //return value should go here
+                return;
             }
-            if (crsCodes.size() > 0){
-                System.out.println("Loading courses");
-                // Find all the courses the user is enrolled in
-                Query.Filter crsCode_filter;
-                Entity course;
-                CourseBean crsBean;
-                for (int i = 0; i<crsCodes.size(); i++){
-                    System.out.println(crsCodes.get(i));
-                    crsCode_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL, crsCodes.get(i).trim());
-                    q = new Query("Course").setFilter(crsCode_filter);
-                    pq = datastore.prepare(q);
-                    course = pq.asSingleEntity();
-                    if(course == null){
-                        System.out.println("WHY");
-                    }
-                    crsBean = new CourseBean((String)course.getProperty("course_code"),
-                            (String)course.getProperty("name"),
-                            (String)course.getProperty("email"),
-                            (String)course.getProperty("description"));
-                    crsBean.setSection((String)course.getProperty("section"));
-                    crsList.add(crsBean);
-                }
-                request.getSession().setAttribute("crsList", crsList);
-            }else{
-                System.out.println("User not enrolled in any courses");
+
+            String course_code = (String)course_list.get(0).getProperty("course_code");
+            crsCodes.add(course_code);
+        }
+        if (crsCodes.size() > 0){
+            System.out.println("Loading courses");
+            // Find all the courses the user is enrolled in
+            Query.Filter crsCode_filter;
+            Entity course;
+            CourseBean crsBean;
+            for (int i = 0; i<crsCodes.size(); i++){
+                System.out.println(crsCodes.get(i));
+                crsCode_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL, crsCodes.get(i).trim());
+                q = new Query("Course").setFilter(crsCode_filter);
+                pq = datastore.prepare(q);
+                course = pq.asSingleEntity();
+
+                crsBean = new CourseBean((String)course.getProperty("course_code"),
+                        (String)course.getProperty("name"),
+                        (String)course.getProperty("email"),
+                        (String)course.getProperty("description"));
+                crsBean.setSection((String)course.getProperty("section"));
+                crsList.add(crsBean);
             }
         }else{
-            System.out.println("Loading Courses from session");
+            System.out.println("User not enrolled in any courses");
         }
+
 
 
         CourseBean currCourse = null;
@@ -148,9 +132,8 @@ public class StudentController {
            2 for already enrolled
            3 for course does not exist*/
         int enrollStatus = 0;
-        // LOAD THE CURR COURSE
+        // CHANGING THE CURR COURSE
         if(request.getParameter("crsName") != null){
-            System.out.println("We're in");
             System.out.println(request.getParameter("crsName"));
             String changeCourse = request.getParameter("crsName");
             for (int i = 0; i <crsList.size(); i++){
@@ -160,7 +143,7 @@ public class StudentController {
                     System.out.println("Swapping course");
                 }
             }
-        }// Check we're enrolling
+        }// Check if we're enrolling
         else if(request.getParameter("enroll") != null){
             enrolling = true;
             boolean newCourse = true;
@@ -175,13 +158,13 @@ public class StudentController {
             }
             if(newCourse){
                 // Look for course in database
-                DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+                datastore = DatastoreServiceFactory.getDatastoreService();
                 // Create the search keyword.
                 Query.Filter enroll_filter = new Query.FilterPredicate("course_code", Query.FilterOperator.EQUAL, enrollCode.trim());
                 // Create the query
-                Query q = new Query("Course").setFilter(enroll_filter);
-                PreparedQuery pq = datastore.prepare(q);
-                Entity result = pq.asSingleEntity();
+                q = new Query("Course").setFilter(enroll_filter);
+                pq = datastore.prepare(q);
+                result = pq.asSingleEntity();
                 // If course does not exist, return a 3
                 if(result == null){
                     enrollStatus = 3;
@@ -193,7 +176,6 @@ public class StudentController {
                             (String)result.getProperty("description"));
                     enrollCourse.setSection((String)result.getProperty("section"));
                     crsList.add(enrollCourse);
-                    request.getSession().setAttribute("crsList", crsList);
                     currCourse = enrollCourse;
                     request.getSession().setAttribute("currCourse",currCourse);
                     long u_set = 0;

@@ -20,9 +20,7 @@ public class LogoutController {
         UserService userService = UserServiceFactory.getUserService();
         if(userService.isUserLoggedIn()){
             System.out.println("UserBean Logged out");
-            request.getSession().setAttribute("email", null);
-            request.getSession().setAttribute("userType", null);
-            request.getSession().setAttribute("crsList", null);
+            request.getSession().setAttribute("currCourse",null);
             return "redirect:" + userService.createLogoutURL("/");
         }
         else{
