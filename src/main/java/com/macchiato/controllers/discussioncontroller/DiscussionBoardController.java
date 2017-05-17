@@ -3,7 +3,6 @@ package com.macchiato.controllers.discussioncontroller;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
 
-import com.macchiato.general.*;
 import com.macchiato.general.discussiondata.*;
 import com.macchiato.general.generaldata.CourseDataHelper;
 import com.macchiato.general.generaldata.EnrollmentData;
@@ -78,7 +77,7 @@ public class DiscussionBoardController {
 
                 KeyRange kr = datastore.allocateIds("Forum",1);
                 key = kr.getEnd();
-                Entity forum = new Entity("Forum",key);
+                Entity forum = new Entity("Forum");
                 System.out.println("forum_key" + forum.getKey());
                 forum.setProperty("email",email);
                 forum.setProperty("course_name",course_name);

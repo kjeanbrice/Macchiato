@@ -215,17 +215,19 @@ public class DiscussionBoardUtils {
         }
 
 
+
+
         User user = GenUtils.getActiveUser();
 
         if(user == null){
             return;
         }
 
-        if(!user.getEmail().equalsIgnoreCase("teacher1@example.com")){
+        if(!user.getEmail().equalsIgnoreCase("308.JeanBrice.Karl@gmail.com")){
             return;
         }
 
-        String instructor_email = "teacher1@example.com";
+        String instructor_email = "308.JeanBrice.Karl@gmail.com";
         String course_name = "cse114";
         String section = "L01";
         GenUtils.createInstructor(instructor_email);
@@ -237,7 +239,7 @@ public class DiscussionBoardUtils {
         SecureRandom random = new SecureRandom();
         String course_code = new BigInteger(30, random).toString(32) + key.getId();
 
-        Entity e = new Entity("Course",key);
+        Entity e = new Entity("Course");
         e.setProperty("name",course_name);
         e.setProperty("course_code",course_code);
         e.setProperty("section",section);
@@ -269,7 +271,7 @@ public class DiscussionBoardUtils {
         createDummyPost(course_name,instructor_email,instructor_email,"Lorem ipsum dolor sit amet. ","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris et sapien eros. Aliquam metus dolor. ",section);
 
         DiscussionBoardUtils.updateUsername(forum_key,instructor_email,"Ted Wilson");
-        GenUtils.enrollUser(forum_key,"student1@example.com","Jake Wilson", 0,(long)obj.get(0));
+        GenUtils.enrollUser(forum_key,"student1@example.com","Jake Harrison", 0,(long)obj.get(0));
         GenUtils.enrollUser(forum_key,"student2@example.com","Brian Tanner ", 0,(long)obj.get(0));
         GenUtils.enrollUser(forum_key,"student3@example.com","Emily Roberts", 0,(long)obj.get(0));
         createDummyPost(course_name,instructor_email,instructor_email,"Lorem ipsum dolor sit amet, consectetur. ","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce turpis erat, accumsan nec magna eu. ",section);

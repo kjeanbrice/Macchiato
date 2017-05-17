@@ -89,7 +89,7 @@ public class InstructorController {
                 SecureRandom random = new SecureRandom();
                 String course_code = new BigInteger(30, random).toString(32) + key.getId();
 
-                Entity e = new Entity("Course",key);
+                Entity e = new Entity("Course");
                 e.setProperty("name",course_name.trim());
                 e.setProperty("course_code",course_code);
                 e.setProperty("section",section.trim());

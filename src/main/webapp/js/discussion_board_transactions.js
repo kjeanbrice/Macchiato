@@ -194,12 +194,9 @@ $(document).ready(function () {
 
 
     //Transaction to make a post in the current group.
-    $('body').on('click', '#create-post-modal', function () {
+    $('body').on('click', '#create-new-post', function () {
 
         var err_label = $('#err-createpost');
-        $('#post-feed').val("");
-        $('#post-title').val("");
-
         err_label.css("opacity","0");
     });
 
@@ -235,6 +232,8 @@ $(document).ready(function () {
                     console.log("Post-Success");
                     console.log("Post-Response: " + post_status);
                     load_discussionpage();
+                    $('#post-feed').val("");
+                    $('#post-title').val("");
                     $('#close-createpost').click();
 
                 },

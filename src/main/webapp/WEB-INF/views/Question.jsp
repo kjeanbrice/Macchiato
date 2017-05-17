@@ -149,7 +149,7 @@
         </form>
     </li>
     <li>
-        <a href="/CourseInfo.htm" class="scroll-nav link">Course Information</a>
+        <a href="/CourseInfo.htm" class="scroll-nav link">Course Info</a>
     </li>
     <li>
         <a href="/login.htm?access=-1" class="scroll-nav link">Logout</a>

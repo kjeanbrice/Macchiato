@@ -80,7 +80,7 @@ $(document).ready(function () {
         var form_crsName = $('#form-crsName');
         var form_crsCode = $('#form-crsCode');
 
-        var link_form = $('#link-form');
+        var link_form = $('#link-form-student');
 
         form_crsName.attr("value",crsName.trim());
         form_crsCode.attr("value",crsCode.trim());
