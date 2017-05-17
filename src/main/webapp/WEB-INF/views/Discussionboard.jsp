@@ -383,6 +383,14 @@
         </div>
 
     </div>
+    {{else}}
+    <div id="discussion-text-area">
+    <div class="row">
+        <div class="center-text small-12 medium-12 large-12 columns">
+            <span id="discussion-text-top">No Content to display</span>
+        </div>
+    </div>
+    </div>
     {{/each}}
 
 </script>

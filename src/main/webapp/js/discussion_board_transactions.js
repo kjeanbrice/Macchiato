@@ -174,7 +174,7 @@ $(document).ready(function () {
                         err_label.fadeTo(1000,1);
                         break;
                     case INVALID_LENGTH:
-                        err_label.text("Your username must have at least 5 characters.");
+                        err_label.text("Your username must have at least 3 characters.");
                         err_label.fadeTo(1000,1);
                         console.log("Invalid_Length:It got here");
                         break;
