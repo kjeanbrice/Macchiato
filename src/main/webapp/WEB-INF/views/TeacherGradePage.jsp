@@ -53,7 +53,7 @@
 <!-- END TOP BAR -->
 
 <div class="container">
-    <h2>ASSIGNMENTS</h2>
+    <h2>Student Grades</h2>
     <table class="table">
         <thead>
         <tr>
@@ -61,21 +61,7 @@
             <th>Student Grade</th>
         </tr>
         </thead>
-        <tbody>
-        <tr>
-        </tr>
-        </tbody>
-    </table>
-</div>||
-<div class="container">
-    <h2>Question Grade</h2>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Question Name</th>
-            <th>Average Grade</th>
-        </tr>
-        </thead>
+        <tbody id="item_area" class="tbody-default">
         <tbody>
         <tr>
         </tr>
@@ -143,6 +129,7 @@
 <script src="js/vendor/what-input.js"></script>
 <script src="js/vendor/foundation.js"></script>
 <script src="js/app.js"></script>
+<script src="js/teacher_grading_transactions.js"></script>
 </body>
 </html>
 

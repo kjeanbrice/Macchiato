@@ -65,9 +65,6 @@ function load_assignment_item(type){
             console.log("Loading the course table: Aw, It didn't connect to the servlet :(");
         }
     });
-
-
-
 }
 
 function assignment_helper(assignmentkey){

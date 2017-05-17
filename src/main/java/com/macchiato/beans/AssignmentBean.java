@@ -8,7 +8,7 @@ import java.util.Date;
 public class AssignmentBean implements Comparable<AssignmentBean>  {
     private String course_code = "";
     private String assignmentName="";
-    private Date duedate;
+    private Date duedate=new Date();
     private String assignmentKey = "";
     private String grade ="";
     private String end="";
@@ -62,6 +62,14 @@ public class AssignmentBean implements Comparable<AssignmentBean>  {
 
     public void setGrade(String grade){this.grade = grade;}
 
+    public String getEnd() {
+        return end;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
 
     // Generates a String in JSON format
     public String generateJSON(){
@@ -94,13 +102,6 @@ public class AssignmentBean implements Comparable<AssignmentBean>  {
         return Integer.toString(a);
     }
 
-    public String getEnd() {
-        return end;
-    }
-
-    public void setEnd(String end) {
-        this.end = end;
-    }
     // Generates a String in JSON format
     public String generateEndJSON(){
         String output = "{\"assignmentName\":\"" + assignmentName + "\","

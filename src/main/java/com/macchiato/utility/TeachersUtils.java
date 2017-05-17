@@ -1,9 +1,7 @@
 package com.macchiato.utility;
 
 import com.google.appengine.api.datastore.*;
-import com.macchiato.beans.AssignmentBean;
-import com.macchiato.beans.CourseBean;
-import com.macchiato.beans.QuestionBean;
+import com.macchiato.beans.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -190,6 +188,198 @@ public class TeachersUtils {
         }
         return outputString;
     }
+
+
+
+
+
+    //this function will function all the question bean from one assignment
+    public static ArrayList<StudentGradeBean> findAllStudentGradeBean(String assignmentKey) {
+        String email;
+        double point;
+
+        System.out.println("Load all the Question :"+assignmentKey);
+        ArrayList<StudentGradeBean> gradeList = new ArrayList<StudentGradeBean>();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter assignmentKey_filter = new Query.FilterPredicate("assignmentKey", Query.FilterOperator.EQUAL, assignmentKey);
+        Query q = new Query("QuestionInfo").setFilter(assignmentKey_filter);
+        PreparedQuery pq = datastore.prepare(q);
+        int numberOfQuestion = pq.asList(FetchOptions.Builder.withDefaults()).size();
+        if (numberOfQuestion == 0) {
+            System.out.println("There is no assignment that you own");
+        } else {
+            for (Entity result : pq.asIterable()) {
+                email = (String) result.getProperty("email_address");
+                point =  Double.parseDouble((String) result.getProperty("point"));
+
+                StudentGradeBean newBean = new StudentGradeBean();
+                newBean.setEmail(email);
+                newBean.setPoint(point);
+                newBean.setTotal(numberOfQuestion);
+                newBean.setAssignmentKey(assignmentKey);
+                gradeList.add(newBean);
+            }
+        }
+        System.out.println("number of  grade bean in the list:" + gradeList.size());
+
+
+        return studentForEachGrade(gradeList);
+    }
+
+    //this function  helps generate  QuestionBean list to a List of json type of string
+    public static String StudentGradesListJson(ArrayList<StudentGradeBean> GradeList) {
+        String outputString = "[";
+        if (GradeList.size() <= 0) {
+            return "[]";
+        }
+        for (int i = 0; i < GradeList.size(); i++) {
+            if (i == GradeList.size() - 1) {
+                outputString += GradeList.get(i).generateJSON() + "]";
+            } else {
+                outputString += GradeList.get(i).generateJSON() + ",";
+            }
+        }
+        return outputString;
+    }
+
+
+
+    //fitter each student from the database
+    public static  ArrayList<StudentGradeBean> studentForEachGrade(ArrayList<StudentGradeBean> GradeList){
+        ArrayList<String> allEmail=AllEmails(GradeList);
+        ArrayList<StudentGradeBean> newList=new ArrayList<StudentGradeBean>();
+        for(int i=0;i<allEmail.size();i++){
+            StudentGradeBean newBean=new StudentGradeBean();
+            newBean.setEmail(allEmail.get(i));
+            int total=0;
+            for(int g=0;g<GradeList.size();g++){
+                if(GradeList.get(g).getEmail().equals(allEmail.get(i))){
+                    newBean.point= newBean.point+GradeList.get(g).getPoint();
+                    newBean.total++;
+                }
+            }
+            newList.add(newBean);
+        }
+        return newList;
+    }
+    //find all the student from the database
+    public static  ArrayList<String> AllEmails(ArrayList<StudentGradeBean> GradeList){
+        ArrayList<String> allemail=new ArrayList<String>();
+        boolean findit;
+        for(int i=0;i<GradeList.size();i++){
+            findit=false;
+            for(int e=0;e<allemail.size();e++){
+                if(allemail.get(e).equals(GradeList.get(i).getEmail())){
+                    findit=true;
+                }
+            }
+            if(findit==false){
+                allemail.add(GradeList.get(i).getEmail());
+            }
+        }
+        System.out.print("Number of Students"+allemail.size());
+        return allemail;
+    }
+
+    //this function will function all the question bean from one assignment
+    public static ArrayList<QuestionGradeBean> findAllQuestionGradeBean(String assignmentKey) {
+        double point;
+        String id;
+        System.out.print("------------------------------------------------------------------------------dawdawdwada---------------------");
+        System.out.println("Load all the Question :"+assignmentKey);
+        ArrayList<QuestionGradeBean> gradeList = new ArrayList<QuestionGradeBean>();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter assignmentKey_filter = new Query.FilterPredicate("assignmentKey", Query.FilterOperator.EQUAL, assignmentKey);
+        Query q = new Query("QuestionInfo").setFilter(assignmentKey_filter);
+        PreparedQuery pq = datastore.prepare(q);
+        int numberOfQuestion = pq.asList(FetchOptions.Builder.withDefaults()).size();
+        if (numberOfQuestion == 0) {
+            System.out.println("There is no assignment that you own");
+        } else {
+            for (Entity result : pq.asIterable()) {
+                point =  Double.parseDouble((String) result.getProperty("point"));
+                id=(String) result.getProperty("questionId");
+                QuestionGradeBean newBean = new QuestionGradeBean();
+                newBean.setPoint(point);
+                newBean.setTotal(numberOfQuestion);
+                newBean.setAssignmentKey(assignmentKey);
+                newBean.setId(id);
+                newBean.setAssignmentKey(assignmentKey);
+                gradeList.add(newBean);
+            }
+        }
+        System.out.println("number of  grade bean in the list:" + gradeList.size());
+
+
+        return questionForEachGrade(gradeList);
+    }
+
+    //this function  helps generate  QuestionGradeBean list to a List of json type of string
+    public static String QuestionGradesListJson(ArrayList<QuestionGradeBean> GradeList) {
+        String outputString = "[";
+        if (GradeList.size() <= 0) {
+            return "[]";
+        }
+        for (int i = 0; i < GradeList.size(); i++) {
+            if (i == GradeList.size() - 1) {
+                outputString += GradeList.get(i).generateJSON() + "]";
+            } else {
+                outputString += GradeList.get(i).generateJSON() + ",";
+            }
+        }
+        return outputString;
+    }
+
+
+    //fitter each student from the database
+    public static  ArrayList<QuestionGradeBean> questionForEachGrade(ArrayList<QuestionGradeBean> GradeList){
+        System.out.print("------------------------------------------------------------------------------dawdawdwada----111-----------------");
+        ArrayList<String> allQuestion=AllQuestions(GradeList);
+        ArrayList<QuestionGradeBean> newList=new ArrayList<QuestionGradeBean>();
+        for(int i=0;i<allQuestion.size();i++){
+            QuestionGradeBean newBean=new QuestionGradeBean();
+            newBean.setQuestionKey(allQuestion.get(i));
+            int total=0;
+            for(int g=0;g<GradeList.size();g++){
+                if(GradeList.get(g).getQuestionKey().equals(allQuestion.get(i))){
+                    newBean.point= newBean.point+GradeList.get(g).getPoint();
+                    newBean.total++;
+                    newBean.setAssignmentKey(GradeList.get(g).getAssignmentKey());
+                }
+            }
+            newList.add(newBean);
+        }
+        return newList;
+    }
+    //find all the student from the database
+    public static  ArrayList<String> AllQuestions(ArrayList<QuestionGradeBean> GradeList){
+        ArrayList<String> allQuestionkey=new ArrayList<String>();
+        boolean findit;
+        for(int i=0;i<GradeList.size();i++){
+            findit=false;
+            for(int e=0;e<allQuestionkey.size();e++){
+                if(allQuestionkey.get(e).equals(GradeList.get(i).getQuestionKey())){
+                    findit=true;
+                }
+            }
+            if(findit==false){
+                allQuestionkey.add(GradeList.get(i).getQuestionKey());
+            }
+        }
+        System.out.print("Number of QQQQQQuestion"+allQuestionkey.size());
+        return allQuestionkey;
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     //this function will remove all the non-digit char in the string a
     public static String numberkeeper(String a){

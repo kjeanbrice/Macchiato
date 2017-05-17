@@ -156,7 +156,7 @@
 <script src="js/vendor/foundation.js"></script>
 <script src="js/app.js"></script>
 <script src="js/teacher_assignment_transactions.js"></script>
-<link rel="stylesheet" href="js/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/bootstrap.min.css" />
 
 
 
