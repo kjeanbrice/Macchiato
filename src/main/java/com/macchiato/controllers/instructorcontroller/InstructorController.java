@@ -23,6 +23,12 @@ import java.util.ArrayList;
 @Controller
 public class InstructorController {
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     @RequestMapping(value = "instructor_addcourse.htm",method = RequestMethod.POST)
     public void addCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");

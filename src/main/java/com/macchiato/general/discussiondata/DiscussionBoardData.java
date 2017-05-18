@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Karl on 3/31/2017.
+ * DiscussionBoardData.java
+ * Purpose: The class represents a forum that encapsulates comments and posts.
+ * @author Karl Jean-Brice
  */
 public class DiscussionBoardData implements Serializable {
 

@@ -1,5 +1,7 @@
 /**
- * Created by Karl Jean-Brice
+ * nav_bar_transactions.js
+ * Purpose: This script handles the interations involving the navigation bar.
+ * @author Karl Jean-Brice
  */
 $(document).ready(function () {
 

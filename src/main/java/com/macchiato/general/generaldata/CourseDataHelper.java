@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Karl on 4/2/2017.
+ * CourseDataHelper.java
+ * Purpose: The helper class that encapsulates a Course object.
+ * @author Karl Jean-Brice
  */
 public class CourseDataHelper implements Serializable {
     private String current_user;

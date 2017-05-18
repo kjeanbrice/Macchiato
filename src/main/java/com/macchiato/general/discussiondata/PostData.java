@@ -9,8 +9,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Karl on 3/31/2017.
+ * PostData.java
+ * Purpose: The class represents data about a single post.
+ * @author Karl Jean-Brice
  */
+
+
 public class PostData implements Serializable {
 
     private long postID;
@@ -36,6 +40,7 @@ public class PostData implements Serializable {
     }
 
     /**
+     * Returns the postID associated with post.
      * @return the postID
      */
     public long getPostID() {
@@ -43,6 +48,7 @@ public class PostData implements Serializable {
     }
 
     /**
+     *
      * @param postID the postID to set
      */
     public void setPostID(long postID) {

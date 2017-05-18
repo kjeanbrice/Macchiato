@@ -6,7 +6,9 @@ import org.apache.commons.lang.StringEscapeUtils;
 import java.io.Serializable;
 
 /**
- * Created by Karl on 3/31/2017.
+ * CourseDataHelper.java
+ * Purpose: The class that represents data about enrollment in a course.
+ * @author Karl Jean-Brice
  */
 
 public class EnrollmentData implements Serializable {

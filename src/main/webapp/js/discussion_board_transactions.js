@@ -1,5 +1,8 @@
 /**
- * Created by Karl on 4/3/2017.
+ * discussion_board_transactions.js
+ * Purpose: This script is responsible for handling front-end interaction for the discussion board.
+ * Calls back-end functions using AJAX to populate the page.
+ * @author Karl Jean-Brice
  */
 $(document).ready(function () {
 
@@ -20,8 +23,10 @@ $(document).ready(function () {
     load_discussionpage();
 
 
-
-
+    /**
+     * Requests data from a backend function to populate the discussion page with post and comment data.
+     * @author Karl Jean-Brice
+     */
     function load_discussionpage() {
         var email_area = $('#i_email').attr('data-iemail');
         var course_area = $('#course').attr('data-course');
@@ -101,7 +106,10 @@ $(document).ready(function () {
     }
 
 
-    //Transaction to change your username
+    /**
+     * Populates the username dialog box with user's current username.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', '#change-user-name', function () {
 
         var err_label = $('#err-changeusername');
@@ -121,6 +129,10 @@ $(document).ready(function () {
 
     });
 
+    /**
+     * Sends data to a backend function to allow a user to change their username.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', '#btn-username-submit', function () {
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
@@ -193,13 +205,22 @@ $(document).ready(function () {
     });
 
 
-    //Transaction to make a post in the current group.
+    /**
+     * Clears out the label used to display error messages when posting.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', '#create-new-post', function () {
 
         var err_label = $('#err-createpost');
         err_label.css("opacity","0");
     });
 
+
+
+    /**
+     * Sends data to a backend function to allow a user to post on the current page.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', '#post-submit', function () {
         var post_content = $('#post-feed').val().trim();
         var post_title = $('#post-title').val().trim();
@@ -247,7 +268,12 @@ $(document).ready(function () {
 
     });
 
-    //Transaction to edit a post
+
+
+    /**
+     * Populates the edit post dialog box with the requested title and content information.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', 'a.link_btn.edit_post_btn', function () {
 
         var post_id = $(this).attr('data-postid');
@@ -261,6 +287,11 @@ $(document).ready(function () {
         err_label.css("opacity","0");
     });
 
+
+    /**
+     * Sends data to a backend function to allow a user to edit a post on the current page.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', '#editpost-submit', function () {
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
@@ -326,7 +357,11 @@ $(document).ready(function () {
 
 
 
-    //Transaction to edit a comment
+
+    /**
+     * Populates the edit comment dialog box with the requested content information.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', 'a.link_btn.edit_comment_btn', function () {
 
         var comment_id = $(this).attr('data-commentid');
@@ -338,6 +373,12 @@ $(document).ready(function () {
         err_label.css("opacity","0");
     });
 
+
+
+    /**
+     * Sends data to a backend function to allow a user to edit a comment on the current page.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', '#editcomment-submit', function () {
         var i_email = $('#i_email').attr('data-iemail');
         var course = $('#course').attr('data-course');
@@ -403,22 +444,15 @@ $(document).ready(function () {
 
 
 
-
+    /**
+     * Sends data to a backend function to allow a user to submit a comment on the current page.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', 'li.comment-submit', function () {
         $( this ).closest( 'form.comment-submit' ).submit();
     });
-    //Transaction to make a comment on a specific post.
     $('body').on('submit', 'form.comment-submit', function (e) {
 
-        /*var SUCCESS = 0;
-         var ENROLLED = 1;
-         var NOT_ENROLLED = 2;
-         var NOT_LOGGED_IN = 3;
-         var DUPLICATE_STUDENT = 4;
-         var EMPTY_PARAMETERS = 5;
-         var BOARD_NOT_FOUND = 6;
-         var DATABASE_ERROR = 7;
-         var POST_NOT_FOUND = 8;*/
 
         e.preventDefault();
         var comment_form = $(this);
@@ -498,7 +532,11 @@ $(document).ready(function () {
 
     });
 
-    //Transaction to delete a post on the group page.
+
+    /**
+     * Sends data to a backend function to allow a user to delete a post on the current page.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', 'a.link_btn.delete_post_btn', function () {
 
         var post_id = $(this).attr("data-postid");
@@ -508,7 +546,6 @@ $(document).ready(function () {
         err_label.text("");
 
     });
-
     $('body').on('click', '#deletepost-submit', function () {
 
         var i_email = $('#i_email').attr('data-iemail');
@@ -573,7 +610,10 @@ $(document).ready(function () {
     });
 
 
-    //Transaction to delete a post on the group page.
+    /**
+     * Sends data to a backend function to allow a user to delete a comment on the current page.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', 'a.link_btn.delete_comment_btn', function () {
         var err_label = $('#err-deletecomment');
         var comment_id = $(this).attr("data-commentid");
@@ -581,7 +621,6 @@ $(document).ready(function () {
         $('#val-deletecomment').attr('data-commentid',comment_id);
         err_label.text("");
     });
-
     $('body').on('click', '#deletecomment-submit', function () {
 
         var i_email = $('#i_email').attr('data-iemail');
@@ -645,7 +684,11 @@ $(document).ready(function () {
 
     });
 
-    //Transaction to like a post
+
+    /**
+     * Sends data to a backend function to allow the user to up vote a post.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', 'a.link_btn.like_post_btn', function () {
 
         var i_email = $('#i_email').attr('data-iemail');
@@ -694,7 +737,10 @@ $(document).ready(function () {
     });
 
 
-    //Transaction to dislike a post
+    /**
+     * Sends data to a backend function to allow the user to down vote a post.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', 'a.link_btn.dislike_post_btn', function () {
 
         var i_email = $('#i_email').attr('data-iemail');
@@ -743,7 +789,10 @@ $(document).ready(function () {
     });
 
 
-    //Transaction to like a comment
+    /**
+     * Sends data to a backend function to allow the user to up vote a comment.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', 'a.link_btn.like_comment_btn', function () {
 
         var i_email = $('#i_email').attr('data-iemail');
@@ -793,7 +842,10 @@ $(document).ready(function () {
 
 
 
-    //Transaction to dislike a comment
+    /**
+     * Sends data to a backend function to allow the user to down vote a comment.
+     * @author Karl Jean-Brice
+     */
     $('body').on('click', 'a.link_btn.dislike_comment_btn', function () {
 
         var i_email = $('#i_email').attr('data-iemail');

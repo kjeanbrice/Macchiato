@@ -1,5 +1,7 @@
 /**
- * Created by Karl on 4/5/2017.
+ * index_redirect.js
+ * Purpose: This script redirects the index page to the Home page.
+ * @author Karl Jean-Brice
  */
 $(document).ready(function () {
     redirect_home();

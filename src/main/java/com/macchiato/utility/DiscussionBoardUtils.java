@@ -14,7 +14,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Karl on 3/30/2017.
+ * DiscussionBoardUtils.java
+ * Purpose: This class serves as a utility class for discussion board.
+ * @author Karl Jean-Brice
  */
 public class DiscussionBoardUtils {
 
@@ -35,6 +37,15 @@ public class DiscussionBoardUtils {
 
 
 
+    /**
+     * Checks if a user is found in the datastore (Enrollment table) using the forum key.
+     * @author Karl Jean-Brice
+     * @param forumKey a key pointing to a unique datastore Forum object.
+     * @param email the email to check for enrollement
+     * @return 4 (DUPLICATE_ENTRY) if the forum key for the user is found multiple times in the datastore (Enrollment table).
+     *         2 (NOT_ENROLLED) if the forum key for the user is not found in the datastore (Enrollment table).
+     *         1 (ENROLLED) if the forum key for the user is found in the Enrollment table.
+     */
     public static int isEnrolled(Key forumKey, String email){
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -57,6 +68,13 @@ public class DiscussionBoardUtils {
         return ENROLLED;
     }
 
+
+    /**
+     * Retrieves the list of forums the user is currently in.
+     * @author Karl Jean-Brice
+     * @param email the email to check for enrollment
+     * @return null if no forums are found for the user. Otherwise, an object containing a list forums the user is participating in.
+     */
     public static CourseDataHelper retrieveForumList(String email) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -120,6 +138,14 @@ public class DiscussionBoardUtils {
 
 
 
+    /**
+     * Retrieves a key pointing to forum using the email address of user who created the forum, the course name, and the course section.
+     * @author Karl Jean-Brice
+     * @param instructor_email the email address of the user who created the forum
+     * @param course the course name associated with the email address
+     * @param section the course section associated with the email address
+     * @return null if no forums are found for the user. Otherwise, an object containing a list forums the user is participating in.
+     */
     public static Key getForumKey(String instructor_email, String course, String section){
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -156,6 +182,17 @@ public class DiscussionBoardUtils {
         return forum.getKey();
     }
 
+    /**
+     * Changes the username of a user on a specific forum.
+     * @author Karl Jean-Brice
+     * @param forumkey the key of the forum containing the email address
+     * @param email the email address of the user requesting the username change.
+     * @param username the new username
+     * @return 11(ALREADY_ACTIVE) if the username is already taken on the forum
+     *         2 (NOT ENROLLED) if user is not currently enrolled in the course.
+     *         7 (DATABASE_ERROR) Multiple or no entries are found in the datastore for the requested parameters
+     *         0 (SUCCESS) the username was successfully changed for the user.
+     */
     public static int updateUsername(Key forumkey, String email, String username){
 
         Entity user;
@@ -203,6 +240,10 @@ public class DiscussionBoardUtils {
 
 
 
+    /**
+     * Creates dummy data for the forum in the datastore.
+     * @author Karl Jean-Brice
+     */
     public static void createDummyDiscussionData() {
 
 

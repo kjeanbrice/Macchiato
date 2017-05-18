@@ -3,7 +3,9 @@ package com.macchiato.general.generaldata;
 import java.io.Serializable;
 
 /**
- * Created by Karl on 4/2/2017.
+ * CourseData.java
+ * Purpose: The class represents data about a single course.
+ * @author Karl Jean-Brice
  */
 public class CourseData implements Serializable {
     private String instructor_email;

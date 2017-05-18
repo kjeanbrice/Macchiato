@@ -13,8 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Karl on 3/26/2017.
+ * GenUtils.java
+ * Purpose: This class serves as a general utility class for the application.
+ * @author Karl Jean-Brice
  */
+
 public class GenUtils {
     public static final int STUDENT = 0;
     public static final int INSTRUCTOR = 1;
@@ -31,8 +34,11 @@ public class GenUtils {
     public final static int DATABASE_ERROR = 12;
 
 
-
-
+    /**
+     * Creates an instructor account for a specified email address.
+     * @author Karl Jean-Brice
+     * @param email the email address to create an account for.
+     */
     public static void createInstructor(String email){
         if(email == null){
             return;
@@ -45,11 +51,6 @@ public class GenUtils {
         Entity user;
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Key key = new Builder("User",email).getKey();
-
-
-        // Key key = new Builder("User",email).addChild("Course","cse336").getKey();
-        //Key parentKey = KeyFactory.createKey(key,"Group");
-
 
 
         try {
@@ -75,6 +76,11 @@ public class GenUtils {
     }
 
 
+    /**
+     * Creates an student account for a specified email address.
+     * @author Karl Jean-Brice
+     * @param email the email address to create an account for.
+     */
     public static void createStudent(String email){
         if(email == null){
             return;
@@ -116,6 +122,11 @@ public class GenUtils {
 
     }
 
+    /**
+     * Checks the credentials of the user currently logged in.
+     * @author Karl Jean-Brice
+     * @return an object containing the credentials of the user.
+     */
     public static ArrayList<Object> checkCredentials(){
 
         ArrayList<Object> credentials = new ArrayList<>();
@@ -146,7 +157,12 @@ public class GenUtils {
         }
     }
 
-
+    /**
+     * Checks if an email address is associated with an instructor account.
+     * @author Karl Jean-Brice
+     * @param email the email address to check
+     * @return true, if the user is an instructor; False, otherwise.
+     */
     public static boolean isInstructor(String email){
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -165,6 +181,12 @@ public class GenUtils {
         }
     }
 
+    /**
+     * Checks if an email address is associated with an admin account.
+     * @author Karl Jean-Brice
+     * @param email the email address to check
+     * @return true, if the user is an admin; False, otherwise.
+     */
     public static boolean isAdmin(String email){
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -183,6 +205,11 @@ public class GenUtils {
         }
     }
 
+    /**
+     * Retrieves the details of the user currently logged in.
+     * @author Karl Jean-Brice
+     * @return a User object containing details about the user.
+     */
     public static User getActiveUser(){
         UserService userService = UserServiceFactory.getUserService();
         if(userService.isUserLoggedIn()) {
@@ -194,64 +221,14 @@ public class GenUtils {
         }
     }
 
-    public static void addUser(String email, String nickname, int access){
-        Entity user;
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Key key = new Builder("User",email).getKey();
-
-        try {
-            datastore.get(key);
-        } catch (EntityNotFoundException e) {
-
-            user = new Entity("User",email.trim());
-            user.setProperty("access",access);
-            user.setProperty("email",email.trim());
-            if(nickname == null | nickname.trim().length() == 0){
-                user.setProperty("username",email);
-            }
-            else {
-                user.setProperty("username",nickname);
-            }
-            datastore.put(user);
-        }
-    }
-
-
-    public static CourseDataHelper retrieveCourseList(String email) {
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-        Query.Filter email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email);
-        Query q = new Query("Course").setFilter(email_filter);
-        PreparedQuery pq = datastore.prepare(q);
-
-        CourseDataHelper data = null;
-        String username = "";
-        String i_email = null;
-        String course = null;
-        String section = null;
-        String course_code = null;
-        long course_id;
-        ArrayList<CourseData> courseData = new ArrayList<>();
-
-        for (Entity result : pq.asIterable()) {
-            i_email = (String)result.getProperty("email");
-            course = (String)result.getProperty("name");
-            section = (String)result.getProperty("section");
-            course_code=(String)result.getProperty("course_code");
-            course_id = (long)result.getProperty("id");
-
-
-            CourseData newData = new CourseData(i_email,username,course,section,course_id);
-            newData.setCourseCode(course_code);
-            courseData.add(newData);
-        }
-
-        data = new CourseDataHelper(email);
-        data.setCourseList(courseData);
-        System.out.println(data.generateJSON());
-        return data;
-    }
-
+    /**
+     * Retrieves the id of the course associated with an email address, course name, and course section.
+     * @author Karl Jean-Brice
+     * @param instructor_email the email address of the use that created the course
+     * @param course the name of the course
+     * @param section the section of the course
+     * @return the id associated with a course
+     */
     public static  ArrayList<Object> getCourseID(String instructor_email, String course, String section){
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -278,6 +255,14 @@ public class GenUtils {
     }
 
 
+    /**
+     * Returns enrollment data associated with a user.
+     * @author Karl Jean-Brice
+     * @param email the email address of the user
+     * @param course the course the user is participating in.
+     * @param forumkey the key of the forum the user in involved in.
+     * @return an object containing enrollment data about the user.
+     */
     public static EnrollmentData getEnrolledUser(String email, String course , Key forumkey){
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -303,8 +288,19 @@ public class GenUtils {
         return enrolled_user;
     }
 
+    /**
+     * Enrolls a user in a specified course.
+     * @author Karl Jean-Brice
+     * @param forum_key the forum key of the course.
+     * @param email the email address of the user to enroll.
+     * @param nickname the initial username of the user on the forum.
+     * @param access the access rights the user has on the forum.
+     * @param course_id the id of the course to enroll in.
+     * @return 11 (DUPLICATE_ENTRY) if the user is already enrolled in the course.
+     *         12 (DATABASE_ERROR) Multiple or no entries are found in the datastore for the requested parameters
+     *         0 (SUCCESS) successfully enrolled the user in the course
+     */
     public static int enrollUser(Key forum_key, String email, String nickname, int access,long course_id){
-
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 

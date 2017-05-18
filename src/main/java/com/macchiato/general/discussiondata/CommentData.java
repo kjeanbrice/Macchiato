@@ -6,7 +6,9 @@ import org.apache.commons.lang.StringEscapeUtils;
 import java.io.Serializable;
 
 /**
- * Created by Karl on 3/31/2017.
+ * CommentData.java
+ * Purpose: The class represents data about a single comment.
+ * @author Karl Jean-Brice
  */
 public class CommentData implements Serializable {
 
