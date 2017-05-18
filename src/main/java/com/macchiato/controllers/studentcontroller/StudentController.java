@@ -24,6 +24,12 @@ import java.util.List;
  */
 @Controller
 public class StudentController {
+    /*
+    This function loads the Student page.
+    It gets the User data from the datastore,
+    then it loads the course list,
+    then it gets the current course that the user is at.
+     */
     @RequestMapping(value = "LoadStudent.htm", method = RequestMethod.GET)
     public void loadStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //storeDummyData();
@@ -98,6 +104,7 @@ public class StudentController {
 
             String course_code = (String)course_list.get(0).getProperty("course_code");
             crsCodes.add(course_code);
+            System.out.println(course_code);
         }
         if (crsCodes.size() > 0){
             System.out.println("Loading courses");
@@ -139,7 +146,16 @@ public class StudentController {
             for (int i = 0; i <crsList.size(); i++){
                 if(crsList.get(i).getCrsCode().compareTo(changeCourse) == 0){
                     currCourse = crsList.get(i);
-                    request.getSession().setAttribute("currCourse",currCourse);
+                    // Update the CurrentCourse Entity
+                    email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email.trim());
+                    // Create the query
+                    q = new Query("CurrentCourse").setFilter(email_filter);
+                    pq = datastore.prepare(q);
+                    // Find the UserBean Entity
+                    result = pq.asSingleEntity();
+                    result.setProperty("course_code", currCourse.getCrsCode());
+                    datastore.put(result);
+                    //request.getSession().setAttribute("currCourse",currCourse);
                     System.out.println("Swapping course");
                 }
             }
@@ -177,7 +193,16 @@ public class StudentController {
                     enrollCourse.setSection((String)result.getProperty("section"));
                     crsList.add(enrollCourse);
                     currCourse = enrollCourse;
-                    request.getSession().setAttribute("currCourse",currCourse);
+                    // Set the CurrentCourse to this one
+                    email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email.trim());
+                    // Create the query
+                    q = new Query("CurrentCourse").setFilter(email_filter);
+                    pq = datastore.prepare(q);
+                    // Find the UserBean Entity
+                    result = pq.asSingleEntity();
+                    result.setProperty("course_code", currCourse.getCrsCode());
+                    datastore.put(result);
+                    //request.getSession().setAttribute("currCourse",currCourse);
                     long u_set = 0;
                     Entity enrollmentEntity = new Entity("Enrollment");
                     enrollmentEntity.setProperty("email", email);
@@ -195,14 +220,40 @@ public class StudentController {
             }
 
         }else{
-            currCourse = (CourseBean)request.getSession().getAttribute("currCourse");
+            // Get the current course
+            email_filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email.trim());
+            // Create the query
+            q = new Query("CurrentCourse").setFilter(email_filter);
+            pq = datastore.prepare(q);
+            // Find the UserBean Entity
+            if (pq != null) {
+                result = pq.asSingleEntity();
+                if(result == null){
+                    currCourse = null;
+                }else{
+                    String currentCourse = (String)result.getProperty("course_code");
+                    for(int i = 0; i<crsList.size();i++){
+                        if(currentCourse.equals(crsList.get(i).getCrsCode())){
+                            currCourse = crsList.get(i);
+                        }
+                    }
+                }
+            }
+            // currCourse = (CourseBean)request.getSession().getAttribute("currCourse");
         }
         // If no course in session,
         if(currCourse == null){
             // get the first course
             if(crsList.size() > 0){
                 currCourse = crsList.get(0);
-                request.getSession().setAttribute("currCourse",currCourse);
+                // Create the first currCourse Entity
+                datastore = DatastoreServiceFactory.getDatastoreService();
+                Entity currCrsEntity = new Entity("CurrentCourse");
+                currCrsEntity.setProperty("email", email.trim());
+                currCrsEntity.setProperty("course_code", currCourse.getCrsCode());
+                datastore.put(currCrsEntity);
+                System.out.println("Creating current course");
+                // request.getSession().setAttribute("currCourse",currCourse);
             }else{
                 // create an empty one
                 currCourse = new CourseBean();
@@ -218,7 +269,7 @@ public class StudentController {
             public int compare(CourseBean course2, CourseBean course1)
             {
 
-                return  course2.getCrsName().compareTo(course1.getCrsName());
+                return  course1.getCrsName().compareTo(course2.getCrsName());
             }
         });
 
@@ -233,7 +284,9 @@ public class StudentController {
         System.out.println(JSONoutput);
         out.println(JSONoutput);
     }
-
+    /*
+    Loads the Assignment
+     */
     public ArrayList<AssignmentBean> loadAssignmentList(HttpServletRequest request, CourseBean currCourse, String email){
         // LOAD ASSIGNMENT LIST
         ArrayList<AssignmentBean> assignList = new ArrayList<AssignmentBean>();
@@ -283,7 +336,15 @@ public class StudentController {
 
 
 
+        // Sort the assignList by Due Date
+        Collections.sort(assignList, new Comparator<AssignmentBean>() {
+            @Override
+            public int compare(AssignmentBean course2, AssignmentBean course1)
+            {
 
+                return  course2.getEnd().compareTo(course1.getEnd());
+            }
+        });
 
         return assignList;
     }

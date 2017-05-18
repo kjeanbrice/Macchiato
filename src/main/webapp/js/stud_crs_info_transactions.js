@@ -6,6 +6,9 @@ $(document).ready(function () {
     var currCrsList;
     load_info("/LoadStudent.htm");
 
+    /*
+    Uses ajax to fill in the information for the student
+     */
     function load_info($url) {
         $.ajax({
             method: 'get',
@@ -17,7 +20,11 @@ $(document).ready(function () {
                 $('#stud_name').text(JSON_crs_info.Student[0].email);
                 $('#class_title').text(JSON_crs_info.Student[2].name);
                 $('#crs_desc').text(JSON_crs_info.Student[2].description);
-                $('#class_section').text(JSON_crs_info.Student[2].section);
+                var section = "Section: ";
+                section += JSON_crs_info.Student[2].section;
+                if(section != "Section: "){
+                    $('#class_section').text(section);
+                }
                 currCrsList = JSON_crs_info.Student[1]
                 load_course_list(currCrsList);
                 var enroll_status = JSON_crs_info.Enroll.status;
@@ -59,11 +66,16 @@ $(document).ready(function () {
         assignment_area.html(list_data);
         console.log(list_data);
     }
-
+    /*
+     Course List pops up on mouse over
+     */
     $('body').on('click mouseover', '#nav_assignments', function () {
         load_course_list(currCrsList);
     });
 
+    /*
+    Gives the Student Controller information on what course to load in when clicked on
+     */
     $('body').on('click', 'li[data-crsName][data-crsCode]', function () {
         var crsName = $(this).attr('data-crsName');
         var crsCode = $(this).attr('data-crsCode');
@@ -84,7 +96,9 @@ $(document).ready(function () {
         load_info(url);
 
     });
-
+    /*
+    Brings up a modal for the user to input the course code they want to enroll in
+     */
     $('body').on('click', '#enroll_submit', function () {
         var crsCode = $('#enroll_crs_code').val().trim();
         if(crsCode){
