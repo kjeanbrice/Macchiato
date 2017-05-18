@@ -172,6 +172,7 @@
 
 </script>
 
+<!-- SCRIPTS TO POPULATE NAVIGATION BAR-->
 <script id= "home-page-template" type="text/x-handle-template">
     {{#if User}}
     <li style="visibility: hidden;"><a href="javascript:void(0)" class="project-btn-styles scroll-nav">Invalid</a></li>
@@ -207,7 +208,7 @@
     {{/if}}
 </script>
 
-
+<!-- SCRIPTS TO POPULATE DISCUSSION LIST-->
 <script id="discussion-list-template" type="text/x-handle-template">
 
     {{#each Courses}}
