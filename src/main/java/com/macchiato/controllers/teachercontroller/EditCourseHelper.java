@@ -18,6 +18,13 @@ import java.io.PrintWriter;
  */
 @Controller
 public class EditCourseHelper {
+    /**
+     *The function will get course code from the front end,
+     * and find information of this course database
+     * and use response to sent the  it back to front end
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
     @RequestMapping(value="/findDes.htm", method = RequestMethod.GET)
     public void editCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();

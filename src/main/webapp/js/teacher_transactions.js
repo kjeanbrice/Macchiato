@@ -87,7 +87,6 @@ $(document).ready(function () {
     $('body').on('click', '#info_course_submit', function (e) {
         var course_code = localStorage.getItem("course_code");
         var course_dis = $('#change_course_dis_text').val().trim();
-        // console.log("123");
         console.log(course_dis);
         var url = "/editCourse.htm?course_code=" +course_code + "&description=" + course_dis ;
 
@@ -117,7 +116,6 @@ $(document).ready(function () {
 
 //function will help put course code to local Storage of HTML5 and load desertion from the database
 function edit_course_helper(course_code){
-    //clear_form_data();
     localStorage.setItem("course_code",course_code);
     console.log("Set new value to local Storage "+course_code);
     var url = "/findDes.htm?course_code=" +course_code;
@@ -134,7 +132,7 @@ function edit_course_helper(course_code){
         }
     });
 }
-
+// when you click assignment it will keep the assignment key on local storage, and locate your page to assignment page
 function assignment_course_helper(course_code){
     localStorage.setItem("course_code",course_code);
     console.log("Set new value to local Storage "+course_code+" ,And junmp to assignment page");

@@ -8,7 +8,7 @@ import java.util.Date;
 public class AssignmentBean implements Comparable<AssignmentBean>  {
     private String course_code = "";
     private String assignmentName="";
-    private Date duedate;
+    private Date duedate=new Date();
     private String assignmentKey = "";
     private String grade ="";
     private String end="";
@@ -62,8 +62,20 @@ public class AssignmentBean implements Comparable<AssignmentBean>  {
 
     public void setGrade(String grade){this.grade = grade;}
 
+    public String getEnd() {
+        return end;
+    }
 
-    // Generates a String in JSON format
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
+
+    /**
+     * Used to allow us to bring our object to the front end through ajax
+     * generate json object for js
+     * @return Json
+     */
     public String generateJSON(){
         String stringdata=(duedate.toString()).substring(0,11) +changeYear(duedate.toString().substring(24,28));
         String endString;
@@ -80,7 +92,11 @@ public class AssignmentBean implements Comparable<AssignmentBean>  {
                 + "\"endString\":\"" + endString + "\","
                 + "\"duedate\":\"" + stringdata+"\"}";
     }
-
+    /**
+     * this function will help
+     * @param o  AssignmentBean
+     * @return 1 if this one is bigger -1 if it is smaller
+     */
     @Override
     public int compareTo(AssignmentBean o) {
         if (getDuedata() == null || o.getDuedata() == null)
@@ -88,20 +104,22 @@ public class AssignmentBean implements Comparable<AssignmentBean>  {
         return getDuedata().compareTo(o.getDuedata());
     }
 
-    //this function will help
+
+    /**
+     * this function will help
+     * @param year  year in string
+     * @return year in int
+     */
     public String changeYear(String year){
         int a= Integer.parseInt(year);
         return Integer.toString(a);
     }
 
-    public String getEnd() {
-        return end;
-    }
-
-    public void setEnd(String end) {
-        this.end = end;
-    }
-    // Generates a String in JSON format
+    /**
+     * Used to allow us to bring our object to the front end through ajax
+     * generate json object for js
+     * @return Json
+     */
     public String generateEndJSON(){
         String output = "{\"assignmentName\":\"" + assignmentName + "\","
                 + "\"course_code\":\"" + course_code + "\","

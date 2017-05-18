@@ -15,6 +15,7 @@ public class QuestionInfoListBean {
     private String totalgrade;
     private String assignmentKey;
 
+    //getter and setter
     public QuestionInfoListBean() {
         questionInfo = new ArrayList<QuestionInfoBean>();
     }
@@ -35,7 +36,20 @@ public class QuestionInfoListBean {
         this.totalgrade = totalgrade;
     }
 
-    // generate json object for js
+    public String getAssignmentKey() {
+        return assignmentKey;
+    }
+
+    public void setAssignmentKey(String assignmentKey) {
+        this.assignmentKey = assignmentKey;
+    }
+
+
+    /**
+     * Used to allow us to bring our object to the front end through ajax
+     * generate json object for js
+     * @return String
+     */
     public String generateJSON() {
         String outputString = "{\"QuestionsInfo\":[";
 
@@ -56,11 +70,5 @@ public class QuestionInfoListBean {
         return outputString;
     }
 
-    public String getAssignmentKey() {
-        return assignmentKey;
-    }
 
-    public void setAssignmentKey(String assignmentKey) {
-        this.assignmentKey = assignmentKey;
-    }
 }

@@ -23,7 +23,13 @@ import static com.macchiato.utility.TeachersUtils.dataGenerate;
  */
 @Controller
 public class AddAssignment {
-    //this function add the new course to the database
+    /**
+     *The function will use  request to get the course code and get
+     * all the information from the front end(inputed by user)
+     * and add assignment to the database
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
     @RequestMapping(value="/addAssignment.htm", method = RequestMethod.POST)
     public void addCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         User active_user = GenUtils.getActiveUser();

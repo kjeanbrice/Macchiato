@@ -20,6 +20,13 @@ import java.io.IOException;
  */
 @Controller
 public class Addcourse {
+    /**
+     *The function will use  login email to get the email and get
+     * all the information from the front end(imputed by user)
+     * and add course to the database
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
 
     //this function add the new course to the database
     @RequestMapping(value="addCourse.htm", method = RequestMethod.POST)
