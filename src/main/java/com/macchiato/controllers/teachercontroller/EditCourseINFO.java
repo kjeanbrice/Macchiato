@@ -16,7 +16,13 @@ import java.io.IOException;
  */
 @Controller
 public class EditCourseINFO {
-    //this function will help teacher to change the information about this course
+    /**
+     *The function will get course code from the front end,
+     * and find information of this course database
+     * and use response to sent the  it back to front end
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
     @RequestMapping(value="editCourse.htm", method = RequestMethod.POST)
     public void editCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String ClassCode=request.getParameter("course_code");

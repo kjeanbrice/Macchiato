@@ -21,6 +21,12 @@ import static com.macchiato.utility.TeachersUtils.findAllStudentGradeBean;
  */
 @Controller
 public class LoadStudentGrade {
+    /**
+     * this function will get assignment key from front end and find all the question
+     * and display the grade for each question
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
     @RequestMapping(value = "/LoadStudentGrade.htm", method = RequestMethod.GET)
     public void LoadCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");

@@ -19,6 +19,12 @@ import static com.macchiato.utility.TeachersUtils.findAllQuestionGradeBean;
  * Created by Xiangbin on 5/17/2017.
  */
 public class LoadQuestionGrade {
+    /**
+     * this function will get assignment key from front end and find all the question
+     * and display the grade for each student
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
     @RequestMapping(value = "/LoadQuestionGrade.htm", method = RequestMethod.GET)
     public void LoadCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");

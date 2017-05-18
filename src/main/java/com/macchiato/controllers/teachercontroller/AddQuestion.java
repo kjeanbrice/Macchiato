@@ -18,6 +18,13 @@ import java.io.IOException;
  */
 @Controller
 public class AddQuestion {
+    /**
+     *The function will use  request to get the assignment key and get
+     * all the information from the front end(inputed by user)
+     * and add question in to this assignment
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
     //this function add the new course to the database
     @RequestMapping(value="addQuestion.htm", method = RequestMethod.POST)
     public void addQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -3,11 +3,7 @@
  */
 $.noConflict();
 $(document).ready(function () {
-
-    load_StudentGrade_item("Load the Page");
-
-
-
+load_StudentGrade_item("Load the Page");
 });
 
 

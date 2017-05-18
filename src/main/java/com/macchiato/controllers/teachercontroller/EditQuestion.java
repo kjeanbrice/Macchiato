@@ -17,7 +17,13 @@ import java.io.IOException;
 @Controller
 public class EditQuestion {
     @RequestMapping(value="/editQuestion.htm", method = RequestMethod.POST)
-    //this methon will take input from edit box to help user edit problem and solution
+    /**
+     *The function will get course code from the front end,
+     * and find information of this course database
+     * and use response to sent the  it back to front end
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
     public void editCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String problem=request.getParameter("problem");
         String solution=request.getParameter("solution");

@@ -22,7 +22,13 @@ import static com.macchiato.utility.TeachersUtils.AssignmentListJson;
  */
 @Controller
 public class LoadAssignment {
-    //Load course function will load all the course owned by this teacher, and it will listed on teacher home page
+    /**
+     *The function will get course code from the front end,
+     * and find all assignments under this course code, and load them to Json and
+     * sent it back to front end
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
     @RequestMapping(value = "/LoadAssignment.htm", method = RequestMethod.GET)
     public void LoadCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String ClassCrs=request.getParameter("course_code");

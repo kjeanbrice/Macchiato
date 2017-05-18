@@ -23,7 +23,12 @@ import static com.macchiato.utility.TeachersUtils.isOwned;
  */
 @Controller
 public class LoadCourse {
-    //Load course function will load all the course owned by this teacher, and it will listed on teacher home page
+    /**
+     *Load course function will load all the course owned
+     * by this teacher, and it will listed on teacher home page
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
     @RequestMapping(value = "/LoadCourse.htm", method = RequestMethod.GET)
     public void LoadCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");

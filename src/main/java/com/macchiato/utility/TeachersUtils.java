@@ -14,8 +14,14 @@ import java.util.Date;
  */
 public class TeachersUtils {
 
-    //helping to find all the course that created by this teacher,
-    // when you inputs a email it will return all the Coursebean list Created by this teacher
+
+    /**
+     * helping to find all the course that created by this teacher
+     * when you inputs a email it will return all the Course bean
+     * list Created by this teacher
+     * @param  email  the email from the instructor
+     * @return ArrayList<CourseBean> course bean array list will be all the course owned by this person
+     */
     public static ArrayList<CourseBean> isOwned(String email) {
         String CrsName;
         String CrsCode;
@@ -54,7 +60,12 @@ public class TeachersUtils {
         return classList;
     }
 
-    //this function helps generate  CourseBean list to a List of json type of string
+
+    /**
+     * this function helps generate  CourseBean list to a List of json type of string
+     * @param  courseList  list of assignment that owned by the teacher
+     * @return outputString course bean array list will be all the course owned by this person
+     */
     public static String CourseListJson(ArrayList<CourseBean> courseList) {
         String outputString = "[";
         if (courseList.size() <= 0) {
@@ -71,6 +82,11 @@ public class TeachersUtils {
     }
 
     //this function will help user to find all the assignment from this course
+    /**
+     * this function helps generate  CourseBean list to a List of json type of string
+     * @param  course_code  code of course that we needs to find
+     * @return AssignmentList the list of assignment under that course
+     */
     public static ArrayList<AssignmentBean> findAllAssigmentBean(String course_code) {
         String assignmentName;
         String dueData;
@@ -118,7 +134,12 @@ public class TeachersUtils {
         return AssignmentList;
     }
 
-    //this function  helps generate  assignmentBean list to a List of json type of string
+
+    /**
+     * this function  helps generate  assignmentBean list to a List of json type of string
+     * @param  assignmentList list of assignment bean under this course
+     * @return outputString Json that content the information from list of assignment bean
+     */
     public static String AssignmentListJson(ArrayList<AssignmentBean> assignmentList) {
         String outputString = "[";
         if (assignmentList.size() <= 0) {
@@ -134,7 +155,12 @@ public class TeachersUtils {
         return outputString;
     }
 
-    //this function will function all the question bean from one assignment
+
+    /**
+     * this function will function all the question bean from one assignment
+     * @param  assignmentKey  key of assignment
+     * @return questionList List of question bean under this assignment key
+     */
     public static ArrayList<QuestionBean> findAllQuestionBean(String assignmentKey) {
         String problem;
         String solution;
@@ -173,7 +199,12 @@ public class TeachersUtils {
 
 
 
-    //this function  helps generate  QuestionBean list to a List of json type of string
+
+    /**
+     * this function  helps generate  QuestionBean list to a List of json type of string
+     * @param  QuestionList  list of question bean
+     * @return outputString Json object has all the information from that list of question bean
+     */
     public static String QuestionListJson(ArrayList<QuestionBean> QuestionList) {
         String outputString = "[";
         if (QuestionList.size() <= 0) {
@@ -189,11 +220,11 @@ public class TeachersUtils {
         return outputString;
     }
 
-
-
-
-
-    //this function will function all the question bean from one assignment
+    /**
+     * this function will function all the question bean from one assignment
+     * @param  assignmentKey  the assignment key
+     * @return studentForEachGrade List of student grades bean that has each students grades from this assignment
+     */
     public static ArrayList<StudentGradeBean> findAllStudentGradeBean(String assignmentKey) {
         String email;
         double point;
@@ -226,7 +257,12 @@ public class TeachersUtils {
         return studentForEachGrade(gradeList);
     }
 
-    //this function  helps generate  QuestionBean list to a List of json type of string
+
+    /**
+     * this function  helps generate  QuestionBean list to a List of json type of string
+     * @param  GradeList  list of student grade bean
+     * @return outputString Json object has all the information from in put list of Student Grades bean
+     */
     public static String StudentGradesListJson(ArrayList<StudentGradeBean> GradeList) {
         String outputString = "[";
         if (GradeList.size() <= 0) {
@@ -244,7 +280,12 @@ public class TeachersUtils {
 
 
 
-    //fitter each student from the database
+
+    /**
+     * this function will find the email of each student
+     * @param  GradeList  list of student grade bean
+     * @return newList each students grades from one assignment
+     */
     public static  ArrayList<StudentGradeBean> studentForEachGrade(ArrayList<StudentGradeBean> GradeList){
         ArrayList<String> allEmail=AllEmails(GradeList);
         ArrayList<StudentGradeBean> newList=new ArrayList<StudentGradeBean>();
@@ -262,7 +303,12 @@ public class TeachersUtils {
         }
         return newList;
     }
-    //find all the student from the database
+
+    /**
+     * find all the student from the database
+     * @param  GradeList  list of student grade bean
+     * @return allemail the email of each student from that list of Student Grade bean
+     */
     public static  ArrayList<String> AllEmails(ArrayList<StudentGradeBean> GradeList){
         ArrayList<String> allemail=new ArrayList<String>();
         boolean findit;
@@ -281,11 +327,15 @@ public class TeachersUtils {
         return allemail;
     }
 
-    //this function will function all the question bean from one assignment
+
+    /**
+     * this function will function all the question bean from one assignment
+     * @param  assignmentKey  the assigment key that you searcher
+     * @return questionForEachGrade the email of each student from that list of Student Grade bean
+     */
     public static ArrayList<QuestionGradeBean> findAllQuestionGradeBean(String assignmentKey) {
         double point;
         String id;
-        System.out.print("------------------------------------------------------------------------------dawdawdwada---------------------");
         System.out.println("Load all the Question :"+assignmentKey);
         ArrayList<QuestionGradeBean> gradeList = new ArrayList<QuestionGradeBean>();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -314,7 +364,12 @@ public class TeachersUtils {
         return questionForEachGrade(gradeList);
     }
 
-    //this function  helps generate  QuestionGradeBean list to a List of json type of string
+
+    /**
+     * this function  helps generate  QuestionGradeBean list to a List of json type of string
+     * @param  GradeList  list of the question grade bean
+     * @return outputString Json object has all the information from list of the question grade bean
+     */
     public static String QuestionGradesListJson(ArrayList<QuestionGradeBean> GradeList) {
         String outputString = "[";
         if (GradeList.size() <= 0) {
@@ -331,9 +386,13 @@ public class TeachersUtils {
     }
 
 
-    //fitter each student from the database
+    /**
+     * fitter each student from the database,this function
+     * helps generate  QuestionGradeBean list to a List of json type of string
+     * @param  GradeList  list of the question grade bean
+     * @return outputString Json object has all the information from list of the question grade bean
+     */
     public static  ArrayList<QuestionGradeBean> questionForEachGrade(ArrayList<QuestionGradeBean> GradeList){
-        System.out.print("------------------------------------------------------------------------------dawdawdwada----111-----------------");
         ArrayList<String> allQuestion=AllQuestions(GradeList);
         ArrayList<QuestionGradeBean> newList=new ArrayList<QuestionGradeBean>();
         for(int i=0;i<allQuestion.size();i++){
@@ -351,7 +410,13 @@ public class TeachersUtils {
         }
         return newList;
     }
-    //find all the student from the database
+
+    /**
+     * find all the student from the database
+     * helps generate  QuestionGradeBean list to a List of json type of string
+     * @param  GradeList  list of the QuestionGradeBean
+     * @return outputString Json object has all the information from list of the question grade bean
+     */
     public static  ArrayList<String> AllQuestions(ArrayList<QuestionGradeBean> GradeList){
         ArrayList<String> allQuestionkey=new ArrayList<String>();
         boolean findit;
@@ -366,28 +431,26 @@ public class TeachersUtils {
                 allQuestionkey.add(GradeList.get(i).getQuestionKey());
             }
         }
-        System.out.print("Number of QQQQQQuestion"+allQuestionkey.size());
         return allQuestionkey;
     }
 
 
-
-
-
-
-
-
-
-
-
-
-    //this function will remove all the non-digit char in the string a
+    /**
+     * this function will remove all the non-digit char in the string a
+     * @param  a  string
+     * @return return that string with only all the number
+     */
     public static String numberkeeper(String a){
         String c= a.replaceAll("[^\\d.]", "");
         return c;
     }
 
-    //this function will change a string formed date to a int array with year,month,day in side
+
+    /**
+     *  this function will change a string formed date to a int array with year,month,day in side
+     * @param  b  string
+     * @return get a date format that to the date
+     */
     public static Date dataGenerate(String b){
         Date newDate = null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -398,7 +461,12 @@ public class TeachersUtils {
         }
         return newDate;
     }
-    //this function will help the check this date is passed or not
+
+    /**
+     *  this function will help the check this date is passed or not
+     * @param  due  the due Date
+     * @return  boolean return true if the date passed false otherwise
+     */
     public static  boolean  Passed(Date due){
         Date now=new Date();
         if(due.getYear()>now.getYear()){

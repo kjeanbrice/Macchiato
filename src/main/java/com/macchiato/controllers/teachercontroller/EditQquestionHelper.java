@@ -18,7 +18,13 @@ import java.io.PrintWriter;
 @Controller
 public class EditQquestionHelper {
     @RequestMapping(value="/findQuestion.htm", method = RequestMethod.GET)
-    //this method will help teacher question to load the problem and solution from the database
+    /**
+     *The function will get question key from the front end,
+     * and find information of this question database
+     * and use response to sent the  it back to front end
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
     public void editCourse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         User active_user = GenUtils.getActiveUser();

@@ -2,7 +2,6 @@ package com.macchiato.controllers.teachercontroller;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
-import com.macchiato.beans.QuestionBean;
 import com.macchiato.utility.GenUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,9 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import static com.macchiato.utility.TeachersUtils.numberkeeper;
 
 /**
  * Created by Xiangbin on 5/5/2017.
@@ -21,7 +17,13 @@ import static com.macchiato.utility.TeachersUtils.numberkeeper;
  */
 @Controller
 public class DeleteQuestion {
-    //this function delete the question from the database
+    /**
+     *The function will use  request to get the Question key
+     *  and And find it in the question database
+     *  delete this course from the database
+     * @param  request  The servlet container to get the data from front end
+     * @param  response  The servlet container to sent to the data from front end
+     */
     @RequestMapping(value="/deleteQuestion.htm", method = RequestMethod.POST)
     public void addQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException {
         User active_user = GenUtils.getActiveUser();

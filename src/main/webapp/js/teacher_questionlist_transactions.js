@@ -33,7 +33,7 @@ $(document).ready(function () {
         });
     });
 
-
+    //this function will submit all the information to front end when you click #question_edit_submit button
     $('body').on('click', '#question_edit_submit', function (e) {
         var problem = $('#change_question_name_text').val().trim();
         var solution = $('#change_question_answer_text').val().trim();
@@ -64,6 +64,8 @@ $(document).ready(function () {
         });
     });
 });
+
+// clean all the data
 function clear_form_data(){
     $('#question_problem_text').val("");
     $('#question_answer_text').val("");
@@ -99,7 +101,8 @@ function load_question_item(type){
     });
 }
 
-
+// when you delete you question it will sent the question key to back
+// end and delete it on the database and reload the page
 function delete_helper(questionKey){
     localStorage.setItem("questionKey",questionKey);
     console.log("Set new value to local Storage "+questionKey);
@@ -125,6 +128,8 @@ function delete_helper(questionKey){
     });
 }
 
+// when you edit you question it will sent the question key to back
+// end and sent back all the information to Let you load the old infomation of this question to the page
 function Question_helper(questionKey){
     localStorage.setItem("questionKey",questionKey);
     console.log("Set new value to local Storage "+questionKey+" ,And junmp to grading page");

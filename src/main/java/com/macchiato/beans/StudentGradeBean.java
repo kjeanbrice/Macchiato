@@ -58,7 +58,7 @@ public class StudentGradeBean {
      * @return String
      */
     public String pointcalculator(){
-        return  Double.toString((this.point/this.total));
+        return  Double.toString((this.point/this.total)*100)+"%";
     }
 
     /**

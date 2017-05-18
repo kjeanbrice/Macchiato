@@ -51,8 +51,9 @@ public class CourseBean implements Serializable {
     public void setDescription(String description) {this.description = description;}
 
     /**
-     *  Generates a String in JSON format
-     * @return JSON string
+     * Used to allow us to bring our object to the front end through ajax
+     * generate json object for js
+     * @return Json
      */
     public String generateJSON(){
         return "{\"course_code\":\"" + course_code + "\","
